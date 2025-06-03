@@ -7,8 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# 安装依赖
-RUN npm ci --only=production
+# 安装依赖，包括 rimraf 作为开发依赖
+RUN npm ci --only=production && npm install --save-dev rimraf
 
 # 复制源代码
 COPY src/ ./src/

@@ -80,8 +80,8 @@ class App {
       // 初始化Ollama服务
       this.ollamaService = new OllamaService(this.unifiedAdapterService, this.ollamaCompatibilityService);
 
-      // 初始化OpenAI兼容服务
-      this.openaiService = new OpenAICompatService(this.ollamaService);
+      // 初始化OpenAI兼容服务（直接使用 UnifiedAdapterService）
+      this.openaiService = new OpenAICompatService(this.unifiedAdapterService);
 
       // 初始化控制器
       this.ollamaController = new OllamaController(this.ollamaService, this.modelDiscoveryService);
@@ -118,6 +118,21 @@ class App {
       })
     );
 
+    // 标准请求体限制（需要在开发日志中间件之前）
+    this.app.use(
+      express.json({
+        limit: '10mb', // 合理的JSON请求限制
+        strict: true, // 严格JSON解析
+      })
+    );
+    this.app.use(
+      express.urlencoded({
+        extended: true,
+        limit: '10mb',
+        parameterLimit: 1000, // 合理的参数数量限制
+      })
+    );
+
     // 请求日志 - 统一格式
     const morganFormat =
       process.env.NODE_ENV === 'production'
@@ -149,21 +164,6 @@ class App {
       })
     );
     this.app.use(requestLogger);
-
-    // 标准请求体限制
-    this.app.use(
-      express.json({
-        limit: '10mb', // 合理的JSON请求限制
-        strict: true, // 严格JSON解析
-      })
-    );
-    this.app.use(
-      express.urlencoded({
-        extended: true,
-        limit: '10mb',
-        parameterLimit: 1000, // 合理的参数数量限制
-      })
-    );
 
     // 自定义中间件
     this.app.use(validateRequestSize);

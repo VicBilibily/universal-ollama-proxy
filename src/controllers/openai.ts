@@ -39,7 +39,9 @@ export class OpenAIController {
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
         try {
-          for await (const chunk of this.openaiService.chatCompletionsStream(request)) {
+          const response = await this.openaiService.chatCompletions(request);
+          // 现在 chatCompletions 返回的是 AsyncIterable
+          for await (const chunk of response as AsyncIterable<any>) {
             res.write(`data: ${JSON.stringify(chunk)}\n\n`);
           }
           res.write('data: [DONE]\n\n');

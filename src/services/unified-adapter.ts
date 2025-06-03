@@ -9,6 +9,7 @@ import {
   UnifiedProvider,
 } from '../types/unified-adapter';
 import { logger, OllamaError } from '../utils';
+import { processMessages } from '../utils/messageProcessor';
 import { RequestQueue } from '../utils/requestQueue';
 import { ModelDiscoveryService } from './modelDiscovery';
 
@@ -88,22 +89,29 @@ export class UnifiedAdapterService {
   async chat(request: ChatRequest): Promise<ChatResponse | AsyncIterable<ChatStreamChunk>> {
     return this.requestQueue.add(async () => {
       try {
-        logger.info('处理统一聊天请求', {
-          model: request.model,
-          stream: request.stream,
-        });
-
         // 获取模型配置
         const modelConfig = await this.modelDiscovery.getModelConfig(request.model);
         if (!modelConfig) {
           throw new OllamaError(`不支持的模型: ${request.model}`, 400);
         }
 
+        // 处理消息内容，移除 prompt 标签
+        request.messages = processMessages(request.messages);
+
+        // 记录详细的请求信息和供应商信息
+        logger.info('统一处理聊天请求', {
+          model: request.model,
+          stream: request.stream,
+          provider: modelConfig.provider,
+        });
+        // logger.debug('请求详情', request);
+
         // 获取对应的OpenAI客户端
         const client = this.getClientForModel(modelConfig);
 
         // 转换请求格式
         const openaiRequest = this.convertToOpenAIRequest(request, modelConfig);
+        logger.debug('转发请求详情', openaiRequest);
 
         if (request.stream) {
           return this.handleStreamChat(client, openaiRequest, modelConfig);
@@ -128,12 +136,22 @@ export class UnifiedAdapterService {
     modelConfig: ModelConfig
   ): AsyncGenerator<ChatStreamChunk, void, unknown> {
     try {
+      logger.debug('开始流式请求', {
+        provider: modelConfig.provider,
+        model: modelConfig.name,
+        endpoint: modelConfig.endpoint || modelConfig.name,
+      });
+
       const stream = (await client.chat.completions.create({
         ...request,
         stream: true,
       })) as any; // 暂时使用any类型绕过类型检查
 
+      let chunkCount = 0;
+      let startTime = Date.now();
+
       for await (const chunk of stream) {
+        chunkCount++;
         const convertedChunk: ChatStreamChunk = {
           id: chunk.id,
           object: 'chat.completion.chunk',
@@ -149,10 +167,26 @@ export class UnifiedAdapterService {
           })),
         };
 
+        // 记录流式完成事件（仅记录第一个块和最后一个块）
+        if (chunkCount === 1 || chunk.choices[0]?.finish_reason === 'stop') {
+          const status = chunkCount === 1 ? '首个响应块' : '流式响应完成';
+          logger.debug(`${status}`, {
+            provider: modelConfig.provider,
+            model: modelConfig.name,
+            chunkCount: chunkCount,
+            elapsedMs: Date.now() - startTime,
+            isComplete: chunk.choices[0]?.finish_reason === 'stop',
+          });
+        }
+
         yield convertedChunk;
       }
     } catch (error) {
-      logger.error('流式聊天处理失败', { model: modelConfig.name, error });
+      logger.error('流式聊天处理失败', {
+        provider: modelConfig.provider,
+        model: modelConfig.name,
+        error,
+      });
       throw new OllamaError(`流式聊天失败: ${error}`, 500);
     }
   }
@@ -162,9 +196,30 @@ export class UnifiedAdapterService {
    */
   private async handleNonStreamChat(client: OpenAI, request: any, modelConfig: ModelConfig): Promise<ChatResponse> {
     try {
+      logger.debug('开始非流式请求', {
+        provider: modelConfig.provider,
+        model: modelConfig.name,
+        endpoint: modelConfig.endpoint || modelConfig.name,
+      });
+
+      const startTime = Date.now();
       const response = await client.chat.completions.create({
         ...request,
         stream: false,
+      });
+
+      const duration = Date.now() - startTime;
+
+      // 记录响应统计信息
+      logger.info('非流式请求完成', {
+        provider: modelConfig.provider,
+        model: modelConfig.name,
+        responseId: response.id,
+        responseTimeMs: duration,
+        promptTokens: response.usage?.prompt_tokens || 0,
+        completionTokens: response.usage?.completion_tokens || 0,
+        totalTokens: response.usage?.total_tokens || 0,
+        contentLength: response.choices[0]?.message?.content?.length || 0,
       });
 
       return {
@@ -187,7 +242,11 @@ export class UnifiedAdapterService {
         },
       };
     } catch (error) {
-      logger.error('非流式聊天处理失败', { model: modelConfig.name, error });
+      logger.error('非流式聊天处理失败', {
+        provider: modelConfig.provider,
+        model: modelConfig.name,
+        error,
+      });
       throw new OllamaError(`聊天请求失败: ${error}`, 500);
     }
   }
@@ -197,8 +256,8 @@ export class UnifiedAdapterService {
    */
   private convertToOpenAIRequest(request: ChatRequest, modelConfig: ModelConfig): any {
     const openaiRequest: any = {
+      ...request,
       model: this.getProviderModelName(request.model, modelConfig),
-      messages: request.messages,
       temperature: request.temperature || 0.7,
       max_tokens: request.max_tokens || modelConfig.defaultOutputLength || 1000,
       top_p: request.top_p || 0.9,

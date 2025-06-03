@@ -78,6 +78,24 @@ export class OllamaCompatibilityService {
         throw new OllamaError(`模型不存在: ${model}`, 404);
       }
 
+      // 构建模型能力列表
+      const capabilities = ['chat', 'completion', 'tools'];
+
+      // 检查模型是否支持视觉功能
+      if (modelConfig.capabilities) {
+        const hasVisionSupport = modelConfig.capabilities.some(
+          cap =>
+            cap === '图片理解' ||
+            cap === '视频理解' ||
+            cap === 'vision' ||
+            cap.includes('image') ||
+            cap.includes('video')
+        );
+        if (hasVisionSupport) {
+          capabilities.push('vision');
+        }
+      }
+
       return {
         license: '',
         modelfile: `# ${modelConfig.name}\nFROM ${modelConfig.name}`,
@@ -99,7 +117,7 @@ export class OllamaCompatibilityService {
         },
         projector_info: {},
         tensors: [],
-        capabilities: ['chat', 'completion'],
+        capabilities,
         modified_at: this.getFormattedTimestamp(),
       };
     } catch (error) {

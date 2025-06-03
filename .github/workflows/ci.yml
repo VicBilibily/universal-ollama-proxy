@@ -53,7 +53,7 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm -d --name test-container -p 3000:3000 universal-ollama-proxy
+          docker run --rm -d --name test-container -p 3000:11434 universal-ollama-proxy
           sleep 10
-          curl -f http://localhost:3000/health || exit 1
+          curl -f http://localhost:3000/ || exit 1
           docker stop test-container

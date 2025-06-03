@@ -1,59 +1,3 @@
-import { OllamaChatMessage } from '../types';
-
-/**
- * 将 Ollama 消息格式转换为火山方舟引擎格式
- */
-export const convertOllamaToVolcEngine = (messages: OllamaChatMessage[]): Array<{ role: string; content: string }> => {
-  return messages.map(msg => ({
-    role: msg.role,
-    content: msg.content,
-  }));
-};
-
-/**
- * 生成当前时间戳
- */
-export const getCurrentTimestamp = (): string => {
-  return new Date().toISOString();
-};
-
-/**
- * 生成随机 ID
- */
-export const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
-
-/**
- * 验证模型名称是否支持
- */
-export const validateModel = (model: string, supportedModels: string[]): boolean => {
-  return supportedModels.includes(model);
-};
-
-/**
- * 格式化模型大小
- */
-export const formatModelSize = (sizeInBytes: number): string => {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  let size = sizeInBytes;
-  let unitIndex = 0;
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
-  }
-
-  return `${size.toFixed(2)} ${units[unitIndex]}`;
-};
-
-/**
- * 延迟函数
- */
-export const delay = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
 /**
  * 错误处理
  */
@@ -65,20 +9,6 @@ export class OllamaError extends Error {
   ) {
     super(message);
     this.name = 'OllamaError';
-  }
-}
-
-/**
- * 火山方舟引擎错误处理
- */
-export class VolcEngineError extends Error {
-  constructor(
-    message: string,
-    public statusCode: number = 500,
-    public code?: string
-  ) {
-    super(message);
-    this.name = 'VolcEngineError';
   }
 }
 

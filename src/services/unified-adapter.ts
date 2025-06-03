@@ -1,13 +1,7 @@
 // 统一的OpenAI适配器服务
 import { OpenAI } from 'openai';
 import { ModelConfig } from '../types';
-import {
-  ChatRequest,
-  ChatResponse,
-  ChatStreamChunk,
-  UnifiedAdapterConfig,
-  UnifiedProvider,
-} from '../types/unified-adapter';
+import { UnifiedAdapterConfig, UnifiedProvider } from '../types/unified-adapter';
 import { logger, OllamaError } from '../utils';
 import { processMessages } from '../utils/messageProcessor';
 import { RequestQueue } from '../utils/requestQueue';
@@ -84,9 +78,11 @@ export class UnifiedAdapterService {
   }
 
   /**
-   * 聊天接口 - 统一OpenAI格式
+   * 聊天接口 - 使用OpenAI SDK原生类型
    */
-  async chat(request: ChatRequest): Promise<ChatResponse | AsyncIterable<ChatStreamChunk>> {
+  async chat(
+    request: OpenAI.Chat.Completions.ChatCompletionCreateParams
+  ): Promise<OpenAI.Chat.Completions.ChatCompletion | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
     return this.requestQueue.add(async () => {
       try {
         // 获取模型配置
@@ -95,8 +91,10 @@ export class UnifiedAdapterService {
           throw new OllamaError(`不支持的模型: ${request.model}`, 400);
         }
 
-        // 处理消息内容，移除 prompt 标签
-        request.messages = processMessages(request.messages);
+        // 处理消息内容，移除 prompt 标签 - 只对 messages 进行过滤处理
+        if (Array.isArray(request.messages)) {
+          (request as any).messages = processMessages(request.messages as any);
+        }
 
         // 记录详细的请求信息和供应商信息
         logger.info('统一处理聊天请求', {
@@ -104,13 +102,12 @@ export class UnifiedAdapterService {
           stream: request.stream,
           provider: modelConfig.provider,
         });
-        // logger.debug('请求详情', request);
 
         // 获取对应的OpenAI客户端
         const client = this.getClientForModel(modelConfig);
 
-        // 转换请求格式
-        const openaiRequest = this.convertToOpenAIRequest(request, modelConfig);
+        // 准备OpenAI请求参数
+        const openaiRequest = this.prepareOpenAIRequest(request, modelConfig);
         logger.debug('转发请求详情', openaiRequest);
 
         if (request.stream) {
@@ -132,9 +129,9 @@ export class UnifiedAdapterService {
    */
   private async *handleStreamChat(
     client: OpenAI,
-    request: any,
+    request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
     modelConfig: ModelConfig
-  ): AsyncGenerator<ChatStreamChunk, void, unknown> {
+  ): AsyncGenerator<OpenAI.Chat.Completions.ChatCompletionChunk, void, unknown> {
     try {
       logger.debug('开始流式请求', {
         provider: modelConfig.provider,
@@ -142,30 +139,16 @@ export class UnifiedAdapterService {
         endpoint: modelConfig.endpoint || modelConfig.name,
       });
 
-      const stream = (await client.chat.completions.create({
+      const stream = await client.chat.completions.create({
         ...request,
         stream: true,
-      })) as any; // 暂时使用any类型绕过类型检查
+      });
 
       let chunkCount = 0;
       let startTime = Date.now();
 
       for await (const chunk of stream) {
         chunkCount++;
-        const convertedChunk: ChatStreamChunk = {
-          id: chunk.id,
-          object: 'chat.completion.chunk',
-          created: chunk.created,
-          model: modelConfig.name,
-          choices: chunk.choices.map((choice: any) => ({
-            index: choice.index,
-            delta: {
-              role: choice.delta.role as any,
-              content: choice.delta.content || '',
-            },
-            finish_reason: choice.finish_reason as any,
-          })),
-        };
 
         // 记录流式完成事件（仅记录第一个块和最后一个块）
         if (chunkCount === 1 || chunk.choices[0]?.finish_reason === 'stop') {
@@ -179,7 +162,8 @@ export class UnifiedAdapterService {
           });
         }
 
-        yield convertedChunk;
+        // 直接返回OpenAI SDK的原生块，无需转换
+        yield chunk;
       }
     } catch (error) {
       logger.error('流式聊天处理失败', {
@@ -194,7 +178,11 @@ export class UnifiedAdapterService {
   /**
    * 处理非流式聊天
    */
-  private async handleNonStreamChat(client: OpenAI, request: any, modelConfig: ModelConfig): Promise<ChatResponse> {
+  private async handleNonStreamChat(
+    client: OpenAI,
+    request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
+    modelConfig: ModelConfig
+  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
     try {
       logger.debug('开始非流式请求', {
         provider: modelConfig.provider,
@@ -222,25 +210,8 @@ export class UnifiedAdapterService {
         contentLength: response.choices[0]?.message?.content?.length || 0,
       });
 
-      return {
-        id: response.id,
-        object: 'chat.completion',
-        created: response.created,
-        model: modelConfig.name,
-        choices: response.choices.map(choice => ({
-          index: choice.index,
-          message: {
-            role: 'assistant',
-            content: choice.message.content || '',
-          },
-          finish_reason: choice.finish_reason as any,
-        })),
-        usage: {
-          prompt_tokens: response.usage?.prompt_tokens || 0,
-          completion_tokens: response.usage?.completion_tokens || 0,
-          total_tokens: response.usage?.total_tokens || 0,
-        },
-      };
+      // 直接返回OpenAI SDK的原生响应，无需转换
+      return response;
     } catch (error) {
       logger.error('非流式聊天处理失败', {
         provider: modelConfig.provider,
@@ -252,10 +223,13 @@ export class UnifiedAdapterService {
   }
 
   /**
-   * 转换为OpenAI请求格式
+   * 准备OpenAI请求参数
    */
-  private convertToOpenAIRequest(request: ChatRequest, modelConfig: ModelConfig): any {
-    const openaiRequest: any = {
+  private prepareOpenAIRequest(
+    request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
+    modelConfig: ModelConfig
+  ): OpenAI.Chat.Completions.ChatCompletionCreateParams {
+    const openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
       ...request,
       model: this.getProviderModelName(request.model, modelConfig),
       temperature: request.temperature || 0.7,
@@ -266,8 +240,8 @@ export class UnifiedAdapterService {
 
     // 添加提供商特定的参数
     if (modelConfig.provider === 'dashscope') {
-      openaiRequest.repetition_penalty = 1.0;
-      openaiRequest.enable_search = false;
+      (openaiRequest as any).repetition_penalty = 1.0;
+      (openaiRequest as any).enable_search = false;
     }
 
     return openaiRequest;

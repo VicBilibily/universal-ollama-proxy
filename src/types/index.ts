@@ -3,12 +3,6 @@
 // Ollama 相关类型
 export * from './ollama';
 
-// 火山方舟引擎相关类型
-export * from './volcengine';
-
-// DashScope 相关类型
-export * from './dashscope';
-
 // OpenAI API 兼容类型
 export * from './openai';
 

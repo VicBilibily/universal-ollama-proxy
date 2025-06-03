@@ -1,6 +1,6 @@
 {
   "name": "universal-ollama-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "通用AI服务提供商 OpenAI 格式接口转换为 Ollama 本地接口代理服务，支持多个AI提供商",
   "main": "dist/index.js",
   "scripts": {

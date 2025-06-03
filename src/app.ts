@@ -77,10 +77,10 @@ class App {
       // 初始化兼容性服务
       this.ollamaCompatibilityService = new OllamaCompatibilityService(this.modelDiscoveryService);
 
-      // 初始化Ollama服务
-      this.ollamaService = new OllamaService(this.unifiedAdapterService, this.ollamaCompatibilityService);
+      // 初始化Ollama服务（只保留兼容性服务，其他方法为占位符）
+      this.ollamaService = new OllamaService(this.ollamaCompatibilityService);
 
-      // 初始化OpenAI兼容服务（直接使用 UnifiedAdapterService）
+      // 初始化OpenAI兼容服务（通过统一适配器）
       this.openaiService = new OpenAICompatService(this.unifiedAdapterService);
 
       // 初始化控制器
@@ -121,14 +121,14 @@ class App {
     // 标准请求体限制（需要在开发日志中间件之前）
     this.app.use(
       express.json({
-        limit: '10mb', // 合理的JSON请求限制
+        limit: '100mb', // 合理的JSON请求限制
         strict: true, // 严格JSON解析
       })
     );
     this.app.use(
       express.urlencoded({
         extended: true,
-        limit: '10mb',
+        limit: '100mb',
         parameterLimit: 1000, // 合理的参数数量限制
       })
     );

@@ -1,0 +1,75 @@
+{
+  "providers": [
+    {
+      "name": "volcengine",
+      "displayName": "火山方舟引擎",
+      "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
+      "apiKey": "${VOLCENGINE_API_KEY}",
+      "defaultModel": "doubao-1.5-pro-32k-250115",
+      "supportedModels": [
+        "doubao-1.5-thinking-pro-250415",
+        "doubao-1.5-thinking-vision-pro-250428",
+        "doubao-1.5-thinking-pro-m-250428",
+        "deepseek-r1-250528",
+        "deepseek-r1-250120",
+        "doubao-1.5-vision-pro-250328",
+        "doubao-1.5-vision-pro-32k-250115",
+        "doubao-1.5-vision-lite-250315",
+        "doubao-1.5-pro-32k-250115",
+        "doubao-1.5-pro-256k-250115",
+        "doubao-1.5-lite-32k-250115",
+        "deepseek-v3-250324",
+        "deepseek-v3-241226"
+      ]
+    },
+    {
+      "name": "dashscope",
+      "displayName": "阿里云百炼",
+      "baseURL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "${DASHSCOPE_API_KEY}",
+      "defaultModel": "qwen-max",
+      "supportedModels": [
+        "qwen-max",
+        "qwen-plus",
+        "qwen-turbo",
+        "qwen-long",
+        "qwen-vl-max",
+        "qwen-vl-plus"
+      ]
+    },
+    {
+      "name": "tencentds",
+      "displayName": "腾讯云DeepSeek",
+      "baseURL": "https://api.lkeap.cloud.tencent.com/v1",
+      "apiKey": "${TENCENTDS_API_KEY}",
+      "defaultModel": "deepseek-v3",
+      "supportedModels": [
+        "deepseek-r1",
+        "deepseek-r1-0528",
+        "deepseek-v3",
+        "deepseek-v3-0324",
+        "deepseek-prover-v2"
+      ]
+    },
+    {
+      "name": "deepseek",
+      "displayName": "DeepSeek官方",
+      "baseURL": "https://api.deepseek.com/v1",
+      "apiKey": "${DEEPSEEK_API_KEY}",
+      "defaultModel": "deepseek-chat",
+      "supportedModels": ["deepseek-chat", "deepseek-reasoner"]
+    }
+  ],
+  "defaultProvider": "volcengine",
+  "fallbackProvider": "dashscope",
+  "modelMapping": {
+    "gpt-4": "qwen-max",
+    "gpt-3.5-turbo": "qwen-plus",
+    "claude-3": "doubao-1.5-pro-32k-250115"
+  },
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-06-03",
+    "description": "统一适配器提供商配置文件"
+  }
+}

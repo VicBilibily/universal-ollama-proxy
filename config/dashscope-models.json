@@ -1,0 +1,218 @@
+{
+  "models": {
+    "text": {
+      "category": "文本生成模型",
+      "description": "阿里云百炼通义千问文本生成模型，仅包含商业版（非开源）Qwen/QwQ系列 Max/Plus/Turbo/Long，稳定版与最新版。",
+      "models": {
+        "qwen-max": {
+          "name": "qwen-max",
+          "displayName": "通义千问Max（稳定版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话", "复杂推理"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 300, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.04, "output": 0.12 }
+        },
+        "qwen-max-latest": {
+          "name": "qwen-max-latest",
+          "displayName": "通义千问Max（最新版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话", "复杂推理"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 300, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.08, "output": 0.24 }
+        },
+        "qwen-plus": {
+          "name": "qwen-plus",
+          "displayName": "通义千问Plus（稳定版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 600, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.008, "output": 0.024 }
+        },
+        "qwen-plus-latest": {
+          "name": "qwen-plus-latest",
+          "displayName": "通义千问Plus（最新版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 600, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.012, "output": 0.032 }
+        },
+        "qwen-turbo": {
+          "name": "qwen-turbo",
+          "displayName": "通义千问Turbo（稳定版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 600, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.0015, "output": 0.006 }
+        },
+        "qwen-turbo-latest": {
+          "name": "qwen-turbo-latest",
+          "displayName": "通义千问Turbo（最新版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "contextLength": 131072,
+          "inputLength": 131072,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 600, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.003, "output": 0.012 }
+        },
+        "qwen-long": {
+          "name": "qwen-long",
+          "displayName": "通义千问Long（稳定版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "长文本处理", "多轮对话"],
+          "contextLength": 10000000,
+          "inputLength": 10000000,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 300, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": false,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.0005, "output": 0.002 }
+        },
+        "qwen-long-latest": {
+          "name": "qwen-long-latest",
+          "displayName": "通义千问Long（最新版）",
+          "type": "chat",
+          "capabilities": ["文本生成", "长文本处理", "多轮对话"],
+          "contextLength": 10000000,
+          "inputLength": 10000000,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": { "rpm": 300, "tpm": 400000 },
+          "freeTokens": 1000000,
+          "recommended": false,
+          "supportedFormats": ["text"],
+          "pricing": { "input": 0.001, "output": 0.004 }
+        }
+      }
+    },
+    "vision": {
+      "category": "视觉理解模型",
+      "description": "阿里云百炼通义千问视觉理解模型，支持图片内容理解和分析",
+      "models": {
+        "qwen-vl-max": {
+          "name": "qwen-vl-max",
+          "displayName": "通义千问VL Max",
+          "type": "vision",
+          "capabilities": [
+            "图片理解",
+            "文本生成",
+            "多轮对话",
+            "OCR",
+            "图表分析"
+          ],
+          "contextLength": 32768,
+          "inputLength": 32768,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": {
+            "rpm": 100,
+            "tpm": 100000
+          },
+          "freeTokens": 100000,
+          "recommended": true,
+          "supportedFormats": ["text", "image"],
+          "pricing": {
+            "input": 0.02,
+            "output": 0.02
+          }
+        },
+        "qwen-vl-plus": {
+          "name": "qwen-vl-plus",
+          "displayName": "通义千问VL Plus",
+          "type": "vision",
+          "capabilities": ["图片理解", "文本生成", "多轮对话", "OCR"],
+          "contextLength": 32768,
+          "inputLength": 32768,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": {
+            "rpm": 200,
+            "tpm": 200000
+          },
+          "freeTokens": 200000,
+          "recommended": true,
+          "supportedFormats": ["text", "image"],
+          "pricing": {
+            "input": 0.008,
+            "output": 0.008
+          }
+        }
+      }
+    }
+  },
+  "defaultParameters": {
+    "chat": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_tokens": 2000,
+      "stream": false,
+      "frequency_penalty": 0.0,
+      "presence_penalty": 0.0,
+      "repetition_penalty": 1.0,
+      "enable_search": false
+    }
+  },
+  "meta": {
+    "source": "https://dashscope.aliyuncs.com/api/v1",
+    "description": "阿里云百炼通义千问模型配置文件，仅包含文本生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
+    "version": "1.0.0",
+    "lastUpdated": "2025-06-03",
+    "officialDoc": "https://help.aliyun.com/zh/model-studio/getting-started/models",
+    "supportedFeatures": {
+      "text_models": [
+        "text_generation",
+        "function_calling",
+        "multi_turn",
+        "complex_reasoning",
+        "long_context"
+      ],
+      "vision_models": [
+        "image_understanding",
+        "ocr",
+        "chart_analysis",
+        "multi_turn"
+      ]
+    }
+  }
+}

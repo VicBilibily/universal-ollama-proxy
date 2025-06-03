@@ -1,0 +1,73 @@
+{
+  "models": {
+    "chat": {
+      "category": "DeepSeek官方聊天模型",
+      "description": "DeepSeek官方API模型",
+      "models": {
+        "deepseek-chat": {
+          "name": "deepseek-chat",
+          "displayName": "DeepSeek Chat (官方)",
+          "type": "chat",
+          "capabilities": [
+            "文本生成",
+            "多轮对话",
+            "推理",
+            "代码生成",
+            "函数调用"
+          ],
+          "contextLength": 64000,
+          "inputLength": 64000,
+          "outputLength": 8192,
+          "defaultOutputLength": 4096,
+          "rateLimits": { "rpm": 1000, "tpm": 1000000 },
+          "freeTokens": 0,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "endpoint": "deepseek-chat",
+          "provider": "deepseek",
+          "parameters": "V3",
+          "notes": "DeepSeek最新聊天模型，支持复杂对话和推理任务",
+          "specialFeatures": ["function_calling", "multi_turn"]
+        },
+        "deepseek-reasoner": {
+          "name": "deepseek-reasoner",
+          "displayName": "DeepSeek Reasoner (官方)",
+          "type": "chat",
+          "capabilities": ["深度推理", "思维链", "数学解题", "逻辑分析"],
+          "contextLength": 64000,
+          "inputLength": 64000,
+          "outputLength": 8192,
+          "defaultOutputLength": 4096,
+          "rateLimits": { "rpm": 500, "tpm": 500000 },
+          "freeTokens": 0,
+          "recommended": true,
+          "supportedFormats": ["text"],
+          "endpoint": "deepseek-reasoner",
+          "provider": "deepseek",
+          "parameters": "R1",
+          "notes": "DeepSeek推理模型，专门用于需要深度思考的复杂任务",
+          "specialFeatures": ["reasoning", "chain_of_thought"]
+        }
+      }
+    }
+  },
+  "defaultParameters": {
+    "chat": {
+      "temperature": 0.7,
+      "max_tokens": 4096,
+      "top_p": 0.9,
+      "stream": true
+    }
+  },
+  "meta": {
+    "source": "https://api.deepseek.com/v1",
+    "description": "DeepSeek官方API模型配置",
+    "version": "2.0.0",
+    "lastUpdated": "2025-06-03",
+    "officialDoc": "https://api-docs.deepseek.com/",
+    "supportedFeatures": {
+      "chat_model": ["function_calling", "multi_turn", "stream"],
+      "reasoner_model": ["reasoning", "chain_of_thought", "deep_thinking"]
+    }
+  }
+}

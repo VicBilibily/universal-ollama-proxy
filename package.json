@@ -1,0 +1,83 @@
+{
+  "name": "universal-ollama-proxy",
+  "version": "1.0.0",
+  "description": "通用AI服务提供商 OpenAI 格式接口转换为 Ollama 本地接口代理服务，支持多个AI提供商",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev:watch": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "postbuild": "echo \"构建完成\"",
+    "check": "node check-setup.js",
+    "prestart": "npm run check",
+    "predev": "npm run check",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\"",
+    "lint": "prettier --check .",
+    "pkg:build": "npm run build && npm run pkg:all",
+    "pkg:all": "npm run pkg:win && npm run pkg:linux && npm run pkg:mac",
+    "pkg:win": "npx pkg dist/index.js --targets node18-win-x64 --out-path binaries",
+    "pkg:linux": "npx pkg dist/index.js --targets node18-linux-x64 --out-path binaries",
+    "pkg:mac": "npx pkg dist/index.js --targets node18-macos-x64 --out-path binaries",
+    "pkg:win-arm": "npx pkg dist/index.js --targets node18-win-arm64 --out-path binaries",
+    "pkg:linux-arm": "npx pkg dist/index.js --targets node18-linux-arm64 --out-path binaries",
+    "pkg:mac-arm": "npx pkg dist/index.js --targets node18-macos-arm64 --out-path binaries",
+    "build:binaries": "node build-binaries.js",
+    "verify:binaries": "node verify-binaries.js",
+    "verify:releases": "node verify-releases.js",
+    "create:release": "node create-release.js",
+    "release": "npm run build:binaries && npm run verify:binaries && npm run create:release",
+    "quick:build": "node quick-build.js",
+    "build:info": "node build-info.js"
+  },
+  "keywords": [
+    "ollama",
+    "universal-proxy",
+    "multi-provider",
+    "volc-engine",
+    "dashscope",
+    "deepseek",
+    "tencent",
+    "ai",
+    "chatbot",
+    "proxy",
+    "typescript"
+  ],
+  "author": "Developer",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "blob-polyfill": "^9.0.20240710",
+    "cors": "^2.8.5",
+    "cross-fetch": "^4.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "form-data": "^4.0.2",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0",
+    "openai": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^4.17.21",
+    "@types/form-data": "^2.5.2",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.15.29",
+    "nodemon": "^3.1.10",
+    "pkg": "^5.8.1",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "pkg": {
+    "assets": [
+      "config/**/*",
+      "node_modules/openai/**/*"
+    ],
+    "outputPath": "binaries"
+  }
+}

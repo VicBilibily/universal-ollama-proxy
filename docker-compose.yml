@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  ai-ollama-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-ollama-proxy:dev
+    container_name: ai-ollama-proxy-dev
+    restart: unless-stopped
+    ports:
+      - '11434:11434'
+    environment:
+      - NODE_ENV=development
+      - PORT=11434
+      - LOG_LEVEL=debug
+      # 从外部环境变量或 .env 文件读取
+      - VOLCENGINE_API_KEY=${VOLCENGINE_API_KEY}
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      - TENCENTDS_API_KEY=${TENCENTDS_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    volumes:
+      # 开发模式下挂载日志目录
+      - ./logs:/app/logs
+      # 挂载配置文件目录
+      - ./config:/app/config:ro
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "const http=require('http');const req=http.request('http://localhost:11434/',r=>r.statusCode===200?process.exit(0):process.exit(1));req.on('error',()=>process.exit(1));req.end();",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ai-proxy-network
+
+networks:
+  ai-proxy-network:
+    driver: bridge
+# 使用方法:
+# 开发环境:
+# 1. 复制 .env.example 到 .env 并填入配置
+# 2. 运行: docker-compose up -d
+# 3. 查看日志: docker-compose logs -f ai-ollama-proxy
+# 4. 停止服务: docker-compose down
+#
+# 生产环境:
+# 使用 docker-compose.prod.yml 文件
+# docker-compose -f docker-compose.prod.yml up -d

@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  ai-ollama-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-ollama-proxy:latest
+    container_name: ai-ollama-proxy
+    restart: unless-stopped
+    ports:
+      - '11434:11434'
+    environment:
+      - NODE_ENV=production
+      - PORT=11434
+      - LOG_LEVEL=info
+      # 从外部环境变量或 .env 文件读取
+      - VOLCENGINE_API_KEY=${VOLCENGINE_API_KEY}
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      - TENCENTDS_API_KEY=${TENCENTDS_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    volumes:
+      # 如果需要挂载日志目录，可以取消注释
+      # - ./logs:/app/logs
+      # 挂载配置文件目录（可选）
+      - ./config:/app/config:ro
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "const http=require('http');const req=http.request('http://localhost:11434/',r=>r.statusCode===200?process.exit(0):process.exit(1));req.on('error',()=>process.exit(1));req.end();",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ai-proxy-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+networks:
+  ai-proxy-network:
+    driver: bridge

@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "构建所有平台二进制文件",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:binaries"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

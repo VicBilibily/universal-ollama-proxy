@@ -26,6 +26,16 @@ export class UnifiedAdapterService {
   }
 
   /**
+   * 从模型名称中提取提供商信息
+   */
+  private extractProviderFromModel(modelName: string): string {
+    if (modelName.includes(':')) {
+      return modelName.split(':')[0];
+    }
+    return 'unknown';
+  }
+
+  /**
    * 初始化所有提供商的OpenAI客户端
    */
   private initializeProviders(): void {
@@ -89,7 +99,7 @@ export class UnifiedAdapterService {
         }
 
         // 获取对应的OpenAI客户端
-        const client = this.getClientForModel(modelConfig);
+        const client = this.getClientForModel(request.model, modelConfig);
 
         // 准备OpenAI请求参数
         const openaiRequest = this.prepareOpenAIRequest(request, modelConfig);
@@ -131,7 +141,7 @@ export class UnifiedAdapterService {
     requestId: string,
     startTime: number
   ): Promise<AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
-    const self = this;
+    const extractProviderFromModel = this.extractProviderFromModel.bind(this);
 
     return (async function* () {
       try {
@@ -168,7 +178,7 @@ export class UnifiedAdapterService {
 
         logger.error('流式聊天处理失败', {
           requestId,
-          provider: modelConfig.provider,
+          provider: extractProviderFromModel(request.model),
           model: modelConfig.name,
           error,
         });
@@ -211,7 +221,7 @@ export class UnifiedAdapterService {
 
       logger.error('非流式聊天处理失败', {
         requestId,
-        provider: modelConfig.provider,
+        provider: this.extractProviderFromModel(request.model),
         model: modelConfig.name,
         error,
       });
@@ -230,7 +240,7 @@ export class UnifiedAdapterService {
       ...request,
       model: this.getProviderModelName(request.model, modelConfig),
       temperature: request.temperature || 0.7,
-      max_tokens: request.max_tokens || modelConfig.defaultOutputLength || 1000,
+      max_tokens: request.max_tokens || modelConfig.capabilities.limits.max_output_tokens || 1000,
       top_p: request.top_p || 0.9,
       stream: request.stream || false,
     };
@@ -242,10 +252,11 @@ export class UnifiedAdapterService {
   /**
    * 获取模型对应的OpenAI客户端
    */
-  private getClientForModel(modelConfig: ModelConfig): OpenAI {
-    const client = this.providers.get(modelConfig.provider!);
+  private getClientForModel(requestModel: string, modelConfig: ModelConfig): OpenAI {
+    const provider = this.extractProviderFromModel(requestModel);
+    const client = this.providers.get(provider);
     if (!client) {
-      throw new OllamaError(`未找到${modelConfig.provider}提供商的客户端`, 500);
+      throw new OllamaError(`未找到${provider}提供商的客户端`, 500);
     }
     return client;
   }
@@ -254,38 +265,11 @@ export class UnifiedAdapterService {
    * 获取提供商内部的模型名称
    */
   private getProviderModelName(requestModel: string, modelConfig: ModelConfig): string {
-    // 所有提供商统一使用端点或名称
-    return modelConfig.endpoint || modelConfig.name;
-  }
-
-  /**
-   * 获取所有可用模型
-   */
-  async getAvailableModels(): Promise<string[]> {
-    return this.modelDiscovery.getAvailableModels();
-  }
-
-  /**
-   * 获取模型配置
-   */
-  async getModelConfig(modelName: string): Promise<ModelConfig | null> {
-    return this.modelDiscovery.getModelConfig(modelName);
-  }
-
-  /**
-   * 刷新提供商配置
-   */
-  async refreshProviders(): Promise<void> {
-    logger.info('刷新提供商配置');
-    this.providers.clear();
-    this.initializeProviders();
-  }
-
-  /**
-   * 生成请求ID
-   */
-  private generateRequestId(modelName: string, request: OpenAI.Chat.Completions.ChatCompletionCreateParams): string {
-    // 使用模型名称和时间戳生成唯一请求ID
-    return `${modelName}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    // 从请求的模型名称中提取实际的模型名称（去掉provider前缀）
+    if (requestModel.includes(':')) {
+      return requestModel.split(':')[1];
+    }
+    // 如果没有provider前缀，使用模型的id
+    return modelConfig.id;
   }
 }

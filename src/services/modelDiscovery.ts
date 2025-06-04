@@ -1,17 +1,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ProviderConfig } from '../config/models';
-import { ModelDiscoveryService as IModelDiscoveryService, ModelConfig, UnifiedAdapterConfig } from '../types';
+import {
+  ModelDiscoveryService as IModelDiscoveryService,
+  ModelConfig,
+  ProviderConfig,
+  UnifiedAdapterConfig,
+} from '../types';
 import { logger } from '../utils';
 
 /**
  * 统一的模型发现服务
- * 直接从配置文件读取模型信息，不依赖具体的服务实现
- * 只保留实际使用的方法：getAvailableModels 和 getModelConfig
+ * 支持新的 GitHub Copilot 兼容模型配置格式
  */
 export class ModelDiscoveryService implements IModelDiscoveryService {
   private models: Map<string, ModelConfig> = new Map(); // 使用 provider:modelName 作为键
-  private modelsByCategory: Map<string, ModelConfig[]> = new Map();
   private lastRefreshTime: Date = new Date(0);
   private readonly configDir: string;
 
@@ -85,53 +87,23 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       const configContent = fs.readFileSync(configFile, 'utf-8');
       const config = JSON.parse(configContent) as ProviderConfig;
 
-      // 遍历所有分类的模型
-      for (const [categoryKey, categoryData] of Object.entries(config.models)) {
-        const categoryModels: ModelConfig[] = [];
-
-        for (const [modelKey, modelConfig] of Object.entries(categoryData.models)) {
-          // 为模型配置添加提供商信息
-          const enrichedModel: ModelConfig = {
-            ...modelConfig,
-            provider: provider as any,
-            category: categoryData.category,
-          };
-
-          // 使用 provider:modelName 作为唯一键
-          const uniqueKey = `${provider}:${modelConfig.name}`;
-          this.models.set(uniqueKey, enrichedModel);
-
-          categoryModels.push(enrichedModel);
-        }
-
-        // 按分类存储模型
-        const existingCategoryModels = this.modelsByCategory.get(categoryData.category) || [];
-        this.modelsByCategory.set(categoryData.category, [...existingCategoryModels, ...categoryModels]);
+      // 验证配置文件格式
+      if (!config.models || !Array.isArray(config.models)) {
+        throw new Error(`配置文件格式错误: ${configFile} - 缺少 models 数组字段`);
       }
 
-      logger.info(`成功加载 ${provider} 提供商的模型配置`);
+      // 加载所有模型
+      for (const modelConfig of config.models) {
+        // 使用 provider:modelId 作为唯一键
+        const uniqueKey = `${provider}:${modelConfig.id}`;
+        this.models.set(uniqueKey, modelConfig);
+      }
+
+      logger.info(`成功加载 ${provider} 提供商的 ${config.models.length} 个模型`);
     } catch (error) {
       logger.error(`解析 ${provider} 模型配置失败:`, error);
       throw error;
     }
-  }
-
-  /**
-   * 生成完整的模型键
-   */
-  private generateModelKey(provider: string, modelName: string): string {
-    return `${provider}:${modelName}`;
-  }
-
-  /**
-   * 解析模型键
-   */
-  private parseModelKey(key: string): { provider: string; modelName: string } | null {
-    const parts = key.split(':');
-    if (parts.length === 2) {
-      return { provider: parts[0], modelName: parts[1] };
-    }
-    return null;
   }
 
   /**
@@ -148,5 +120,13 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   async getModelConfig(modelName: string): Promise<ModelConfig | null> {
     // 只接受完整的 provider:modelName 格式
     return this.models.get(modelName) || null;
+  }
+
+  /**
+   * 刷新模型配置
+   */
+  async refreshModels(): Promise<void> {
+    this.models.clear();
+    await this.loadAllProviderModels();
   }
 }

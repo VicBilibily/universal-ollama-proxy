@@ -87,7 +87,7 @@ class App {
       this.openaiService = new OpenAICompatService(this.unifiedAdapterService);
 
       // 初始化控制器
-      this.ollamaController = new OllamaController(this.ollamaService, this.modelDiscoveryService);
+      this.ollamaController = new OllamaController(this.ollamaService);
       this.openaiController = new OpenAIController(this.openaiService);
 
       logger.info('统一适配器服务初始化完成');

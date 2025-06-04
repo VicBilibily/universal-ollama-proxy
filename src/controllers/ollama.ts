@@ -1,22 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { ModelDiscoveryService } from '../services/modelDiscovery';
 import { OllamaService } from '../services/ollama';
 import { OllamaShowRequest } from '../types';
 import { OllamaError, logger } from '../utils';
 
 export class OllamaController {
   private ollamaService: OllamaService;
-  private modelDiscoveryService: ModelDiscoveryService;
 
-  constructor(ollamaService: OllamaService, modelDiscoveryService: ModelDiscoveryService) {
+  constructor(ollamaService: OllamaService) {
     this.ollamaService = ollamaService;
-    this.modelDiscoveryService = modelDiscoveryService;
   }
 
   /**
    * GET /api/tags - 获取模型列表
    */
-  async getTags(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getTags(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logger.info('获取模型列表请求');
       const models = await this.ollamaService.list();
@@ -46,7 +43,7 @@ export class OllamaController {
   /**
    * GET / - 健康检查
    */
-  async healthCheck(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async healthCheck(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       res.json({
         status: 'Ollama is running',

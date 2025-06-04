@@ -1,271 +1,489 @@
 {
-  "models": {
-    "thinking": {
-      "category": "深度思考模型",
-      "description": "具备深度思考能力的大语言模型",
-      "models": {
-        "doubao-1.5-thinking-pro-250415": {
-          "name": "doubao-1.5-thinking-pro-250415",
-          "displayName": "豆包1.5深度思考Pro",
-          "type": "chat",
-          "capabilities": ["深度思考", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 96000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+  "models": [
+    {
+      "id": "doubao-1.5-pro-32k-250115",
+      "name": "豆包1.5 Pro 32K",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-pro-32k-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-pro",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 123904
         },
-        "doubao-1.5-thinking-vision-pro-250428": {
-          "name": "doubao-1.5-thinking-vision-pro-250428",
-          "displayName": "豆包1.5深度思考视觉Pro",
-          "type": "chat",
-          "capabilities": ["深度思考", "图片理解", "视频理解", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 96000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text", "image", "video"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true
         },
-        "doubao-1.5-thinking-pro-m-250428": {
-          "name": "doubao-1.5-thinking-pro-m-250428",
-          "displayName": "豆包1.5深度思考Pro-M",
-          "type": "chat",
-          "capabilities": ["深度思考", "图片理解"],
-          "contextLength": 128000,
-          "inputLength": 96000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
-        },
-        "deepseek-r1-250528": {
-          "name": "deepseek-r1-250528",
-          "displayName": "DeepSeek R1",
-          "type": "chat",
-          "capabilities": ["深度思考", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 96000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text"]
-        },
-        "deepseek-r1-250120": {
-          "name": "deepseek-r1-250120",
-          "displayName": "DeepSeek R1 (旧版)",
-          "type": "chat",
-          "capabilities": ["深度思考", "函数调用"],
-          "contextLength": 96000,
-          "inputLength": 64000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": false,
-          "supportedFormats": ["text"]
-        }
+        "tokenizer": "cl100k_base",
+        "type": "chat"
       }
     },
-    "vision": {
-      "category": "视觉理解模型",
-      "description": "支持图像和视频理解的多模态大语言模型",
-      "models": {
-        "doubao-1.5-vision-pro-250328": {
-          "name": "doubao-1.5-vision-pro-250328",
-          "displayName": "豆包1.5视觉Pro",
-          "type": "chat",
-          "capabilities": ["图片理解", "视频理解", "深度思考"],
-          "contextLength": 128000,
-          "inputLength": 96000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "reasoningLength": 32000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text", "image", "video"]
+    {
+      "id": "doubao-1.5-pro-128k-250115",
+      "name": "豆包1.5 Pro 128K",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-pro-128k-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-pro",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 123904
         },
-        "doubao-1.5-vision-pro-32k-250115": {
-          "name": "doubao-1.5-vision-pro-32k-250115",
-          "displayName": "豆包1.5视觉Pro 32K",
-          "type": "chat",
-          "capabilities": ["图片理解", "函数调用"],
-          "contextLength": 32000,
-          "inputLength": 32000,
-          "outputLength": 12000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": false,
-          "supportedFormats": ["text", "image"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true
         },
-        "doubao-1.5-vision-lite-250315": {
-          "name": "doubao-1.5-vision-lite-250315",
-          "displayName": "豆包1.5视觉Lite",
-          "type": "chat",
-          "capabilities": ["图片理解"],
-          "contextLength": 128000,
-          "inputLength": 128000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
-        }
+        "tokenizer": "cl100k_base",
+        "type": "chat"
       }
     },
-    "text": {
-      "category": "大语言模型",
-      "description": "专注于文本生成的大语言模型",
-      "models": {
-        "doubao-1.5-pro-32k-250115": {
-          "name": "doubao-1.5-pro-32k-250115",
-          "displayName": "豆包1.5 Pro 32K",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 128000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+    {
+      "id": "doubao-1.5-pro-256k-250115",
+      "name": "豆包1.5 Pro 256K",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-pro-256k-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-pro",
+        "limits": {
+          "max_context_window_tokens": 256000,
+          "max_output_tokens": 12000,
+          "max_prompt_tokens": 244000
         },
-        "doubao-1.5-pro-256k-250115": {
-          "name": "doubao-1.5-pro-256k-250115",
-          "displayName": "豆包1.5 Pro 256K",
-          "type": "chat",
-          "capabilities": ["文本生成"],
-          "contextLength": 256000,
-          "inputLength": 256000,
-          "outputLength": 12000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 2000,
-            "tpm": 400000
-          },
-          "freeTokens": 500000,
-          "recommended": false,
-          "supportedFormats": ["text"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true
         },
-        "doubao-1.5-lite-32k-250115": {
-          "name": "doubao-1.5-lite-32k-250115",
-          "displayName": "豆包1.5 Lite 32K",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用"],
-          "contextLength": 32000,
-          "inputLength": 32000,
-          "outputLength": 12000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-lite-32k-250115",
+      "name": "豆包1.5 Lite 32K",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-lite-32k-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-lite",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 28672
         },
-        "deepseek-v3-250324": {
-          "name": "deepseek-v3-250324",
-          "displayName": "DeepSeek V3",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 128000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true
         },
-        "deepseek-v3-241226": {
-          "name": "deepseek-v3-241226",
-          "displayName": "DeepSeek V3 (初始版)",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用"],
-          "contextLength": 128000,
-          "inputLength": 128000,
-          "outputLength": 16000,
-          "defaultOutputLength": 4000,
-          "rateLimits": {
-            "rpm": 30000,
-            "tpm": 5000000
-          },
-          "freeTokens": 500000,
-          "recommended": false,
-          "supportedFormats": ["text"]
-        }
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-vision-pro-32k-250115",
+      "name": "豆包1.5视觉Pro 32K",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-vision-pro-32k-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-vision",
+        "limits": {
+          "max_context_window_tokens": 32000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 27904,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "webp",
+              "gif",
+              "mp4",
+              "avi",
+              "mov"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-vision-pro-250115",
+      "name": "豆包1.5视觉Pro",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-vision-pro-250115",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-vision",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 123904,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "webp",
+              "gif",
+              "mp4",
+              "avi",
+              "mov"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-vision-lite-250315",
+      "name": "豆包1.5视觉Lite",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-vision-lite-250315",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-vision",
+        "limits": {
+          "max_context_window_tokens": 32000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 27904,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "webp",
+              "gif",
+              "mp4",
+              "avi",
+              "mov"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "vision": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-vision-pro-250328",
+      "name": "豆包1.5视觉Pro",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-vision-pro-250328",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-vision",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 123904,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "webp",
+              "gif",
+              "mp4",
+              "avi",
+              "mov"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-thinking-pro-250415",
+      "name": "豆包1.5深度思考Pro",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-thinking-pro-250415",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-thinking",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000,
+          "reasoning_tokens": 32000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-thinking-pro-m-250428",
+      "name": "豆包1.5深度思考Pro-M",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-thinking-pro-m-250428",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-thinking",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000,
+          "reasoning_tokens": 32000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "doubao-1.5-thinking-vision-pro-250428",
+      "name": "豆包1.5深度思考视觉Pro",
+      "object": "model",
+      "vendor": "ByteDance",
+      "version": "doubao-1.5-thinking-vision-pro-250428",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "doubao-1.5-thinking-vision",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000,
+          "reasoning_tokens": 32000,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "webp",
+              "gif",
+              "mp4",
+              "avi",
+              "mov"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "thinking": true,
+          "vision": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "deepseek-v3-241226",
+      "name": "DeepSeek V3 初始版",
+      "object": "model",
+      "vendor": "DeepSeek",
+      "version": "deepseek-v3-241226",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "deepseek-v3",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "deepseek-v3-250324",
+      "name": "DeepSeek V3-250324",
+      "object": "model",
+      "vendor": "DeepSeek",
+      "version": "deepseek-v3-250324",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "deepseek-v3",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "deepseek-r1-250120",
+      "name": "DeepSeek R1 旧版",
+      "object": "model",
+      "vendor": "DeepSeek",
+      "version": "deepseek-r1-250120",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "deepseek-r1",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000,
+          "reasoning_tokens": 32000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "deepseek-r1-250528",
+      "name": "DeepSeek R1",
+      "object": "model",
+      "vendor": "DeepSeek",
+      "version": "deepseek-r1-250528",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "deepseek-r1",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 96000,
+          "reasoning_tokens": 32000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
       }
     }
-  },
-  "defaultParameters": {
-    "chat": {
-      "temperature": 0.7,
-      "top_p": 0.9,
-      "max_tokens": 4000,
-      "stream": false,
-      "frequency_penalty": 0.0,
-      "presence_penalty": 0.0
-    }
-  },
+  ],
+  "object": "list",
   "meta": {
+    "version": "2.0.0",
+    "lastUpdated": "2025-06-04",
     "source": "https://ark.cn-beijing.volces.com/api/v3",
-    "description": "火山方舟引擎模型配置文件，包含语言类型的多模态模型（已移除UI和embedding模型）",
-    "version": "1.0.0",
-    "lastUpdated": "2025-06-02",
+    "description": "火山方舟引擎模型配置文件 - 新格式版本",
     "officialDoc": "https://www.volcengine.com/docs/82379/1330310",
     "supportedFeatures": {
-      "thinking_models": ["deep_thinking", "reasoning", "function_calling"],
-      "vision_models": ["image_understanding", "video_understanding", "ocr"],
-      "text_models": ["text_generation", "function_calling", "multi_turn"]
+      "categories": ["thinking", "vision", "text"],
+      "capabilities": [
+        "streaming",
+        "tool_calls",
+        "vision",
+        "thinking",
+        "structured_outputs"
+      ]
     }
   }
 }

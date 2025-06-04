@@ -108,6 +108,16 @@ class ChatLogger {
   }
 
   /**
+   * 从模型ID中提取提供商信息
+   */
+  private extractProviderFromModelId(modelId: string): string {
+    if (modelId.includes(':')) {
+      return modelId.split(':')[0];
+    }
+    return 'unknown';
+  }
+
+  /**
    * 生成唯一的请求ID
    * 格式: 纯数字日期时间 + 随机ID
    * 例如: 20250604103015123_abc123def
@@ -151,7 +161,7 @@ class ChatLogger {
       requestId,
       timestamp: startTime,
       model: openaiRequest.model, // 使用 OpenAI 请求中的模型名称
-      provider: modelConfig.provider || 'unknown',
+      provider: this.extractProviderFromModelId(modelConfig.id),
       openaiRequest: JSON.parse(JSON.stringify(openaiRequest)), // 深拷贝 OpenAI 请求
       metadata: {
         startTime,

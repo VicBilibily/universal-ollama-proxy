@@ -24,7 +24,7 @@ process.on('uncaughtException', (error: Error) => {
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+process.on('unhandledRejection', (reason: any, _promise: Promise<any>) => {
   logger.error('未处理的 Promise 拒绝:', reason);
   process.exit(1);
 });

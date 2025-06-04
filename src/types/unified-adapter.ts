@@ -10,7 +10,4 @@ export interface UnifiedProvider {
 
 export interface UnifiedAdapterConfig {
   providers: UnifiedProvider[];
-  defaultProvider?: string;
-  fallbackProvider?: string;
-  modelMapping?: Record<string, string>;
 }

@@ -27,6 +27,7 @@
     "validate:release": "node scripts/validate-release.js",
     "monitor:actions": "node scripts/monitor-actions.js",
     "prerelease": "npm run validate:release",
+    "test:models-chat": "node scripts/test-all-models.js",
     "prepare": "husky",
     "setup:hooks": "node scripts/setup-hooks.js",
     "postinstall": "npm run setup:hooks"

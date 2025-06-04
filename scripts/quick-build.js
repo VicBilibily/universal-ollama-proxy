@@ -10,9 +10,9 @@ const readline = require('readline');
 
 const QUICK_OPTIONS = [
   { name: '构建所有平台', command: 'npm run build:binaries' },
-  { name: '仅构建 Windows 平台', command: 'node ./build-binaries.js windows' },
-  { name: '仅构建 Linux 平台', command: 'node ./build-binaries.js linux' },
-  { name: '仅构建 macOS 平台', command: 'node ./build-binaries.js macos' },
+  { name: '仅构建 Windows 平台', command: 'node ./scripts/build-binaries.js windows' },
+  { name: '仅构建 Linux 平台', command: 'node ./scripts/build-binaries.js linux' },
+  { name: '仅构建 macOS 平台', command: 'node ./scripts/build-binaries.js macos' },
   { name: '创建发布包', command: 'npm run create:release' },
   { name: '完整发布流程 (构建+验证+打包)', command: 'npm run release' },
   { name: '验证已有二进制文件', command: 'npm run verify:binaries' },

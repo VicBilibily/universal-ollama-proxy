@@ -1,241 +1,411 @@
 {
-  "models": {
-    "text": {
-      "category": "文本生成模型",
-      "description": "阿里云百炼通义千问文本生成模型，仅包含商业版（非开源）Qwen/QwQ系列 Max/Plus/Turbo/Long，稳定版与最新版。",
-      "models": {
-        "qwen-max": {
-          "name": "qwen-max",
-          "displayName": "通义千问Max（稳定版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话", "复杂推理"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 300, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+  "models": [
+    {
+      "id": "qwen-max",
+      "name": "通义千问Max（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-max",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-max",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 32768
         },
-        "qwen-max-latest": {
-          "name": "qwen-max-latest",
-          "displayName": "通义千问Max（最新版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话", "复杂推理"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 300, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
         },
-        "qwen-plus": {
-          "name": "qwen-plus",
-          "displayName": "通义千问Plus（稳定版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 600, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
-        },
-        "qwen-plus-latest": {
-          "name": "qwen-plus-latest",
-          "displayName": "通义千问Plus（最新版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话", "思考模式"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 600, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
-        },
-        "qwen-turbo": {
-          "name": "qwen-turbo",
-          "displayName": "通义千问Turbo（稳定版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 600, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
-        },
-        "qwen-turbo-latest": {
-          "name": "qwen-turbo-latest",
-          "displayName": "通义千问Turbo（最新版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话", "思考模式"],
-          "contextLength": 131072,
-          "inputLength": 131072,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 600, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": true,
-          "supportedFormats": ["text"]
-        },
-        "qwen-long": {
-          "name": "qwen-long",
-          "displayName": "通义千问Long（稳定版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "长文本处理", "多轮对话"],
-          "contextLength": 10000000,
-          "inputLength": 10000000,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 300, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": false,
-          "supportedFormats": ["text"]
-        },
-        "qwen-long-latest": {
-          "name": "qwen-long-latest",
-          "displayName": "通义千问Long（最新版）",
-          "type": "chat",
-          "capabilities": ["文本生成", "长文本处理", "多轮对话"],
-          "contextLength": 10000000,
-          "inputLength": 10000000,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": { "rpm": 300, "tpm": 400000 },
-          "freeTokens": 1000000,
-          "recommended": false,
-          "supportedFormats": ["text"]
-        }
+        "tokenizer": "cl100k_base",
+        "type": "chat"
       }
     },
-    "vision": {
-      "category": "视觉理解模型",
-      "description": "阿里云百炼通义千问视觉理解模型，支持图片内容理解和分析",
-      "models": {
-        "qwen-vl-max": {
-          "name": "qwen-vl-max",
-          "displayName": "通义千问VL Max（稳定版）",
-          "type": "vision",
-          "capabilities": [
-            "图片理解",
-            "文本生成",
-            "多轮对话",
-            "OCR",
-            "图表分析"
-          ],
-          "contextLength": 32768,
-          "inputLength": 32768,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": {
-            "rpm": 100,
-            "tpm": 100000
-          },
-          "freeTokens": 100000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
+    {
+      "id": "qwen-max-latest",
+      "name": "通义千问Max（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-max-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-max",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072
         },
-        "qwen-vl-max-latest": {
-          "name": "qwen-vl-max-latest",
-          "displayName": "通义千问VL Max（最新版）",
-          "type": "vision",
-          "capabilities": [
-            "图片理解",
-            "文本生成",
-            "多轮对话",
-            "OCR",
-            "图表分析"
-          ],
-          "contextLength": 32768,
-          "inputLength": 32768,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": {
-            "rpm": 100,
-            "tpm": 100000
-          },
-          "freeTokens": 100000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
         },
-        "qwen-vl-plus": {
-          "name": "qwen-vl-plus",
-          "displayName": "通义千问VL Plus（稳定版）",
-          "type": "vision",
-          "capabilities": ["图片理解", "文本生成", "多轮对话", "OCR"],
-          "contextLength": 32768,
-          "inputLength": 32768,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": {
-            "rpm": 200,
-            "tpm": 200000
-          },
-          "freeTokens": 200000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-plus",
+      "name": "通义千问Plus（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-plus",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-plus",
+        "limits": {
+          "max_context_window_tokens": 129024,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 129024
         },
-        "qwen-vl-plus-latest": {
-          "name": "qwen-vl-plus-latest",
-          "displayName": "通义千问VL Plus（最新版）",
-          "type": "vision",
-          "capabilities": ["图片理解", "文本生成", "多轮对话", "OCR"],
-          "contextLength": 32768,
-          "inputLength": 32768,
-          "outputLength": 8192,
-          "defaultOutputLength": 2000,
-          "rateLimits": {
-            "rpm": 200,
-            "tpm": 200000
-          },
-          "freeTokens": 200000,
-          "recommended": true,
-          "supportedFormats": ["text", "image"]
-        }
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-plus-latest",
+      "name": "通义千问Plus（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-plus-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-plus",
+        "limits": {
+          "max_context_window_tokens": 129024,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 129024,
+          "reasoning_tokens": 98304
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-turbo",
+      "name": "通义千问Turbo（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-turbo",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-turbo",
+        "limits": {
+          "max_context_window_tokens": 1000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 1000000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-turbo-latest",
+      "name": "通义千问Turbo（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-turbo-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-turbo",
+        "limits": {
+          "max_context_window_tokens": 1000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 1000000,
+          "reasoning_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-long",
+      "name": "通义千问Long（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-long",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "qwen-long",
+        "limits": {
+          "max_context_window_tokens": 10000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 10000000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-long-latest",
+      "name": "通义千问Long（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-long-latest",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "qwen-long",
+        "limits": {
+          "max_context_window_tokens": 10000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 10000000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-vl-max",
+      "name": "通义千问VL Max（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-vl-max",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-vl-max",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp",
+              "bmp",
+              "tiff"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-vl-max-latest",
+      "name": "通义千问VL Max（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-vl-max-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-vl-max",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp",
+              "bmp",
+              "tiff"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-vl-plus",
+      "name": "通义千问VL Plus（稳定版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-vl-plus",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-vl-plus",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp",
+              "bmp",
+              "tiff"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen-vl-plus-latest",
+      "name": "通义千问VL Plus（最新版）",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-vl-plus-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-vl-plus",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072,
+          "vision": {
+            "max_images": 10,
+            "max_image_size": 20971520,
+            "supported_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp",
+              "bmp",
+              "tiff"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
       }
     }
-  },
-  "defaultParameters": {
-    "chat": {
-      "temperature": 0.7,
-      "top_p": 0.9,
-      "max_tokens": 2000,
-      "stream": false,
-      "frequency_penalty": 0.0,
-      "presence_penalty": 0.0,
-      "repetition_penalty": 1.0,
-      "enable_search": false
-    }
-  },
+  ],
+  "object": "list",
   "meta": {
+    "version": "2.0.0",
+    "lastUpdated": "2025-06-04",
     "source": "https://dashscope.aliyuncs.com/api/v1",
     "description": "阿里云百炼通义千问模型配置文件，仅包含文本生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
-    "version": "1.0.0",
-    "lastUpdated": "2025-06-03",
     "officialDoc": "https://help.aliyun.com/zh/model-studio/models",
     "supportedFeatures": {
-      "text_models": [
-        "text_generation",
-        "function_calling",
-        "multi_turn",
-        "complex_reasoning",
-        "long_context"
-      ],
-      "vision_models": [
-        "image_understanding",
-        "ocr",
-        "chart_analysis",
-        "multi_turn"
+      "categories": ["text", "vision"],
+      "capabilities": [
+        "tool_calls",
+        "vision",
+        "thinking",
+        "streaming",
+        "structured_outputs"
       ]
     }
   }

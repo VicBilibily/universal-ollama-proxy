@@ -38,13 +38,6 @@
       }
     }
   ],
-  "defaultProvider": "volcengine",
-  "fallbackProvider": "dashscope",
-  "modelMapping": {
-    "gpt-4": "qwen-max",
-    "gpt-3.5-turbo": "qwen-plus",
-    "claude-3": "doubao-1.5-pro-32k-250115"
-  },
   "meta": {
     "version": "1.0.0",
     "lastUpdated": "2025-06-03",

@@ -72,28 +72,13 @@ export class OllamaService {
 
       // 检查模型是否支持视觉功能
       if (modelConfig.capabilities) {
-        const hasVisionSupport = modelConfig.capabilities.some(
-          cap =>
-            cap === '图片理解' ||
-            cap === '视频理解' ||
-            cap === 'vision' ||
-            cap.includes('image') ||
-            cap.includes('video')
-        );
+        const hasVisionSupport = modelConfig.capabilities.supports.vision || false;
         if (hasVisionSupport) {
           capabilities.push('vision');
         }
 
         // 检查模型是否支持思考模式
-        const hasThinkingSupport = modelConfig.capabilities.some(
-          cap =>
-            cap === '思考模式' ||
-            cap === '深度思考' ||
-            cap === 'thinking' ||
-            cap === 'reasoning' ||
-            cap.includes('思考') ||
-            cap.includes('推理')
-        );
+        const hasThinkingSupport = modelConfig.capabilities.supports.thinking || false;
         if (hasThinkingSupport) {
           capabilities.push('thinking');
         }
@@ -159,13 +144,21 @@ export class OllamaService {
    * 从配置获取模型家族
    */
   private getModelFamilyFromConfig(config: ModelConfig): string {
+    // 优先使用配置文件中的 family 信息
+    if (config.capabilities?.family) {
+      return config.capabilities.family;
+    }
+
+    // 后备方案：从模型名称推断
     const modelName = config.name.toLowerCase();
-    if (modelName.includes('doubao') || modelName.includes('豆包')) {
+    if (modelName.includes('doubao')) {
       return 'doubao';
     } else if (modelName.includes('qwen')) {
       return 'qwen';
     } else if (modelName.includes('llama')) {
       return 'llama';
+    } else if (modelName.includes('deepseek')) {
+      return 'deepseek';
     }
     return 'unknown';
   }
@@ -174,25 +167,38 @@ export class OllamaService {
    * 从配置获取参数大小
    */
   private getParameterSizeFromConfig(config: ModelConfig): number {
+    // 尝试从配置文件的 vendor 或其他字段获取参数信息
+    // 这是一个简化的推断逻辑，实际参数大小应该在配置文件中明确定义
     const modelName = config.name.toLowerCase();
+    const modelId = config.id.toLowerCase();
 
-    // 根据模型名称推断参数大小（单位：百万参数）
-    if (modelName.includes('4k') || modelName.includes('32k') || modelName.includes('128k')) {
-      if (modelName.includes('doubao-pro')) {
+    // DeepSeek 模型
+    if (modelId.includes('deepseek')) {
+      if (modelId.includes('reasoner')) {
+        return 671000; // 671B parameters
+      } else if (modelId.includes('chat')) {
+        return 67000; // 67B parameters
+      }
+    }
+
+    // 豆包模型
+    if (modelName.includes('doubao')) {
+      if (modelName.includes('pro')) {
         return 175000; // 175B parameters
-      } else if (modelName.includes('doubao-lite')) {
+      } else if (modelName.includes('lite')) {
         return 7000; // 7B parameters
       }
     }
 
-    if (modelName.includes('qwen-max')) {
-      return 72000; // 72B parameters
-    } else if (modelName.includes('qwen-plus')) {
-      return 14000; // 14B parameters
-    } else if (modelName.includes('qwen-turbo')) {
-      return 7000; // 7B parameters
-    } else if (modelName.includes('qwen-long')) {
-      return 14000; // 14B parameters
+    // Qwen 模型
+    if (modelName.includes('qwen')) {
+      if (modelName.includes('max')) {
+        return 72000; // 72B parameters
+      } else if (modelName.includes('plus')) {
+        return 14000; // 14B parameters
+      } else if (modelName.includes('turbo') || modelName.includes('long')) {
+        return 7000; // 7B parameters
+      }
     }
 
     // 默认值

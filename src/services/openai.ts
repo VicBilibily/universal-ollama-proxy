@@ -27,7 +27,7 @@ export class OpenAICompatService {
 
     try {
       // 验证模型名称必须为组合ID格式 (provider:modelName)
-      if (!this.isCompositeModelName(request.model)) {
+      if (!request.model.includes(':') || request.model.split(':').length !== 2) {
         const error = new Error(`模型名称必须使用组合格式 'provider:modelName'，当前格式: ${request.model}`);
         logger.error('模型名称格式验证失败:', { model: request.model });
         throw error;
@@ -58,24 +58,5 @@ export class OpenAICompatService {
       logger.error('OpenAI 聊天请求处理失败:', error);
       throw error;
     }
-  }
-
-  /**
-   * 验证模型名称是否为组合ID格式 (provider:modelName)
-   */
-  private isCompositeModelName(modelName: string): boolean {
-    if (!modelName || typeof modelName !== 'string') {
-      return false;
-    }
-
-    // 检查是否包含冒号分隔符
-    const parts = modelName.split(':');
-    if (parts.length !== 2) {
-      return false;
-    }
-
-    // 检查提供商名和模型名都不为空
-    const [provider, model] = parts;
-    return provider.trim().length > 0 && model.trim().length > 0;
   }
 }

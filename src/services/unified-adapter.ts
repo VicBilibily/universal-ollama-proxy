@@ -57,25 +57,12 @@ export class UnifiedAdapterService {
    * 获取提供商特定的请求头
    */
   private getProviderHeaders(provider: UnifiedProvider): Record<string, string> {
-    const headers: Record<string, string> = {};
-
-    switch (provider.name) {
-      case 'volcengine':
-        headers['Content-Type'] = 'application/json';
-        break;
-      case 'dashscope':
-        headers['Content-Type'] = 'application/json';
-        headers['X-DashScope-SSE'] = 'enable';
-        break;
-      case 'tencentds':
-        headers['Content-Type'] = 'application/json';
-        break;
-      case 'deepseek':
-        headers['Content-Type'] = 'application/json';
-        break;
-    }
-
-    return headers;
+    // 从配置中获取请求头，如果没有配置则使用默认值
+    return (
+      provider.headers || {
+        'Content-Type': 'application/json',
+      }
+    );
   }
 
   /**
@@ -248,12 +235,7 @@ export class UnifiedAdapterService {
       stream: request.stream || false,
     };
 
-    // 添加提供商特定的参数
-    if (modelConfig.provider === 'dashscope') {
-      (openaiRequest as any).repetition_penalty = 1.0;
-      (openaiRequest as any).enable_search = false;
-    }
-
+    // 使用通用的OpenAI请求格式，所有供应商特定参数应在配置文件中处理
     return openaiRequest;
   }
 
@@ -272,27 +254,8 @@ export class UnifiedAdapterService {
    * 获取提供商内部的模型名称
    */
   private getProviderModelName(requestModel: string, modelConfig: ModelConfig): string {
-    // 对于DashScope，去掉可能的前缀
-    if (modelConfig.provider === 'dashscope') {
-      return modelConfig.endpoint || modelConfig.name;
-    }
-
-    // 对于VolcEngine，使用配置的端点或名称
-    if (modelConfig.provider === 'volcengine') {
-      return modelConfig.endpoint || modelConfig.name;
-    }
-
-    // 对于腾讯DS，使用端点或名称
-    if (modelConfig.provider === 'tencentds') {
-      return modelConfig.endpoint || modelConfig.name;
-    }
-
-    // 对于DeepSeek，使用端点或名称
-    if (modelConfig.provider === 'deepseek') {
-      return modelConfig.endpoint || modelConfig.name;
-    }
-
-    return modelConfig.name;
+    // 所有提供商统一使用端点或名称
+    return modelConfig.endpoint || modelConfig.name;
   }
 
   /**

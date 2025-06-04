@@ -87,6 +87,49 @@ function copyConfigFiles(targetDir) {
 }
 
 function createReadme(targetDir, platform, arch, binaryName) {
+  // 从配置文件中读取供应商信息
+  let providerEnvVars = [];
+  let providerDescriptions = [];
+
+  try {
+    const unifiedConfigPath = path.join('config', 'unified-providers.json');
+    if (fs.existsSync(unifiedConfigPath)) {
+      const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
+      const unifiedConfig = JSON.parse(unifiedConfigContent);
+
+      if (unifiedConfig && unifiedConfig.providers && Array.isArray(unifiedConfig.providers)) {
+        unifiedConfig.providers.forEach(provider => {
+          if (provider.apiKey && provider.apiKey.startsWith('${') && provider.apiKey.endsWith('}')) {
+            const envVarName = provider.apiKey.slice(2, -1);
+            providerEnvVars.push({
+              name: envVarName,
+              displayName: provider.displayName,
+            });
+          }
+        });
+      }
+    }
+  } catch (error) {
+    log(`  ⚠️ 无法读取统一配置文件: ${error.message}`);
+    // 回退到默认的供应商列表
+    providerEnvVars = [
+      { name: 'VOLCENGINE_API_KEY', displayName: '火山方舟引擎' },
+      { name: 'DASHSCOPE_API_KEY', displayName: '阿里云百炼' },
+      { name: 'DEEPSEEK_API_KEY', displayName: 'DeepSeek官方' },
+      { name: 'TENCENTDS_API_KEY', displayName: '腾讯云DeepSeek' },
+    ];
+  }
+
+  // 生成环境变量配置示例
+  let envConfigWindows = `# 通用配置\nset PORT=11434\n`;
+  let envConfigUnix = `# 通用配置\nexport PORT=11434\n`;
+
+  // 添加供应商API密钥配置
+  providerEnvVars.forEach(provider => {
+    envConfigWindows += `\n# ${provider.displayName}配置\nset ${provider.name}=your_${provider.name.toLowerCase().replace(/_api_key/i, '')}_api_key_here\n`;
+    envConfigUnix += `\n# ${provider.displayName}配置\nexport ${provider.name}=your_${provider.name.toLowerCase().replace(/_api_key/i, '')}_api_key_here\n`;
+  });
+
   const readmeContent = `# Universal Ollama Proxy v${VERSION}
 
 ## 平台信息
@@ -115,20 +158,7 @@ copy .env.example .env
 
 然后编辑 \`.env\` 文件，或者设置系统环境变量：
 \`\`\`
-# 通用配置
-set PORT=11434
-
-# 火山引擎配置
-set VOLCENGINE_API_KEY=your_volc_api_key_here
-
-# 阿里云DashScope配置
-set DASHSCOPE_API_KEY=your_dashscope_api_key_here
-
-# DeepSeek配置
-set DEEPSEEK_API_KEY=your_deepseek_api_key_here
-
-# 腾讯云配置
-set TENCENTDS_API_KEY=your_tencent_api_key_here
+${envConfigWindows}
 \`\`\`
 `
     : `
@@ -138,20 +168,7 @@ cp .env.example .env
 
 然后编辑 \`.env\` 文件，或者设置环境变量：
 \`\`\`bash
-# 通用配置
-export PORT=11434
-
-# 火山引擎配置
-export VOLCENGINE_API_KEY=your_volc_api_key_here
-
-# 阿里云DashScope配置
-export DASHSCOPE_API_KEY=your_dashscope_api_key_here
-
-# DeepSeek配置
-export DEEPSEEK_API_KEY=your_deepseek_api_key_here
-
-# 腾讯云配置
-export TENCENTDS_API_KEY=your_tencent_api_key_here
+${envConfigUnix}
 \`\`\`
 `
 }

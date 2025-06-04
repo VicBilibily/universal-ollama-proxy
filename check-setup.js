@@ -24,8 +24,29 @@ function checkEnvFile() {
   }
 
   const envContent = fs.readFileSync(envPath, 'utf8');
-  // 检查环境变量（至少需要一个）
-  const apiKeys = ['VOLCENGINE_API_KEY', 'DASHSCOPE_API_KEY'];
+
+  // 从统一配置文件中读取所有API密钥环境变量
+  let apiKeys = [];
+  try {
+    const unifiedConfigPath = path.join(__dirname, 'config', 'unified-providers.json');
+    const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
+    const unifiedConfig = JSON.parse(unifiedConfigContent);
+
+    apiKeys = unifiedConfig.providers
+      .map(provider => {
+        // 从配置中提取环境变量名，例如将"${DEEPSEEK_API_KEY}"转换为"DEEPSEEK_API_KEY"
+        const apiKey = provider.apiKey;
+        if (apiKey.startsWith('${') && apiKey.endsWith('}')) {
+          return apiKey.slice(2, -1);
+        }
+        return null;
+      })
+      .filter(key => key !== null);
+  } catch (error) {
+    logger.error(`❌ 无法读取统一配置文件: ${error.message}`);
+    logger.warn('⚠️ 使用默认API Key检查列表');
+  }
+
   const validKeys = [];
   const missingKeys = [];
 
@@ -43,9 +64,22 @@ function checkEnvFile() {
     missingKeys.forEach(varName => {
       logger.info(`   - ${varName}`);
     });
-    logger.info('💡 请在 .env 文件中设置正确的 API Key');
-    logger.info('💡 VOLCENGINE_API_KEY: 火山方舟引擎 API Key');
-    logger.info('💡 DASHSCOPE_API_KEY: 阿里云百炼 API Key');
+    logger.info('💡 请在 .env 文件中设置至少一个正确的 API Key');
+    // 显示所有可能的API Key提示
+    try {
+      const unifiedConfigPath = path.join(__dirname, 'config', 'unified-providers.json');
+      const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
+      const unifiedConfig = JSON.parse(unifiedConfigContent);
+
+      unifiedConfig.providers.forEach(provider => {
+        const envVar = provider.apiKey.slice(2, -1);
+        logger.info(`💡 ${envVar}: ${provider.displayName} API Key`);
+      });
+    } catch (error) {
+      // 如果无法读取配置文件，则提供通用提示
+      logger.info('💡 请在 .env 文件中设置至少一个 API Key');
+      logger.info('💡 您可以查看配置文件 config/unified-providers.json 了解支持的 API Key');
+    }
     logger.info('💡 目前这些变量设置为示例值，需要替换为真实的 API Key');
     return false;
   }

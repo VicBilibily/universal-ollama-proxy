@@ -171,19 +171,6 @@ npm run build && npm start
 
 ## API 使用示例
 
-### 使用 Ollama 客户端
-
-```bash
-# 设置环境变量
-$env:OLLAMA_HOST = "http://localhost:11434"
-
-# 查看可用模型
-ollama list
-
-# 开始对话
-ollama run doubao-1.5-pro-32k-250115
-```
-
 ### 使用 HTTP API
 
 #### 获取模型列表
@@ -229,6 +216,11 @@ curl -X POST http://localhost:11434/api/chat `
 | `CHAT_LOGS`          | 启用聊天详细日志       | `false`       | ❌   |
 | `CHAT_LOGS_DIR`      | 聊天日志存储目录       | `logs/chat`   | ❌   |
 
+> **注意**: 供应商 API Key 的环境变量名称是从 `config/unified-providers.json`
+> 配置文件中动态读取的。当添加新的供应商时，只需在配置文件中定义相应的环境变量名（如
+> `${NEW_PROVIDER_API_KEY}`），系统会自动从环境变量中读取对应的值，无需修改代码。以上列出的是当前配置中定义的API
+> Key环境变量。
+
 > 至少需要配置一个 API Key
 
 ### 日志级别说明
@@ -251,11 +243,9 @@ CHAT_LOGS_DIR=logs/chat
 
 #### 日志文件结构
 
-每个聊天请求会生成以下文件：
+每个聊天请求会生成一个综合日志文件：
 
-- `{requestId}_request.json` - 请求开始时的完整信息
-- `{requestId}_stream.json` - 流式响应的实时更新（仅流式请求）
-- `{requestId}_complete.json` - 请求完成后的完整日志
+- `{requestId}.json` - 包含请求的完整信息、响应内容及元数据
 
 **请求ID格式**：`YYYYMMDDHHMMSSMMM_随机字符`
 
@@ -276,17 +266,14 @@ CHAT_LOGS_DIR=logs/chat
 
 ```bash
 logs/chat/
-├── 20250604103015123_abc123def_request.json    # 请求开始日志
-├── 20250604103015123_abc123def_stream.json     # 流式响应日志（如果是流式请求）
-└── 20250604103015123_abc123def_complete.json   # 请求完成日志
+└── 20250604103015123_abc123def.json    # 完整的请求和响应日志
 ```
 
 **文件命名规则**：
 
-- 文件名格式：`{纯数字时间戳}_{随机ID}_{类型}.json`
+- 文件名格式：`{纯数字时间戳}_{随机ID}.json`
 - 时间戳：17位纯数字（YYYYMMDDHHMMSSMMM）
 - 随机ID：9位字符串，确保唯一性
-- 类型：`request`、`stream`、`complete`
 
 #### 日志文件使用指南
 
@@ -294,22 +281,22 @@ logs/chat/
 
 ```bash
 # Windows PowerShell
-Get-ChildItem logs\chat\202506041030* | Sort-Object Name
+Get-ChildItem logs\chat\202506041030*.json | Sort-Object Name
 
 # 查看2025年6月4日10:30-10:31之间的所有请求
-Get-ChildItem logs\chat\20250604103* | Sort-Object Name
+Get-ChildItem logs\chat\20250604103*.json | Sort-Object Name
 ```
 
 **快速定位问题**：
 
-1. 查看 `*_complete.json` 文件的 `summary` 部分获取概览
+1. 查看日志文件的 `summary` 部分获取请求概览
 2. 检查 `response.error` 字段查看错误信息
 3. 分析 `response.responseTime` 了解性能问题
-4. 查看 `request.messages` 了解完整对话上下文
+4. 查看 `openaiRequest.messages` 了解完整对话上下文
 
 **文件大小管理**：
 
-- 每个请求的三个文件独立存储，便于分析
+- 每个请求生成一个独立的日志文件，便于分析
 - 无文件大小限制，完整记录所有通讯内容
 - 建议定期清理旧日志文件释放磁盘空间
 
@@ -375,8 +362,31 @@ Release 即可自动构建并上传所有平台的程序包**！
 4. 点击 "Publish release"
 5. **等待 3-5 分钟，所有平台包自动出现在 Release 页面** 🎉
 
-> 📖 **详细文档**: [自动发布指南](./AUTO_RELEASE_GUIDE.md) |
-> [CI/CD 指南](./CICD_GUIDE.md)
+#### 方式二：本地构建
+
+1. 克隆仓库并安装依赖
+
+   ```bash
+   git clone https://github.com/VicBilibily/universal-ollama-proxy.git
+   cd universal-ollama-proxy
+   npm install
+   ```
+
+2. 运行完整发布流程
+
+   ```bash
+   npm run release
+   ```
+
+   或使用交互式快速构建工具
+
+   ```bash
+   npm run quick:build
+   ```
+
+3. 构建完成后在 `releases/` 目录中查看生成的发布包
+
+> 📖 **详细文档**: [自动发布指南](./AUTO_RELEASE_GUIDE.md)
 
 ## 故障排除
 
@@ -399,7 +409,7 @@ Release 即可自动构建并上传所有平台的程序包**！
 - 设置 `LOG_LEVEL=debug` 获取详细调试信息
 - 启用 `CHAT_LOGS=true` 记录完整请求响应数据
 - 检查 `logs/chat/` 目录下的日志文件分析问题
-- 查看 `*_complete.json` 文件的 `summary` 部分获取性能统计
+- 查看日志文件的 `summary` 部分获取性能统计和请求概览
 - 日志文件按时间排序：文件名前17位是纯数字时间戳，便于按时间顺序查看
 - 查找特定时间的请求：根据时间戳格式 `YYYYMMDDHHMMSSMMM` 快速定位文件
 

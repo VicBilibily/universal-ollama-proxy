@@ -14,11 +14,14 @@ services:
       - NODE_ENV=development
       - PORT=11434
       - LOG_LEVEL=debug
+      # 以下环境变量是根据 config/unified-providers.json 配置文件中定义的供应商动态读取的
+      # 如果添加了新的供应商，请在此处添加对应的环境变量
       # 从外部环境变量或 .env 文件读取
       - VOLCENGINE_API_KEY=${VOLCENGINE_API_KEY}
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
       - TENCENTDS_API_KEY=${TENCENTDS_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      # 添加新供应商时，在此添加对应的环境变量
     volumes:
       # 开发模式下挂载日志目录
       - ./logs:/app/logs

@@ -2,6 +2,7 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { OpenAI } from 'openai';
 import { join } from 'path';
+import { logger } from '.';
 import { ModelConfig } from '../types';
 
 /**
@@ -67,10 +68,27 @@ class ChatLogger {
   private activeRequests: Map<string, ChatRequestLog> = new Map();
 
   constructor() {
+    // 默认配置
     this.config = {
-      enabled: process.env.CHAT_LOGS === 'true',
-      logDir: process.env.CHAT_LOGS_DIR || 'logs/chat',
+      enabled: false,
+      logDir: 'logs/chat',
     };
+
+    // 从环境变量加载配置
+    this.loadConfig();
+  }
+
+  /**
+   * 从环境变量加载配置
+   */
+  private loadConfig(): void {
+    // 是否启用日志
+    this.config.enabled = process.env.CHAT_LOGS === 'true';
+
+    // 日志目录
+    if (process.env.CHAT_LOGS_DIR) {
+      this.config.logDir = process.env.CHAT_LOGS_DIR;
+    }
 
     // 如果启用日志，确保日志目录存在
     if (this.config.enabled) {
@@ -312,6 +330,17 @@ class ChatLogger {
    */
   getConfig(): ChatLogConfig {
     return { ...this.config };
+  }
+
+  /**
+   * 重新加载配置
+   */
+  reloadConfig(): void {
+    this.loadConfig();
+    logger.info('聊天日志配置已重新加载', {
+      enabled: this.config.enabled,
+      logDir: this.config.logDir,
+    });
   }
 
   /**

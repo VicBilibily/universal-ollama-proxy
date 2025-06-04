@@ -4,7 +4,7 @@ import path from 'path';
 export interface ModelInfo {
   name: string;
   displayName: string;
-  type: string;
+  type: 'chat' | 'embedding';
   capabilities: string[];
   contextLength: number;
   inputLength: number;
@@ -61,11 +61,31 @@ class ModelConfigLoader {
   }
 
   /**
-   * 获取所有支持的模型列表（从统一配置中获取）
+   * 获取所有支持的模型列表（从供应商配置文件中获取）
    */
   getAllSupportedModels(): string[] {
-    const providers = ['volcengine', 'dashscope', 'tencentds', 'deepseek'];
     const models: string[] = [];
+
+    // 从配置文件读取供应商列表
+    const unifiedConfigPath = path.join(this.configPath, 'unified-providers.json');
+
+    if (!fs.existsSync(unifiedConfigPath)) {
+      throw new Error(`供应商配置文件不存在: ${unifiedConfigPath}`);
+    }
+
+    let unifiedConfig;
+    try {
+      const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
+      unifiedConfig = JSON.parse(unifiedConfigContent);
+    } catch (error) {
+      throw new Error(`读取或解析供应商配置文件失败: ${unifiedConfigPath}, 错误: ${error}`);
+    }
+
+    if (!unifiedConfig.providers || !Array.isArray(unifiedConfig.providers)) {
+      throw new Error(`供应商配置文件格式错误: providers 字段缺失或格式不正确`);
+    }
+
+    const providers = unifiedConfig.providers.map((provider: any) => provider.name);
 
     for (const provider of providers) {
       try {
@@ -74,8 +94,8 @@ class ModelConfigLoader {
           models.push(...Object.keys(category.models));
         });
       } catch (error) {
-        // 忽略加载失败的提供商
         console.warn(`Failed to load ${provider} models:`, error);
+        // 继续加载其他提供商，但不使用后备列表
       }
     }
 

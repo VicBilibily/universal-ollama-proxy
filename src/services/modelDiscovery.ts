@@ -1,11 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { ProviderConfig } from '../config/models';
 import {
   ModelDiscoveryService as IModelDiscoveryService,
   ModelConfig,
   ModelQueryOptions,
   ModelStats,
-  VolcEngineModelsConfig,
+  UnifiedAdapterConfig,
 } from '../types';
 import { logger } from '../utils';
 
@@ -35,20 +36,37 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       logger.error('模型发现服务初始化失败:', error);
       throw error;
     }
-  }
-
-  /**
+  } /**
    * 加载所有提供商的模型配置
    */
   private async loadAllProviderModels(): Promise<void> {
-    const providers = ['volcengine', 'dashscope', 'tencentds', 'deepseek'];
+    // 从配置文件读取供应商列表
+    const unifiedConfigPath = path.join(this.configDir, 'unified-providers.json');
+
+    if (!fs.existsSync(unifiedConfigPath)) {
+      throw new Error(`供应商配置文件不存在: ${unifiedConfigPath}`);
+    }
+
+    let unifiedConfig: UnifiedAdapterConfig;
+    try {
+      const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
+      unifiedConfig = JSON.parse(unifiedConfigContent);
+    } catch (error) {
+      throw new Error(`读取或解析供应商配置文件失败: ${unifiedConfigPath}, 错误: ${error}`);
+    }
+
+    if (!unifiedConfig.providers || !Array.isArray(unifiedConfig.providers)) {
+      throw new Error(`供应商配置文件格式错误: providers 字段缺失或格式不正确`);
+    }
+
+    const providers = unifiedConfig.providers.map(provider => provider.name);
 
     for (const provider of providers) {
       try {
         await this.loadProviderModels(provider);
       } catch (error) {
         logger.warn(`加载 ${provider} 模型配置失败:`, error);
-        // 继续加载其他提供商的模型
+        // 继续加载其他提供商的模型，但不使用后备列表
       }
     }
 
@@ -68,7 +86,7 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
 
     try {
       const configContent = fs.readFileSync(configFile, 'utf-8');
-      const config = JSON.parse(configContent) as VolcEngineModelsConfig;
+      const config = JSON.parse(configContent) as ProviderConfig;
 
       // 遍历所有分类的模型
       for (const [categoryKey, categoryData] of Object.entries(config.models)) {
@@ -267,7 +285,7 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       try {
         const configFile = path.join(this.configDir, `${provider}-models.json`);
         const configContent = fs.readFileSync(configFile, 'utf-8');
-        const config = JSON.parse(configContent) as VolcEngineModelsConfig;
+        const config = JSON.parse(configContent) as ProviderConfig;
 
         return {
           ...model,

@@ -22,6 +22,7 @@ import { OpenAICompatService } from './services/openai';
 import { UnifiedAdapterService } from './services/unified-adapter';
 import { UnifiedAdapterConfig } from './types';
 import { logger } from './utils';
+import { chatLogger } from './utils/chatLogger';
 
 // 加载环境变量
 dotenv.config();
@@ -67,6 +68,13 @@ class App {
           }
         }
       }
+
+      // 初始化日志配置
+      chatLogger.reloadConfig();
+      logger.info('聊天日志已初始化', {
+        enabled: chatLogger.isEnabled(),
+        config: chatLogger.getConfig(),
+      });
 
       // 初始化模型发现服务（统一实现，不依赖特定服务）
       this.modelDiscoveryService = new ModelDiscoveryService();

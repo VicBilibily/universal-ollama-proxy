@@ -79,13 +79,36 @@ function verifyPackage(packagePath) {
     const envExamplePath = path.join(tempDir, '.env.example');
     if (fs.existsSync(envExamplePath)) {
       const envContent = fs.readFileSync(envExamplePath, 'utf-8');
-      const requiredEnvVars = [
-        'PORT',
-        'VOLCENGINE_API_KEY',
-        'DASHSCOPE_API_KEY',
-        'DEEPSEEK_API_KEY',
-        'TENCENTDS_API_KEY',
-      ];
+
+      // 基础必需的环境变量
+      let requiredEnvVars = ['PORT'];
+
+      // 从配置文件中读取API密钥环境变量
+      try {
+        const unifiedConfigPath = path.join(tempDir, 'config', 'unified-providers.json');
+        if (fs.existsSync(unifiedConfigPath)) {
+          const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
+          const unifiedConfig = JSON.parse(unifiedConfigContent);
+
+          // 从配置中提取所有API KEY环境变量
+          const apiKeys = unifiedConfig.providers
+            .map(provider => {
+              const apiKey = provider.apiKey;
+              if (apiKey && apiKey.startsWith('${') && apiKey.endsWith('}')) {
+                return apiKey.slice(2, -1);
+              }
+              return null;
+            })
+            .filter(key => key !== null);
+
+          // 将API密钥添加到必需的环境变量列表中
+          requiredEnvVars = [...requiredEnvVars, ...apiKeys];
+        }
+      } catch (error) {
+        log(`    ⚠️ 无法读取统一配置文件: ${error.message}`);
+        // 回退到硬编码的环境变量列表
+        requiredEnvVars = ['PORT', 'VOLCENGINE_API_KEY', 'DASHSCOPE_API_KEY', 'DEEPSEEK_API_KEY', 'TENCENTDS_API_KEY'];
+      }
 
       for (const envVar of requiredEnvVars) {
         if (envContent.includes(envVar)) {

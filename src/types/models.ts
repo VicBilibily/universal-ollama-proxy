@@ -21,7 +21,7 @@ export interface ModelConfig {
   recommended: boolean;
   supportedFormats: string[];
   endpoint?: string; // 可选的自定义端点，默认使用name
-  provider?: 'volcengine' | 'dashscope' | 'tencentds' | 'deepseek'; // 模型提供商
+  provider?: string; // 模型提供商
 }
 
 export interface ModelCategory {
@@ -41,28 +41,6 @@ export interface DefaultParameters {
   };
   embedding: {
     encoding_format: string;
-  };
-}
-
-export interface VolcEngineModelsConfig {
-  models: {
-    thinking: ModelCategory;
-    vision: ModelCategory;
-    text: ModelCategory;
-    embedding: ModelCategory;
-    multimodal_embedding: ModelCategory;
-  };
-  defaultParameters: DefaultParameters;
-  endpoints: {
-    chat: string;
-    embedding: string;
-    multimodal_embedding: string;
-  };
-  meta: {
-    version: string;
-    lastUpdated: string;
-    source: string;
-    description: string;
   };
 }
 

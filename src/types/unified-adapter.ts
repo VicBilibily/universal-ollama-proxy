@@ -1,15 +1,16 @@
 // OpenAI统一适配器类型定义
 
 export interface UnifiedProvider {
-  name: 'volcengine' | 'dashscope' | 'tencentds' | 'deepseek';
+  name: string;
   displayName: string;
   baseURL: string;
   apiKey: string;
-  defaultModel?: string;
-  supportedModels: string[];
+  headers?: Record<string, string>;
 }
 
 export interface UnifiedAdapterConfig {
   providers: UnifiedProvider[];
-  defaultProvider?: 'volcengine' | 'dashscope' | 'tencentds' | 'deepseek';
+  defaultProvider?: string;
+  fallbackProvider?: string;
+  modelMapping?: Record<string, string>;
 }

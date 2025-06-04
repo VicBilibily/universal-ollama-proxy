@@ -23,7 +23,7 @@ function log(message) {
 }
 
 function displayMenu() {
-  console.log('\n🚀 Volc Engine Ollama Proxy - 快速构建工具\n');
+  console.log('\n🚀 Universal Ollama Proxy - 快速构建工具\n');
   console.log('请选择要执行的操作:');
   QUICK_OPTIONS.forEach((option, index) => {
     console.log(`  ${index + 1}. ${option.name}`);

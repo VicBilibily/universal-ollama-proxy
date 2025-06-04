@@ -1,0 +1,167 @@
+name: Release Build and Deploy
+
+on:
+  release:
+    types: [published, created, prereleased]
+
+jobs:
+  build-and-release:
+    name: 构建并发布程序包
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行测试和代码检查
+        run: |
+          npm run lint
+          npm run build
+
+      - name: 构建所有平台二进制文件
+        run: npm run build:binaries
+
+      - name: 验证二进制文件
+        run: npm run verify:binaries
+
+      - name: 创建发布包
+        run: npm run create:release
+
+      - name: 验证发布包
+        run: npm run verify:releases
+
+      - name: 列出生成的文件
+        run: |
+          echo "生成的二进制文件:"
+          ls -la binaries/
+          echo "生成的发布包:"
+          ls -la releases/
+
+      - name: 获取版本号
+        id: get_version
+        run: |
+          echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+
+      - name: 上传发布资产到 GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            releases/*.zip
+            releases/*.tar.gz
+          body: |
+            ## 🚀 发布说明
+
+            ### 📦 下载
+
+            #### Windows
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-x64.zip` - Windows x64
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-arm64.zip` - Windows ARM64
+
+            #### Linux
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz` - Linux x64
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-arm64.tar.gz` - Linux ARM64
+
+            #### macOS
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-x64.tar.gz` - macOS Intel
+            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-arm64.tar.gz` - macOS Apple Silicon
+
+            ### 🔧 使用方法
+
+            1. 下载对应平台的压缩包
+            2. 解压到目标目录
+            3. 配置环境变量（复制 `.env.example` 为 `.env`）
+            4. 运行可执行文件
+
+            ### 📋 验证信息
+
+            - ✅ 所有平台构建完成
+            - ✅ 二进制文件验证通过
+            - ✅ 发布包完整性检查通过
+            - ✅ 自动化 CI/CD 流程
+
+            ### 📝 更新内容
+
+            此版本通过自动化 CI/CD 流程构建，包含以下改进：
+            - 多平台二进制文件支持
+            - 性能优化和错误修复
+            - 增强的错误处理机制
+            - 完善的日志记录功能
+
+            ---
+
+            > 📊 构建报告和详细信息请查看 [Actions 页面](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 生成构建报告
+        run: |
+          echo "## 📊 构建报告" >> build-report.md
+          echo "" >> build-report.md
+          echo "### 🏗️ 构建信息" >> build-report.md
+          echo "- **版本:** ${{ steps.get_version.outputs.version }}" >> build-report.md
+          echo "- **构建时间:** $(date -u)" >> build-report.md
+          echo "- **Node.js 版本:** ${{ matrix.node-version }}" >> build-report.md
+          echo "- **平台:** $(uname -a)" >> build-report.md
+          echo "" >> build-report.md
+          echo "### 📦 生成的文件" >> build-report.md
+          echo "" >> build-report.md
+          echo "#### 二进制文件" >> build-report.md
+          echo '```' >> build-report.md
+          ls -la binaries/ >> build-report.md
+          echo '```' >> build-report.md
+          echo "" >> build-report.md
+          echo "#### 发布包" >> build-report.md
+          echo '```' >> build-report.md
+          ls -la releases/ >> build-report.md
+          echo '```' >> build-report.md
+
+      - name: 上传构建报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report-${{ steps.get_version.outputs.version }}
+          path: build-report.md
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ steps.get_version.outputs.version }}
+          path: |
+            binaries/
+            releases/
+          retention-days: 30
+
+      - name: 构建成功通知
+        if: success()
+        run: |
+          echo "🎉 发布构建成功完成!"
+          echo "版本: ${{ steps.get_version.outputs.version }}"
+          echo "生成的文件数量:"
+          echo "  - 二进制文件: $(ls -1 binaries/ | wc -l) 个"
+          echo "  - 发布包: $(ls -1 releases/ | wc -l) 个"
+          echo "构建时间: $(date -u)"
+
+      - name: 构建失败处理
+        if: failure()
+        run: |
+          echo "❌ 发布构建失败!"
+          echo "请检查以下内容:"
+          echo "  - 代码编译是否成功"
+          echo "  - 依赖安装是否正常"
+          echo "  - 环境变量配置是否正确"
+          echo "  - 网络连接是否稳定"
+          echo ""
+          echo "详细日志请查看 Actions 页面"
+          exit 1

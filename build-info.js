@@ -138,7 +138,7 @@ function displayStats() {
 
 function main() {
   console.clear();
-  log('🚀 Volc Engine Ollama Proxy - 构建状态');
+  log('🚀 Universal Ollama Proxy - 构建状态');
   log('=' + '='.repeat(52));
   log('');
 

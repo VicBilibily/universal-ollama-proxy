@@ -1,3 +1,14 @@
+// 禁用实验性功能警告
+process.removeAllListeners('warning');
+process.on('warning', warning => {
+  // 忽略 fetch API 的实验性警告
+  if (warning.name === 'ExperimentalWarning' && warning.message.includes('Fetch API')) {
+    return;
+  }
+  // 其他警告仍然显示
+  console.warn(warning.name, warning.message);
+});
+
 // 首先导入 polyfills
 import dotenv from 'dotenv';
 import App from './app';

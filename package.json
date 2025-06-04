@@ -1,6 +1,6 @@
 {
   "name": "universal-ollama-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "通用AI服务提供商 OpenAI 格式接口转换为 Ollama 本地接口代理服务，支持多个AI提供商",
   "main": "dist/index.js",
   "scripts": {
@@ -22,7 +22,11 @@
     "create:release": "node create-release.js",
     "release": "npm run build:binaries && npm run verify:binaries && npm run create:release",
     "quick:build": "node quick-build.js",
-    "build:info": "node build-info.js"
+    "build:info": "node build-info.js",
+    "check:cicd": "node check-cicd.js",
+    "validate:release": "node validate-release.js",
+    "monitor:actions": "node monitor-actions.js",
+    "prerelease": "npm run validate:release"
   },
   "keywords": [
     "ollama",
@@ -39,6 +43,14 @@
   ],
   "author": "Developer",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VicBilibily/universal-ollama-proxy.git"
+  },
+  "homepage": "https://github.com/VicBilibily/universal-ollama-proxy#readme",
+  "bugs": {
+    "url": "https://github.com/VicBilibily/universal-ollama-proxy/issues"
+  },
   "dependencies": {
     "axios": "^1.9.0",
     "blob-polyfill": "^9.0.20240710",

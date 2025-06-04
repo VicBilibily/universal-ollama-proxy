@@ -1,5 +1,10 @@
 # AI 模型统一代理 - Ollama 兼容接口
 
+[![CI](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml)
+[![Release](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/VicBilibily/universal-ollama-proxy)](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 将多个 AI 服务提供商统一为 Ollama 兼容接口，**主要用于 GitHub Copilot
 Chat 的 Ollama 接入**。
 
@@ -88,13 +93,47 @@ Chat 的 Ollama 接入**。
 - `deepseek-chat` - DeepSeek Chat 官方
 - `deepseek-reasoner` - DeepSeek Reasoner 推理
 
-## 快速开始
+## 📥 下载预编译版本
+
+**推荐方式**: 直接从
+[Releases](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
+页面下载预编译的程序包，无需安装 Node.js 环境。
+
+> 🤖 **自动构建**: 所有发布版本均通过 GitHub
+> Actions 自动构建，确保一致性和可靠性。
+
+| 操作系统       | 架构          | 下载链接                                               |
+| -------------- | ------------- | ------------------------------------------------------ |
+| 🪟 **Windows** | x64           | `universal-ollama-proxy-v{version}-windows-x64.zip`    |
+| 🪟 **Windows** | ARM64         | `universal-ollama-proxy-v{version}-windows-arm64.zip`  |
+| 🐧 **Linux**   | x64           | `universal-ollama-proxy-v{version}-linux-x64.tar.gz`   |
+| 🐧 **Linux**   | ARM64         | `universal-ollama-proxy-v{version}-linux-arm64.tar.gz` |
+| 🍎 **macOS**   | Intel         | `universal-ollama-proxy-v{version}-macos-x64.tar.gz`   |
+| 🍎 **macOS**   | Apple Silicon | `universal-ollama-proxy-v{version}-macos-arm64.tar.gz` |
+
+### 🚀 使用预编译版本
+
+1. **下载**: 选择对应平台的压缩包
+2. **解压**: 解压到目标目录
+3. **配置**: 复制 `.env.example` 为 `.env` 并配置 API Keys
+4. **运行**: 直接运行可执行文件
+
+每个压缩包都包含：
+
+- ✅ 独立可执行文件（无需 Node.js）
+- ✅ 完整配置文件 (`config/`)
+- ✅ 环境变量示例 (`.env.example`)
+- ✅ 使用说明文档
+
+## 🛠️ 源码安装
+
+如果需要从源码编译或进行开发，请使用以下方式：
 
 ### 1. 安装与配置
 
 ```bash
 # 克隆项目
-git clone <repository-url>
+git clone https://github.com/VicBilibily/universal-ollama-proxy.git
 cd universal-ollama-proxy
 
 # 安装依赖
@@ -292,7 +331,52 @@ npm run dev         # 开发模式
 npm run build       # 构建项目
 npm run start       # 启动服务
 npm run clean       # 清理构建文件
+
+# 构建相关
+npm run build:binaries    # 构建所有平台二进制文件
+npm run verify:binaries   # 验证二进制文件
+npm run create:release    # 创建发布包
+npm run release          # 完整发布流程
+npm run build:info       # 查看构建状态
+
+# 工具脚本
+node quick-build.js      # 交互式快速构建
+node build-info.js       # 显示构建信息
 ```
+
+## 🚀 CI/CD 自动化
+
+本项目配置了完整的自动化发布流程，**手动创建 GitHub
+Release 即可自动构建并上传所有平台的程序包**！
+
+### 📦 自动发布特性
+
+- 🎯 **一键触发**: 创建 GitHub Release 自动触发构建
+- 🌍 **多平台支持**: 自动生成 6 个平台版本（Windows/Linux/macOS × x64/ARM64）
+- ⚡ **快速构建**: 3-5 分钟完成所有平台构建
+- ✅ **质量保证**: 自动代码检查、构建验证、包完整性检查
+- 📋 **详细报告**: 自动生成构建报告和验证结果
+
+### 🔄 持续集成
+
+- **代码质量**: 自动运行 lint、格式检查、TypeScript 编译
+- **跨版本测试**: 在 Node.js 16、18、20 上自动测试
+- **跨平台验证**: Ubuntu、Windows、macOS 环境自动测试
+
+### 📋 发布流程（两种方式）
+
+#### 方式一：GitHub Release（推荐）
+
+1. 进入 GitHub 仓库的
+   [Releases](https://github.com/VicBilibily/universal-ollama-proxy/releases)
+   页面
+2. 点击 "Create a new release"
+3. 输入版本号（如 `v1.0.2`）和发布说明
+4. 点击 "Publish release"
+5. **等待 3-5 分钟，所有平台包自动出现在 Release 页面** 🎉
+
+> 📖 **详细文档**: [自动发布指南](./AUTO_RELEASE_GUIDE.md) |
+> [CI/CD 指南](./CICD_GUIDE.md)
 
 ## 故障排除
 

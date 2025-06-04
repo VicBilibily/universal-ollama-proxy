@@ -1,10 +1,8 @@
 // Global polyfills for Node.js environment
 import fetch from 'cross-fetch';
 
-// Set global fetch
-if (!globalThis.fetch) {
-  globalThis.fetch = fetch as any;
-}
+// 强制使用 cross-fetch 而不是 Node.js 内置的实验性 fetch
+globalThis.fetch = fetch as any;
 
 // Blob polyfill for Node.js
 if (typeof globalThis.Blob === 'undefined') {

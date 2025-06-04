@@ -32,3 +32,6 @@ coverage/
 # Ignore temporary files
 tmp/
 temp/
+
+# Ignore status report files
+logs/status/*.json

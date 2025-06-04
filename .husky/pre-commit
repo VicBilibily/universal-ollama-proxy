@@ -1,0 +1,4 @@
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 使用 lint-staged 只格式化暂存的文件
+npx lint-staged

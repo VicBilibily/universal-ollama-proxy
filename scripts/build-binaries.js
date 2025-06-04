@@ -95,7 +95,7 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 多平台可执行文件构建脚本
 
 用法:
-  node build-binaries.js [选项] [平台...]
+  node scripts/build-binaries.js [选项] [平台...]
 
 选项:
   --all           构建所有平台 (默认)
@@ -107,10 +107,10 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
   macos           构建 macOS 平台
 
 示例:
-  node build-binaries.js                    # 构建所有平台
-  node build-binaries.js --all              # 构建所有平台
-  node build-binaries.js windows            # 只构建 Windows 平台
-  node build-binaries.js linux macos        # 构建 Linux 和 macOS 平台
+  node scripts/build-binaries.js                    # 构建所有平台
+  node scripts/build-binaries.js --all              # 构建所有平台
+  node scripts/build-binaries.js windows            # 只构建 Windows 平台
+  node scripts/build-binaries.js linux macos        # 构建 Linux 和 macOS 平台
 `);
   process.exit(0);
 }

@@ -216,8 +216,16 @@ async function validateReleaseProcess() {
     },
   };
 
-  fs.writeFileSync('release-validation-report.json', JSON.stringify(report, null, 2));
-  logger.success('详细报告已保存: release-validation-report.json');
+  // 创建日志状态目录（如果不存在）
+  const logsDir = path.join(__dirname, '..', 'logs', 'status');
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
+
+  // 保存到状态目录
+  const reportPath = path.join(logsDir, 'release-validation-report.json');
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+  logger.success(`详细报告已保存: ${path.relative(process.cwd(), reportPath)}`);
 
   if (report.summary.success) {
     logger.success('\\n🎉 发布流程验证成功！');

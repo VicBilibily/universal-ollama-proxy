@@ -22,10 +22,6 @@ export interface ModelConfig {
   supportedFormats: string[];
   endpoint?: string; // 可选的自定义端点，默认使用name
   provider?: 'volcengine' | 'dashscope' | 'tencentds' | 'deepseek'; // 模型提供商
-  pricing?: {
-    input: number;
-    output: number;
-  };
 }
 
 export interface ModelCategory {

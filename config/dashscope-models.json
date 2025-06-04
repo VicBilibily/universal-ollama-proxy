@@ -16,8 +16,7 @@
           "rateLimits": { "rpm": 300, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.04, "output": 0.12 }
+          "supportedFormats": ["text"]
         },
         "qwen-max-latest": {
           "name": "qwen-max-latest",
@@ -31,8 +30,7 @@
           "rateLimits": { "rpm": 300, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.08, "output": 0.24 }
+          "supportedFormats": ["text"]
         },
         "qwen-plus": {
           "name": "qwen-plus",
@@ -46,14 +44,13 @@
           "rateLimits": { "rpm": 600, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.008, "output": 0.024 }
+          "supportedFormats": ["text"]
         },
         "qwen-plus-latest": {
           "name": "qwen-plus-latest",
           "displayName": "通义千问Plus（最新版）",
           "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "capabilities": ["文本生成", "函数调用", "多轮对话", "思考模式"],
           "contextLength": 131072,
           "inputLength": 131072,
           "outputLength": 8192,
@@ -61,8 +58,7 @@
           "rateLimits": { "rpm": 600, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.012, "output": 0.032 }
+          "supportedFormats": ["text"]
         },
         "qwen-turbo": {
           "name": "qwen-turbo",
@@ -76,14 +72,13 @@
           "rateLimits": { "rpm": 600, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.0015, "output": 0.006 }
+          "supportedFormats": ["text"]
         },
         "qwen-turbo-latest": {
           "name": "qwen-turbo-latest",
           "displayName": "通义千问Turbo（最新版）",
           "type": "chat",
-          "capabilities": ["文本生成", "函数调用", "多轮对话"],
+          "capabilities": ["文本生成", "函数调用", "多轮对话", "思考模式"],
           "contextLength": 131072,
           "inputLength": 131072,
           "outputLength": 8192,
@@ -91,8 +86,7 @@
           "rateLimits": { "rpm": 600, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": true,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.003, "output": 0.012 }
+          "supportedFormats": ["text"]
         },
         "qwen-long": {
           "name": "qwen-long",
@@ -106,8 +100,7 @@
           "rateLimits": { "rpm": 300, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": false,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.0005, "output": 0.002 }
+          "supportedFormats": ["text"]
         },
         "qwen-long-latest": {
           "name": "qwen-long-latest",
@@ -121,8 +114,7 @@
           "rateLimits": { "rpm": 300, "tpm": 400000 },
           "freeTokens": 1000000,
           "recommended": false,
-          "supportedFormats": ["text"],
-          "pricing": { "input": 0.001, "output": 0.004 }
+          "supportedFormats": ["text"]
         }
       }
     },
@@ -132,7 +124,7 @@
       "models": {
         "qwen-vl-max": {
           "name": "qwen-vl-max",
-          "displayName": "通义千问VL Max",
+          "displayName": "通义千问VL Max（稳定版）",
           "type": "vision",
           "capabilities": [
             "图片理解",
@@ -151,15 +143,34 @@
           },
           "freeTokens": 100000,
           "recommended": true,
-          "supportedFormats": ["text", "image"],
-          "pricing": {
-            "input": 0.02,
-            "output": 0.02
-          }
+          "supportedFormats": ["text", "image"]
+        },
+        "qwen-vl-max-latest": {
+          "name": "qwen-vl-max-latest",
+          "displayName": "通义千问VL Max（最新版）",
+          "type": "vision",
+          "capabilities": [
+            "图片理解",
+            "文本生成",
+            "多轮对话",
+            "OCR",
+            "图表分析"
+          ],
+          "contextLength": 32768,
+          "inputLength": 32768,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": {
+            "rpm": 100,
+            "tpm": 100000
+          },
+          "freeTokens": 100000,
+          "recommended": true,
+          "supportedFormats": ["text", "image"]
         },
         "qwen-vl-plus": {
           "name": "qwen-vl-plus",
-          "displayName": "通义千问VL Plus",
+          "displayName": "通义千问VL Plus（稳定版）",
           "type": "vision",
           "capabilities": ["图片理解", "文本生成", "多轮对话", "OCR"],
           "contextLength": 32768,
@@ -172,11 +183,24 @@
           },
           "freeTokens": 200000,
           "recommended": true,
-          "supportedFormats": ["text", "image"],
-          "pricing": {
-            "input": 0.008,
-            "output": 0.008
-          }
+          "supportedFormats": ["text", "image"]
+        },
+        "qwen-vl-plus-latest": {
+          "name": "qwen-vl-plus-latest",
+          "displayName": "通义千问VL Plus（最新版）",
+          "type": "vision",
+          "capabilities": ["图片理解", "文本生成", "多轮对话", "OCR"],
+          "contextLength": 32768,
+          "inputLength": 32768,
+          "outputLength": 8192,
+          "defaultOutputLength": 2000,
+          "rateLimits": {
+            "rpm": 200,
+            "tpm": 200000
+          },
+          "freeTokens": 200000,
+          "recommended": true,
+          "supportedFormats": ["text", "image"]
         }
       }
     }
@@ -198,7 +222,7 @@
     "description": "阿里云百炼通义千问模型配置文件，仅包含文本生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
     "version": "1.0.0",
     "lastUpdated": "2025-06-03",
-    "officialDoc": "https://help.aliyun.com/zh/model-studio/getting-started/models",
+    "officialDoc": "https://help.aliyun.com/zh/model-studio/models",
     "supportedFeatures": {
       "text_models": [
         "text_generation",

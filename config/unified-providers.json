@@ -34,7 +34,9 @@
         "qwen-turbo",
         "qwen-long",
         "qwen-vl-max",
-        "qwen-vl-plus"
+        "qwen-vl-max-latest",
+        "qwen-vl-plus",
+        "qwen-vl-plus-latest"
       ]
     },
     {

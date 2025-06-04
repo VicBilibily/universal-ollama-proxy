@@ -94,6 +94,20 @@ export class OllamaCompatibilityService {
         if (hasVisionSupport) {
           capabilities.push('vision');
         }
+
+        // 检查模型是否支持思考模式
+        const hasThinkingSupport = modelConfig.capabilities.some(
+          cap =>
+            cap === '思考模式' ||
+            cap === '深度思考' ||
+            cap === 'thinking' ||
+            cap === 'reasoning' ||
+            cap.includes('思考') ||
+            cap.includes('推理')
+        );
+        if (hasThinkingSupport) {
+          capabilities.push('thinking');
+        }
       }
 
       return {

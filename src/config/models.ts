@@ -18,10 +18,6 @@ export interface ModelInfo {
   freeTokens: number;
   recommended: boolean;
   supportedFormats: string[];
-  pricing?: {
-    input: number;
-    output: number;
-  };
 }
 
 export interface ModelCategory {

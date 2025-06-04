@@ -210,27 +210,46 @@ function packagePlatform(binaryPath, config) {
 
   try {
     if (config.packageName.endsWith('.zip')) {
-      // Windows - 使用PowerShell创建ZIP
-      const psCommand = `Compress-Archive -Path "${tempDir}\\*" -DestinationPath "${packagePath}" -Force`;
-      execSync(`powershell -Command "${psCommand}"`, { stdio: 'pipe' });
+      // 使用archiver创建ZIP文件 - 跨平台兼容
+      const archiver = require('archiver');
+      const output = fs.createWriteStream(packagePath);
+      const archive = archiver('zip', { zlib: { level: 9 } });
+
+      return new Promise((resolve, reject) => {
+        output.on('close', () => {
+          const stats = fs.statSync(packagePath);
+          const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+          log(`✅ 打包完成: ${config.packageName} (${sizeMB} MB)`);
+          resolve(true);
+        });
+
+        archive.on('error', err => {
+          log(`❌ 打包失败: ${config.packageName} - ${err.message}`);
+          reject(false);
+        });
+
+        archive.pipe(output);
+        archive.directory(tempDir, false);
+        archive.finalize();
+      });
     } else {
       // Linux/macOS - 使用tar
       const tarCommand = `tar -czf "${packagePath}" -C "${tempDir}" .`;
       execSync(tarCommand, { stdio: 'pipe' });
+
+      const stats = fs.statSync(packagePath);
+      const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+      log(`✅ 打包完成: ${config.packageName} (${sizeMB} MB)`);
+
+      return true;
     }
-
-    const stats = fs.statSync(packagePath);
-    const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
-    log(`✅ 打包完成: ${config.packageName} (${sizeMB} MB)`);
-
-    return true;
   } catch (error) {
     log(`❌ 打包失败: ${config.packageName} - ${error.message}`);
     return false;
   }
 }
 
-function main() {
+async function main() {
   log('开始创建发布包...');
 
   if (!fs.existsSync(BINARIES_DIR)) {
@@ -260,8 +279,13 @@ function main() {
 
     if (config) {
       log(`\n📦 打包 ${config.platform} ${config.arch}...`);
-      if (packagePlatform(binaryPath, config)) {
-        successCount++;
+      try {
+        const result = await packagePlatform(binaryPath, config);
+        if (result) {
+          successCount++;
+        }
+      } catch (error) {
+        log(`❌ 打包失败: ${config.packageName} - ${error.message}`);
       }
     } else {
       log(`⚠️  跳过未知格式的文件: ${fileName}`);

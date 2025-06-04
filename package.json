@@ -69,6 +69,8 @@
     "@types/form-data": "^2.5.2",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.15.29",
+    "adm-zip": "^0.5.16",
+    "archiver": "^7.0.1",
     "nodemon": "^3.1.10",
     "pkg": "^5.8.1",
     "prettier": "^3.5.3",

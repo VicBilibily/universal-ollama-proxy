@@ -34,6 +34,12 @@ jobs:
       - name: TypeScript 编译
         run: npm run build
 
+      - name: 创建临时环境配置
+        run: |
+          cp .env.example .env
+          echo "VOLCENGINE_API_KEY=ci_test_key" >> .env
+          echo "DASHSCOPE_API_KEY=ci_test_key" >> .env
+
       - name: 验证构建
         run: npm run check
 

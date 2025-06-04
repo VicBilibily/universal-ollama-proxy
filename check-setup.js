@@ -10,6 +10,12 @@ const path = require('path');
 function checkEnvFile() {
   const envPath = path.join(__dirname, '.env');
 
+  // 在 CI 环境中跳过环境检查
+  if (process.env.CI === 'true') {
+    logger.info('🔄 CI 环境中，跳过 .env 文件检查');
+    return true;
+  }
+
   if (!fs.existsSync(envPath)) {
     logger.error('❌ 缺少 .env 文件');
     logger.info('💡 请复制 .env.example 到 .env 并填入正确的配置');

@@ -38,8 +38,10 @@ function verifyPackage(packagePath) {
 
     // 解压文件
     if (packageName.endsWith('.zip')) {
-      const psCommand = `Expand-Archive -Path "${packagePath}" -DestinationPath "${tempDir}" -Force`;
-      execSync(`powershell -Command "${psCommand}"`, { stdio: 'pipe' });
+      // 使用 Node.js 解压 ZIP 文件 - 跨平台兼容
+      const AdmZip = require('adm-zip');
+      const zip = new AdmZip(packagePath);
+      zip.extractAllTo(tempDir, true);
     } else if (packageName.endsWith('.tar.gz')) {
       execSync(`tar -xzf "${packagePath}" -C "${tempDir}"`, { stdio: 'pipe' });
     }

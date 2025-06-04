@@ -2,12 +2,28 @@ name: Release Build and Deploy
 
 on:
   release:
-    types: [published, created, prereleased]
+    types: [published]
+  # 添加手动触发，支持重新发布
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '要重新发布的版本标签 (例如: 1.0.2)'
+        required: true
+        type: string
+      force_rebuild:
+        description: '强制重新构建 (即使文件已存在)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build-and-release:
     name: 构建并发布程序包
     runs-on: ubuntu-latest
+    # 添加明确的权限
+    permissions:
+      contents: write
+      packages: read
 
     strategy:
       matrix:
@@ -31,90 +47,297 @@ jobs:
           npm run lint
           npm run build
 
+      - name: 创建临时环境配置
+        run: |
+          cp .env.example .env
+          echo "VOLCENGINE_API_KEY=ci_test_key" >> .env
+          echo "DASHSCOPE_API_KEY=ci_test_key" >> .env
+
+      - name: 获取版本号
+        id: get_version
+        run: |
+          # 处理版本号 - 手动触发时使用输入的标签，否则使用release标签
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RAW_VERSION="${{ github.event.inputs.tag }}"
+            echo "手动触发发布，版本: ${RAW_VERSION}"
+          else
+            RAW_VERSION="${{ github.event.release.tag_name }}"
+            echo "Release触发发布，版本: ${RAW_VERSION}"
+          fi
+
+          # 构建产物使用v前缀版本，tag保持原始格式
+          if [[ $RAW_VERSION == v* ]]; then
+            # 如果tag已经有v前缀，去掉v作为原始版本
+            CLEAN_VERSION="${RAW_VERSION#v}"
+            VERSION="v${CLEAN_VERSION}"
+          else
+            # 如果tag没有v前缀，保持原样作为原始版本，构建时添加v前缀
+            CLEAN_VERSION="${RAW_VERSION}"
+            VERSION="v${RAW_VERSION}"
+            echo "Tag不带v前缀，构建产物将使用: ${VERSION}"
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "raw_version=${RAW_VERSION}" >> $GITHUB_OUTPUT
+          echo "clean_version=${CLEAN_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: 检查是否需要强制重新构建
+        id: check_rebuild
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          FORCE_REBUILD="${{ github.event.inputs.force_rebuild }}"
+
+          # 检查二进制文件是否已存在
+          BINARIES_EXIST=false
+          if [ -d "binaries" ] && [ "$(ls -A binaries/)" ]; then
+            echo "发现已存在的二进制文件"
+            ls -la binaries/
+            BINARIES_EXIST=true
+          fi
+
+          # 检查发布包是否已存在
+          RELEASES_EXIST=false
+          if [ -d "releases" ] && [ "$(ls -A releases/)" ]; then
+            echo "发现已存在的发布包"
+            ls -la releases/
+            RELEASES_EXIST=true
+          fi
+
+          # 决定是否需要重新构建
+          if [ "$FORCE_REBUILD" = "true" ]; then
+            echo "强制重新构建模式"
+            echo "need_build=true" >> $GITHUB_OUTPUT
+            echo "need_package=true" >> $GITHUB_OUTPUT
+          elif [ "$BINARIES_EXIST" = "false" ]; then
+            echo "二进制文件不存在，需要构建"
+            echo "need_build=true" >> $GITHUB_OUTPUT
+            echo "need_package=true" >> $GITHUB_OUTPUT
+          elif [ "$RELEASES_EXIST" = "false" ]; then
+            echo "发布包不存在，需要打包"
+            echo "need_build=false" >> $GITHUB_OUTPUT
+            echo "need_package=true" >> $GITHUB_OUTPUT
+          else
+            echo "文件已存在，跳过构建"
+            echo "need_build=false" >> $GITHUB_OUTPUT
+            echo "need_package=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 构建所有平台二进制文件
-        run: npm run build:binaries
+        if: steps.check_rebuild.outputs.need_build == 'true'
+        run: |
+          echo "开始构建二进制文件..."
+          npm run build:binaries
 
       - name: 验证二进制文件
-        run: npm run verify:binaries
+        run: |
+          echo "验证二进制文件..."
+          if [ ! -d "binaries" ] || [ ! "$(ls -A binaries/)" ]; then
+            echo "❌ 二进制文件目录为空或不存在"
+            exit 1
+          fi
+          npm run verify:binaries
 
       - name: 创建发布包
-        run: npm run create:release
+        if: steps.check_rebuild.outputs.need_package == 'true'
+        run: |
+          echo "创建发布包..."
+          npm run create:release
 
       - name: 验证发布包
-        run: npm run verify:releases
+        run: |
+          echo "验证发布包..."
+          if [ ! -d "releases" ] || [ ! "$(ls -A releases/)" ]; then
+            echo "❌ 发布包目录为空或不存在"
+            exit 1
+          fi
+          npm run verify:releases
 
       - name: 列出生成的文件
         run: |
           echo "生成的二进制文件:"
           ls -la binaries/
+          echo ""
           echo "生成的发布包:"
           ls -la releases/
 
-      - name: 获取版本号
-        id: get_version
+      - name: 检查并清理发布文件
         run: |
-          echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          VERSION="${{ steps.get_version.outputs.version }}"
+          RAW_VERSION="${{ steps.get_version.outputs.raw_version }}"
+
+          cd releases/
+
+          echo "构建生成的原始文件列表:"
+          ls -la
+
+          # 删除可能的重复或错误文件
+          echo "清理重复和错误的文件..."
+
+          # 删除双v前缀的文件（如果存在）
+          rm -f universal-ollama-proxy-v*v*.* 2>/dev/null || true
+
+          # 删除不正确格式的文件
+          rm -f universal-ollama-proxy-*${RAW_VERSION}*.* 2>/dev/null || true
+
+          # 确保只保留正确格式的文件（v前缀版本）
+          echo "清理后的文件列表:"
+          ls -la
+
+          # 验证Windows zip文件是否存在
+          WIN_X64_ZIP="universal-ollama-proxy-${VERSION}-windows-x64.zip"
+          WIN_ARM64_ZIP="universal-ollama-proxy-${VERSION}-windows-arm64.zip"
+
+          if [ ! -f "$WIN_X64_ZIP" ]; then
+            echo "❌ 缺少Windows x64 ZIP文件: $WIN_X64_ZIP"
+            exit 1
+          fi
+
+          if [ ! -f "$WIN_ARM64_ZIP" ]; then
+            echo "❌ 缺少Windows ARM64 ZIP文件: $WIN_ARM64_ZIP"
+            exit 1
+          fi
+
+          echo "✅ 所有Windows ZIP文件检查通过"
+          echo "最终发布文件列表:"
+          ls -la universal-ollama-proxy-${VERSION}-*
+
+      - name: 检查并设置Release描述
+        id: set_release_body
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          RAW_VERSION="${{ steps.get_version.outputs.raw_version }}"
+
+          # 如果是手动触发，或者release描述为空，则设置默认描述
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "手动触发，设置默认Release描述"
+            SHOULD_SET_BODY=true
+          else
+            # 检查release描述是否为空
+            RELEASE_BODY="${{ github.event.release.body }}"
+            if [ -z "$RELEASE_BODY" ] || [ "$RELEASE_BODY" = "null" ]; then
+              echo "Release描述为空，设置默认描述"
+              SHOULD_SET_BODY=true
+            else
+              echo "Release已有描述，保持不变"
+              SHOULD_SET_BODY=false
+            fi
+          fi
+
+          if [ "$SHOULD_SET_BODY" = "true" ]; then
+            # 创建默认Release描述
+            cat > release_body.md << 'EOF'
+          # 🚀 Universal Ollama Proxy ${{ steps.get_version.outputs.version }} 发布说明
+
+          ## ✨ 关于本项目
+
+          Universal Ollama Proxy 是一个通用的 AI 服务代理，提供 Ollama 兼容接口，专为 GitHub Copilot Chat 的 Ollama 接入优化。
+
+          ## 🔥 支持多种 AI 服务提供商
+
+          - **火山方舟引擎（豆包）** - 字节跳动的AI服务
+          - **阿里云百炼（通义千问）** - 阿里巴巴的AI服务
+          - **腾讯云 DeepSeek** - 腾讯云AI服务
+          - **DeepSeek 官方** - DeepSeek原生服务
+
+          ## 🏗️ 技术特性
+
+          - **跨平台支持** - Windows、Linux、macOS 全平台覆盖
+          - **多架构** - 支持 x64 和 ARM64 架构
+          - **零配置启动** - 开箱即用的配置文件
+          - **高性能** - 优化的请求处理和错误恢复机制
+          - **安全可靠** - 完善的错误处理和日志记录
+
+          ## 📥 下载安装
+
+          请根据您的操作系统选择对应的安装包：
+
+          | 操作系统 | 架构 | 下载文件 |
+          |---------|-----|---------|
+          | Windows | x64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-x64.zip` |
+          | Windows | ARM64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-arm64.zip` |
+          | Linux | x64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz` |
+          | Linux | ARM64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-arm64.tar.gz` |
+          | macOS | x64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-x64.tar.gz` |
+          | macOS | ARM64 | `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-arm64.tar.gz` |
+
+          ## 🚀 快速开始
+
+          1. **下载** 适合您系统的安装包
+          2. **解压** 文件到任意目录
+          3. **配置** 复制 .env.example 为 .env，填入您的 API Keys
+          4. **运行** 执行对应平台的可执行文件
+
+          ```bash
+          # Windows
+          universal-ollama-proxy.exe
+
+          # Linux/macOS
+          ./universal-ollama-proxy
+          ```
+
+          ## ⚙️ 配置说明
+
+          在 .env 文件中配置您的 API Keys：
+
+          ```env
+          # 火山方舟引擎
+          VOLCENGINE_API_KEY=your_volcengine_api_key
+
+          # 阿里云百炼
+          DASHSCOPE_API_KEY=your_dashscope_api_key
+
+          # DeepSeek 官方
+          DEEPSEEK_API_KEY=your_deepseek_api_key
+
+          # 腾讯云 DeepSeek
+          DEEPSEEK_API_KEY=your_tencent_deepseek_api_key
+          ```
+
+          ## 🔗 GitHub Copilot Chat 使用
+
+          1. 启动 Universal Ollama Proxy（默认监听 [http://localhost:11434](http://localhost:11434)）
+          2. 在 GitHub Copilot Chat 中通过模型选择使用相应的 AI 服务提供商模型
+          3. 无需额外配置，直接开始对话
+
+          ## 📚 相关链接
+
+          - **项目主页**: https://github.com/VicBilibily/universal-ollama-proxy
+          - **问题反馈**: https://github.com/VicBilibily/universal-ollama-proxy/issues
+          - **使用文档**: 查看项目 [README.md](README.md)
+
+          ## 🤝 支持与反馈
+
+          如果您在使用过程中遇到问题或有改进建议，欢迎：
+
+          - 📝 [提交 Issue](https://github.com/VicBilibily/universal-ollama-proxy/issues)
+          - 🌟 给项目点个 Star
+          - 🔄 分享给更多需要的朋友
+          EOF
+            echo "use_default_body=true" >> $GITHUB_OUTPUT
+          else
+            echo "use_default_body=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: 上传发布资产到 GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ steps.get_version.outputs.raw_version }}
           files: |
-            releases/*.zip
-            releases/*.tar.gz
-          body: |
-            ## 🚀 发布说明
-
-            ### 📦 下载
-
-            #### Windows
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-x64.zip` - Windows x64
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-windows-arm64.zip` - Windows ARM64
-
-            #### Linux
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz` - Linux x64
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-linux-arm64.tar.gz` - Linux ARM64
-
-            #### macOS
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-x64.tar.gz` - macOS Intel
-            - `universal-ollama-proxy-${{ steps.get_version.outputs.version }}-macos-arm64.tar.gz` - macOS Apple Silicon
-
-            ### 🔧 使用方法
-
-            1. 下载对应平台的压缩包
-            2. 解压到目标目录
-            3. 配置环境变量（复制 `.env.example` 为 `.env`）
-            4. 运行可执行文件
-
-            ### 📋 验证信息
-
-            - ✅ 所有平台构建完成
-            - ✅ 二进制文件验证通过
-            - ✅ 发布包完整性检查通过
-            - ✅ 自动化 CI/CD 流程
-
-            ### 📝 更新内容
-
-            此版本通过自动化 CI/CD 流程构建，包含以下改进：
-            - 多平台二进制文件支持
-            - 性能优化和错误修复
-            - 增强的错误处理机制
-            - 完善的日志记录功能
-
-            ---
-
-            > 📊 构建报告和详细信息请查看 [Actions 页面](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            releases/universal-ollama-proxy-${{ steps.get_version.outputs.version }}-*.zip
+            releases/universal-ollama-proxy-${{ steps.get_version.outputs.version }}-*.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body_path: ${{ steps.set_release_body.outputs.use_default_body == 'true' && 'release_body.md' || '' }}
+          append_body: ${{ steps.set_release_body.outputs.use_default_body == 'false' }}
 
       - name: 生成构建报告
         run: |
-          echo "## 📊 构建报告" >> build-report.md
+          echo "## 📊 构建报告" > build-report.md
           echo "" >> build-report.md
           echo "### 🏗️ 构建信息" >> build-report.md
           echo "- **版本:** ${{ steps.get_version.outputs.version }}" >> build-report.md
           echo "- **构建时间:** $(date -u)" >> build-report.md
           echo "- **Node.js 版本:** ${{ matrix.node-version }}" >> build-report.md
           echo "- **平台:** $(uname -a)" >> build-report.md
+          echo "- **触发方式:** ${{ github.event_name }}" >> build-report.md
           echo "" >> build-report.md
           echo "### 📦 生成的文件" >> build-report.md
           echo "" >> build-report.md
@@ -148,6 +371,7 @@ jobs:
         run: |
           echo "🎉 发布构建成功完成!"
           echo "版本: ${{ steps.get_version.outputs.version }}"
+          echo "触发方式: ${{ github.event_name }}"
           echo "生成的文件数量:"
           echo "  - 二进制文件: $(ls -1 binaries/ | wc -l) 个"
           echo "  - 发布包: $(ls -1 releases/ | wc -l) 个"
@@ -162,6 +386,13 @@ jobs:
           echo "  - 依赖安装是否正常"
           echo "  - 环境变量配置是否正确"
           echo "  - 网络连接是否稳定"
+          echo ""
+          echo "💡 重新发布方法:"
+          echo "  1. 进入 Actions 页面"
+          echo "  2. 选择 'Release Build and Deploy' 工作流"
+          echo "  3. 点击 'Run workflow'"
+          echo "  4. 输入版本号: ${{ steps.get_version.outputs.version }}"
+          echo "  5. 选择是否强制重新构建"
           echo ""
           echo "详细日志请查看 Actions 页面"
           exit 1

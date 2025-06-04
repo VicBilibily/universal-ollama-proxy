@@ -96,4 +96,6 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
-/cicd-status-report.json
+
+# 状态报告文件
+/logs/status/*.json

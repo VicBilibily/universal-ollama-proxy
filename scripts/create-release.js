@@ -11,7 +11,7 @@ const path = require('path');
 
 const BINARIES_DIR = 'binaries';
 const RELEASES_DIR = 'releases';
-const VERSION = require('./package.json').version;
+const VERSION = require('../package.json').version;
 
 const PLATFORM_CONFIGS = [
   {
@@ -65,11 +65,19 @@ function ensureDir(dir) {
 function copyConfigFiles(targetDir) {
   const configDir = 'config';
   const targetConfigDir = path.join(targetDir, 'config');
+  const excludeFiles = [];
+  const excludePatterns = [/-status\.json$/];
 
   if (fs.existsSync(configDir)) {
     ensureDir(targetConfigDir);
     const configFiles = fs.readdirSync(configDir);
     configFiles.forEach(file => {
+      // 排除状态文件
+      const isExcluded = excludeFiles.includes(file) || excludePatterns.some(pattern => pattern.test(file));
+      if (isExcluded) {
+        return;
+      }
+
       const srcPath = path.join(configDir, file);
       const destPath = path.join(targetConfigDir, file);
       fs.copyFileSync(srcPath, destPath);

@@ -10,23 +10,26 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "postbuild": "echo \"构建完成\"",
-    "check": "node check-setup.js",
+    "check": "node scripts/check-setup.js",
     "prestart": "npm run check",
     "predev": "npm run check",
-    "format": "prettier --write \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\"",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\" \"scripts/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\" \"config/**/*.json\" \"*.{js,ts,json,md}\" \"scripts/**/*.js\"",
     "lint": "prettier --check .",
-    "build:binaries": "node build-binaries.js",
-    "verify:binaries": "node verify-binaries.js",
-    "verify:releases": "node verify-releases.js",
-    "create:release": "node create-release.js",
+    "build:binaries": "node scripts/build-binaries.js",
+    "verify:binaries": "node scripts/verify-binaries.js",
+    "verify:releases": "node scripts/verify-releases.js",
+    "create:release": "node scripts/create-release.js",
     "release": "npm run build:binaries && npm run verify:binaries && npm run create:release",
-    "quick:build": "node quick-build.js",
-    "build:info": "node build-info.js",
-    "check:cicd": "node check-cicd.js",
-    "validate:release": "node validate-release.js",
-    "monitor:actions": "node monitor-actions.js",
-    "prerelease": "npm run validate:release"
+    "quick:build": "node scripts/quick-build.js",
+    "build:info": "node scripts/build-info.js",
+    "check:cicd": "node scripts/check-cicd.js",
+    "validate:release": "node scripts/validate-release.js",
+    "monitor:actions": "node scripts/monitor-actions.js",
+    "prerelease": "npm run validate:release",
+    "prepare": "husky",
+    "setup:hooks": "node scripts/setup-hooks.js",
+    "postinstall": "npm run setup:hooks"
   },
   "keywords": [
     "ollama",
@@ -71,6 +74,8 @@
     "@types/node": "^22.15.29",
     "adm-zip": "^0.5.16",
     "archiver": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "nodemon": "^3.1.10",
     "pkg": "^5.8.1",
     "prettier": "^3.5.3",
@@ -84,5 +89,10 @@
       "node_modules/openai/**/*"
     ],
     "outputPath": "binaries"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md}": "prettier --write",
+    "src/**/*.{js,ts,json}": "prettier --write",
+    "config/**/*.json": "prettier --write"
   }
 }

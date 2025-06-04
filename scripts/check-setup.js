@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 function checkEnvFile() {
-  const envPath = path.join(__dirname, '.env');
+  const envPath = path.join(__dirname, '..', '.env');
 
   // 在 CI 环境中跳过环境检查
   if (process.env.CI === 'true') {
@@ -28,7 +28,7 @@ function checkEnvFile() {
   // 从统一配置文件中读取所有API密钥环境变量
   let apiKeys = [];
   try {
-    const unifiedConfigPath = path.join(__dirname, 'config', 'unified-providers.json');
+    const unifiedConfigPath = path.join(__dirname, '..', 'config', 'unified-providers.json');
     const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
     const unifiedConfig = JSON.parse(unifiedConfigContent);
 
@@ -67,7 +67,7 @@ function checkEnvFile() {
     logger.info('💡 请在 .env 文件中设置至少一个正确的 API Key');
     // 显示所有可能的API Key提示
     try {
-      const unifiedConfigPath = path.join(__dirname, 'config', 'unified-providers.json');
+      const unifiedConfigPath = path.join(__dirname, '..', 'config', 'unified-providers.json');
       const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
       const unifiedConfig = JSON.parse(unifiedConfigContent);
 
@@ -136,8 +136,8 @@ const logger = {
 };
 
 function checkDependencies() {
-  const packagePath = path.join(__dirname, 'package.json');
-  const nodeModulesPath = path.join(__dirname, 'node_modules');
+  const packagePath = path.join(__dirname, '..', 'package.json');
+  const nodeModulesPath = path.join(__dirname, '..', 'node_modules');
 
   if (!fs.existsSync(nodeModulesPath)) {
     logger.error('❌ 缺少依赖包');
@@ -150,7 +150,7 @@ function checkDependencies() {
 }
 
 function checkBuild() {
-  const distPath = path.join(__dirname, 'dist');
+  const distPath = path.join(__dirname, '..', 'dist');
 
   if (!fs.existsSync(distPath)) {
     logger.warn('⚠️  缺少构建文件');

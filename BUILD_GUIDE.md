@@ -42,16 +42,16 @@ npm run pkg:mac-arm
 
 ```bash
 # 构建所有平台
-node build-binaries.js
+node scripts/build-binaries.js
 
 # 只构建 Windows 平台
-node build-binaries.js windows
+node scripts/build-binaries.js windows
 
 # 构建 Linux 和 macOS
-node build-binaries.js linux macos
+node scripts/build-binaries.js linux macos
 
 # 查看帮助
-node build-binaries.js --help
+node scripts/build-binaries.js --help
 ```
 
 ## 输出文件

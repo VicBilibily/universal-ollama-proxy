@@ -1,11 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ProviderConfig } from '../config/models';
-import {
-  ModelDiscoveryService as IModelDiscoveryService,
-  ModelConfig,
-  UnifiedAdapterConfig,
-} from '../types';
+import { ModelDiscoveryService as IModelDiscoveryService, ModelConfig, UnifiedAdapterConfig } from '../types';
 import { logger } from '../utils';
 
 /**

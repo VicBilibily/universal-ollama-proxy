@@ -7,6 +7,7 @@
 
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
 
 /**
  * 日志工具
@@ -40,7 +41,8 @@ function getRepositoryInfo() {
     // 尝试从 repository 字段获取
     if (packageJson.repository) {
       const repo = packageJson.repository.url || packageJson.repository;
-      const match = repo.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
+      // 支持不同格式的 GitHub URL，包括 git+https://
+      const match = repo.match(/(?:git\+)?(?:https?:\/\/)?(?:github\.com[:/]|git@github\.com:)([^/]+)\/([^/.]+)/);
       if (match) {
         return {
           owner: match[1],
@@ -149,16 +151,6 @@ async function showWorkflowStatus() {
   const { owner, repo } = getRepositoryInfo();
   logger.info(`仓库: ${owner}/${repo}`);
 
-  if (owner === 'VicBilibily') {
-    logger.warn('⚠️ 检测到默认仓库信息，请在 package.json 中配置正确的 repository 字段');
-    logger.info('示例配置:');
-    logger.info('"repository": {');
-    logger.info('  "type": "git",');
-    logger.info('  "url": "https://github.com/VicBilibily/universal-ollama-proxy.git"');
-    logger.info('}');
-    return;
-  }
-
   try {
     logger.info('\\n🔍 获取工作流运行记录...');
     const data = await getWorkflowRuns(owner, repo);
@@ -231,8 +223,16 @@ async function showWorkflowStatus() {
       rawData: data.workflow_runs,
     };
 
-    fs.writeFileSync('github-actions-status.json', JSON.stringify(report, null, 2));
-    logger.success('\\n📋 详细状态已保存: github-actions-status.json');
+    // 创建日志状态目录（如果不存在）
+    const logsDir = path.join(__dirname, '..', 'logs', 'status');
+    if (!fs.existsSync(logsDir)) {
+      fs.mkdirSync(logsDir, { recursive: true });
+    }
+
+    // 保存到状态目录
+    const statusFile = path.join(logsDir, 'github-actions-status.json');
+    fs.writeFileSync(statusFile, JSON.stringify(report, null, 2));
+    logger.success(`\n📋 详细状态已保存: ${statusFile}`);
   } catch (error) {
     logger.error(`获取工作流状态失败: ${error.message}`);
 
@@ -255,11 +255,7 @@ function showLocalStatus() {
   logger.info('-'.repeat(30));
 
   // 检查工作流文件
-  const workflowFiles = [
-    '.github/workflows/ci.yml',
-    '.github/workflows/release.yml',
-    '.github/workflows/auto-release.yml',
-  ];
+  const workflowFiles = ['.github/workflows/ci.yml', '.github/workflows/release.yml'];
 
   workflowFiles.forEach(file => {
     if (fs.existsSync(file)) {

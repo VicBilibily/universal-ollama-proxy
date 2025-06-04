@@ -118,10 +118,10 @@ function displayCommands() {
   log('  npm run verify:binaries   - 验证二进制文件');
   log('  npm run create:release    - 创建发布包');
   log('  npm run release          - 完整发布流程');
-  log('  node quick-build.js      - 交互式快速构建');
-  log('  node build-binaries.js windows  - 仅构建 Windows');
-  log('  node build-binaries.js linux    - 仅构建 Linux');
-  log('  node build-binaries.js macos    - 仅构建 macOS');
+  log('  node scripts/quick-build.js      - 交互式快速构建');
+  log('  node scripts/build-binaries.js windows  - 仅构建 Windows');
+  log('  node scripts/build-binaries.js linux    - 仅构建 Linux');
+  log('  node scripts/build-binaries.js macos    - 仅构建 macOS');
   log('');
 }
 
@@ -147,7 +147,7 @@ function main() {
   displayReleases();
   displayCommands();
 
-  log('提示: 运行 node quick-build.js 启动交互式构建工具');
+  log('提示: 运行 node scripts/quick-build.js 启动交互式构建工具');
 }
 
 main();

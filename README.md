@@ -178,15 +178,101 @@ curl -X POST http://localhost:11434/api/chat `
 
 ## 环境变量配置
 
-| 变量名               | 说明                   | 必需 |
-| -------------------- | ---------------------- | ---- |
-| `PORT`               | 服务器端口             | ❌   |
-| `VOLCENGINE_API_KEY` | 火山方舟引擎 API Key   | ⚠️   |
-| `DASHSCOPE_API_KEY`  | 阿里云百炼 API Key     | ⚠️   |
-| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek API Key | ⚠️   |
-| `DEEPSEEK_API_KEY`   | DeepSeek官方 API Key   | ⚠️   |
+| 变量名               | 说明                   | 默认值        | 必需 |
+| -------------------- | ---------------------- | ------------- | ---- |
+| `PORT`               | 服务器端口             | `11434`       | ❌   |
+| `NODE_ENV`           | 运行环境               | `development` | ❌   |
+| `LOG_LEVEL`          | 日志级别               | `info`        | ❌   |
+| `VOLCENGINE_API_KEY` | 火山方舟引擎 API Key   | -             | ⚠️   |
+| `DASHSCOPE_API_KEY`  | 阿里云百炼 API Key     | -             | ⚠️   |
+| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek API Key | -             | ⚠️   |
+| `DEEPSEEK_API_KEY`   | DeepSeek官方 API Key   | -             | ⚠️   |
+| `CHAT_LOGS`          | 启用聊天详细日志       | `false`       | ❌   |
+| `CHAT_LOGS_DIR`      | 聊天日志存储目录       | `logs/chat`   | ❌   |
 
 > 至少需要配置一个 API Key
+
+### 日志级别说明
+
+- `debug` - 输出所有级别日志（包含详细调试信息）
+- `info` - 输出 info、warn 和 error 级别日志
+- `warn` - 只输出 warn 和 error 级别日志
+- `error` - 只输出 error 级别日志
+
+### 聊天详细日志功能
+
+启用 `CHAT_LOGS=true` 后，系统会为每个聊天请求创建详细的日志文件：
+
+```env
+# 启用聊天详细日志记录
+CHAT_LOGS=true
+# 自定义日志存储目录
+CHAT_LOGS_DIR=logs/chat
+```
+
+#### 日志文件结构
+
+每个聊天请求会生成以下文件：
+
+- `{requestId}_request.json` - 请求开始时的完整信息
+- `{requestId}_stream.json` - 流式响应的实时更新（仅流式请求）
+- `{requestId}_complete.json` - 请求完成后的完整日志
+
+**请求ID格式**：`YYYYMMDDHHMMSSMMM_随机字符`
+
+- 前17位：纯数字的日期时间（年月日时分秒毫秒）
+- 后缀：随机字符串（9位）
+- 示例：`20250604103015123_abc123def`
+
+#### 日志内容包含
+
+- **完整的请求参数**：model、messages、temperature 等所有参数
+- **完整的响应内容**：包括所有 choices 和 usage 信息
+- **流式响应块**：每个流式响应 chunk 的完整内容
+- **错误信息**：详细的错误堆栈和调试信息
+- **性能指标**：响应时间、token 使用量、数据大小
+- **元数据**：时间戳、客户端信息等
+
+#### 示例日志文件
+
+```bash
+logs/chat/
+├── 20250604103015123_abc123def_request.json    # 请求开始日志
+├── 20250604103015123_abc123def_stream.json     # 流式响应日志（如果是流式请求）
+└── 20250604103015123_abc123def_complete.json   # 请求完成日志
+```
+
+**文件命名规则**：
+
+- 文件名格式：`{纯数字时间戳}_{随机ID}_{类型}.json`
+- 时间戳：17位纯数字（YYYYMMDDHHMMSSMMM）
+- 随机ID：9位字符串，确保唯一性
+- 类型：`request`、`stream`、`complete`
+
+#### 日志文件使用指南
+
+**查看特定时间段的请求**：
+
+```bash
+# Windows PowerShell
+Get-ChildItem logs\chat\202506041030* | Sort-Object Name
+
+# 查看2025年6月4日10:30-10:31之间的所有请求
+Get-ChildItem logs\chat\20250604103* | Sort-Object Name
+```
+
+**快速定位问题**：
+
+1. 查看 `*_complete.json` 文件的 `summary` 部分获取概览
+2. 检查 `response.error` 字段查看错误信息
+3. 分析 `response.responseTime` 了解性能问题
+4. 查看 `request.messages` 了解完整对话上下文
+
+**文件大小管理**：
+
+- 每个请求的三个文件独立存储，便于分析
+- 无文件大小限制，完整记录所有通讯内容
+- 建议定期清理旧日志文件释放磁盘空间
 
 ## 项目结构
 
@@ -210,10 +296,28 @@ npm run clean       # 清理构建文件
 
 ## 故障排除
 
-1. **认证失败** - 检查 API Key 配置
-2. **模型不可用** - 确认模型已开通
-3. **网络问题** - 检查防火墙设置
-4. **配置问题** - 运行 `npm run check`
+### 常见问题
+
+1. **认证失败** - 检查 API Key 配置是否正确
+2. **模型不可用** - 确认模型已在对应平台开通
+3. **网络问题** - 检查防火墙设置和网络连接
+4. **配置问题** - 运行 `npm run check` 检查配置
+
+### 聊天日志相关问题
+
+5. **日志文件未生成** - 确认 `CHAT_LOGS=true` 且目录权限正确
+6. **日志目录不存在** - 系统会自动创建，检查磁盘空间和权限
+7. **日志文件过大** - 无大小限制，注意磁盘空间管理
+8. **查看日志内容** - 日志为 JSON 格式，可用文本编辑器或 JSON 查看器打开
+
+### 调试建议
+
+- 设置 `LOG_LEVEL=debug` 获取详细调试信息
+- 启用 `CHAT_LOGS=true` 记录完整请求响应数据
+- 检查 `logs/chat/` 目录下的日志文件分析问题
+- 查看 `*_complete.json` 文件的 `summary` 部分获取性能统计
+- 日志文件按时间排序：文件名前17位是纯数字时间戳，便于按时间顺序查看
+- 查找特定时间的请求：根据时间戳格式 `YYYYMMDDHHMMSSMMM` 快速定位文件
 
 ## 许可证
 

@@ -3,6 +3,7 @@ import { OpenAI } from 'openai';
 import { ModelConfig } from '../types';
 import { UnifiedAdapterConfig, UnifiedProvider } from '../types/unified-adapter';
 import { logger, OllamaError } from '../utils';
+import { chatLogger } from '../utils/chatLogger';
 import { processMessages } from '../utils/messageProcessor';
 import { RequestQueue } from '../utils/requestQueue';
 import { ModelDiscoveryService } from './modelDiscovery';
@@ -84,11 +85,21 @@ export class UnifiedAdapterService {
     request: OpenAI.Chat.Completions.ChatCompletionCreateParams
   ): Promise<OpenAI.Chat.Completions.ChatCompletion | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
     return this.requestQueue.add(async () => {
+      const requestId = chatLogger.generateRequestId();
+      const startTime = Date.now();
+      let modelConfig: ModelConfig | null = null;
+
       try {
         // 获取模型配置
-        const modelConfig = await this.modelDiscovery.getModelConfig(request.model);
+        modelConfig = await this.modelDiscovery.getModelConfig(request.model);
         if (!modelConfig) {
           throw new OllamaError(`不支持的模型: ${request.model}`, 400);
+        }
+
+        // 记录详细请求日志（如果启用）
+        if (chatLogger.isEnabled()) {
+          await chatLogger.logRequestStart(requestId, request, modelConfig);
+          logger.debug('记录聊天请求详细日志', { requestId, model: request.model });
         }
 
         // 处理消息内容，移除 prompt 标签 - 只对 messages 进行过滤处理
@@ -98,6 +109,7 @@ export class UnifiedAdapterService {
 
         // 记录详细的请求信息和供应商信息
         logger.info('统一处理聊天请求', {
+          requestId,
           model: request.model,
           stream: request.stream,
           provider: modelConfig.provider,
@@ -108,15 +120,22 @@ export class UnifiedAdapterService {
 
         // 准备OpenAI请求参数
         const openaiRequest = this.prepareOpenAIRequest(request, modelConfig);
-        logger.debug('转发请求详情', openaiRequest);
+        logger.debug('转发请求详情', { requestId, ...openaiRequest });
 
         if (request.stream) {
-          return this.handleStreamChat(client, openaiRequest, modelConfig);
+          return this.handleStreamChatWithLogging(client, openaiRequest, modelConfig, requestId, startTime);
         } else {
-          return this.handleNonStreamChat(client, openaiRequest, modelConfig);
+          return this.handleNonStreamChatWithLogging(client, openaiRequest, modelConfig, requestId, startTime);
         }
       } catch (error) {
-        logger.error('统一聊天请求失败', { model: request.model, error });
+        const responseTime = Date.now() - startTime;
+
+        // 记录错误到详细日志
+        if (chatLogger.isEnabled() && modelConfig) {
+          await chatLogger.logRequestComplete(requestId, null, responseTime, !!request.stream, undefined, error);
+        }
+
+        logger.error('统一聊天请求失败', { requestId, model: request.model, error });
         if (error instanceof OllamaError) {
           throw error;
         }
@@ -125,95 +144,135 @@ export class UnifiedAdapterService {
     });
   }
   /**
-   * 处理流式聊天
+   * 处理流式聊天并记录详细日志
    */
-  private async *handleStreamChat(
+  private async handleStreamChatWithLogging(
     client: OpenAI,
     request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
-    modelConfig: ModelConfig
-  ): AsyncGenerator<OpenAI.Chat.Completions.ChatCompletionChunk, void, unknown> {
-    try {
-      logger.debug('开始流式请求', {
-        provider: modelConfig.provider,
-        model: modelConfig.name,
-        endpoint: modelConfig.endpoint || modelConfig.name,
-      });
+    modelConfig: ModelConfig,
+    requestId: string,
+    startTime: number
+  ): Promise<AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
+    const self = this;
 
-      const stream = await client.chat.completions.create({
-        ...request,
-        stream: true,
-      });
+    return (async function* () {
+      try {
+        logger.debug('开始流式请求', {
+          requestId,
+          provider: modelConfig.provider,
+          model: modelConfig.name,
+          endpoint: modelConfig.endpoint || modelConfig.name,
+        });
 
-      let chunkCount = 0;
-      let startTime = Date.now();
+        const stream = await client.chat.completions.create({
+          ...request,
+          stream: true,
+        });
 
-      for await (const chunk of stream) {
-        chunkCount++;
+        let chunkCount = 0;
+        const responseTime = Date.now() - startTime;
 
-        // 记录流式完成事件（仅记录第一个块和最后一个块）
-        if (chunkCount === 1 || chunk.choices[0]?.finish_reason === 'stop') {
-          const status = chunkCount === 1 ? '首个响应块' : '流式响应完成';
-          logger.debug(`${status}`, {
-            provider: modelConfig.provider,
-            model: modelConfig.name,
-            chunkCount: chunkCount,
-            elapsedMs: Date.now() - startTime,
-            isComplete: chunk.choices[0]?.finish_reason === 'stop',
-          });
+        for await (const chunk of stream) {
+          chunkCount++;
+
+          // 记录流式响应块到详细日志
+          if (chatLogger.isEnabled()) {
+            await chatLogger.logStreamChunk(requestId, chunk);
+          }
+
+          // 记录流式完成事件（仅记录第一个块和最后一个块）
+          if (chunkCount === 1 || chunk.choices[0]?.finish_reason === 'stop') {
+            const status = chunkCount === 1 ? '首个响应块' : '流式响应完成';
+            logger.debug(`${status}`, {
+              requestId,
+              provider: modelConfig.provider,
+              model: modelConfig.name,
+              chunkCount: chunkCount,
+              elapsedMs: Date.now() - startTime,
+              isComplete: chunk.choices[0]?.finish_reason === 'stop',
+            });
+          }
+
+          yield chunk;
         }
 
-        // 直接返回OpenAI SDK的原生块，无需转换
-        yield chunk;
+        // 记录流式完成到详细日志
+        if (chatLogger.isEnabled()) {
+          await chatLogger.logRequestComplete(requestId, null, responseTime, true, chunkCount);
+        }
+      } catch (error) {
+        const responseTime = Date.now() - startTime;
+
+        // 记录错误到详细日志
+        if (chatLogger.isEnabled()) {
+          await chatLogger.logRequestComplete(requestId, null, responseTime, true, undefined, error);
+        }
+
+        logger.error('流式聊天处理失败', {
+          requestId,
+          provider: modelConfig.provider,
+          model: modelConfig.name,
+          error,
+        });
+        throw new OllamaError(`流式聊天失败: ${error}`, 500);
       }
-    } catch (error) {
-      logger.error('流式聊天处理失败', {
-        provider: modelConfig.provider,
-        model: modelConfig.name,
-        error,
-      });
-      throw new OllamaError(`流式聊天失败: ${error}`, 500);
-    }
+    })();
   }
 
   /**
-   * 处理非流式聊天
+   * 处理非流式聊天并记录详细日志
    */
-  private async handleNonStreamChat(
+  private async handleNonStreamChatWithLogging(
     client: OpenAI,
     request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
-    modelConfig: ModelConfig
+    modelConfig: ModelConfig,
+    requestId: string,
+    startTime: number
   ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
     try {
       logger.debug('开始非流式请求', {
+        requestId,
         provider: modelConfig.provider,
         model: modelConfig.name,
         endpoint: modelConfig.endpoint || modelConfig.name,
       });
 
-      const startTime = Date.now();
       const response = await client.chat.completions.create({
         ...request,
         stream: false,
       });
 
-      const duration = Date.now() - startTime;
+      const responseTime = Date.now() - startTime;
+
+      // 记录响应到详细日志
+      if (chatLogger.isEnabled()) {
+        await chatLogger.logRequestComplete(requestId, response, responseTime, false);
+      }
 
       // 记录响应统计信息
       logger.info('非流式请求完成', {
+        requestId,
         provider: modelConfig.provider,
         model: modelConfig.name,
         responseId: response.id,
-        responseTimeMs: duration,
+        responseTimeMs: responseTime,
         promptTokens: response.usage?.prompt_tokens || 0,
         completionTokens: response.usage?.completion_tokens || 0,
         totalTokens: response.usage?.total_tokens || 0,
         contentLength: response.choices[0]?.message?.content?.length || 0,
       });
 
-      // 直接返回OpenAI SDK的原生响应，无需转换
       return response;
     } catch (error) {
+      const responseTime = Date.now() - startTime;
+
+      // 记录错误到详细日志
+      if (chatLogger.isEnabled()) {
+        await chatLogger.logRequestComplete(requestId, null, responseTime, false, undefined, error);
+      }
+
       logger.error('非流式聊天处理失败', {
+        requestId,
         provider: modelConfig.provider,
         model: modelConfig.name,
         error,
@@ -306,5 +365,13 @@ export class UnifiedAdapterService {
     logger.info('刷新提供商配置');
     this.providers.clear();
     this.initializeProviders();
+  }
+
+  /**
+   * 生成请求ID
+   */
+  private generateRequestId(modelName: string, request: OpenAI.Chat.Completions.ChatCompletionCreateParams): string {
+    // 使用模型名称和时间戳生成唯一请求ID
+    return `${modelName}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   }
 }

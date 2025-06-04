@@ -96,31 +96,21 @@ export class UnifiedAdapterService {
           throw new OllamaError(`不支持的模型: ${request.model}`, 400);
         }
 
-        // 记录详细请求日志（如果启用）
-        if (chatLogger.isEnabled()) {
-          await chatLogger.logRequestStart(requestId, request, modelConfig);
-          logger.debug('记录聊天请求详细日志', { requestId, model: request.model });
-        }
-
         // 处理消息内容，移除 prompt 标签 - 只对 messages 进行过滤处理
         if (Array.isArray(request.messages)) {
-          (request as any).messages = processMessages(request.messages as any);
+          (request as any).messages = processMessages(request.messages as any, request.model);
         }
-
-        // 记录详细的请求信息和供应商信息
-        logger.info('统一处理聊天请求', {
-          requestId,
-          model: request.model,
-          stream: request.stream,
-          provider: modelConfig.provider,
-        });
 
         // 获取对应的OpenAI客户端
         const client = this.getClientForModel(modelConfig);
 
         // 准备OpenAI请求参数
         const openaiRequest = this.prepareOpenAIRequest(request, modelConfig);
-        logger.debug('转发请求详情', { requestId, ...openaiRequest });
+
+        // 记录详细请求日志（如果启用）
+        if (chatLogger.isEnabled()) {
+          await chatLogger.logRequestStart(requestId, openaiRequest, modelConfig);
+        }
 
         if (request.stream) {
           return this.handleStreamChatWithLogging(client, openaiRequest, modelConfig, requestId, startTime);
@@ -143,6 +133,7 @@ export class UnifiedAdapterService {
       }
     });
   }
+
   /**
    * 处理流式聊天并记录详细日志
    */
@@ -157,13 +148,6 @@ export class UnifiedAdapterService {
 
     return (async function* () {
       try {
-        logger.debug('开始流式请求', {
-          requestId,
-          provider: modelConfig.provider,
-          model: modelConfig.name,
-          endpoint: modelConfig.endpoint || modelConfig.name,
-        });
-
         const stream = await client.chat.completions.create({
           ...request,
           stream: true,
@@ -178,19 +162,6 @@ export class UnifiedAdapterService {
           // 记录流式响应块到详细日志
           if (chatLogger.isEnabled()) {
             await chatLogger.logStreamChunk(requestId, chunk);
-          }
-
-          // 记录流式完成事件（仅记录第一个块和最后一个块）
-          if (chunkCount === 1 || chunk.choices[0]?.finish_reason === 'stop') {
-            const status = chunkCount === 1 ? '首个响应块' : '流式响应完成';
-            logger.debug(`${status}`, {
-              requestId,
-              provider: modelConfig.provider,
-              model: modelConfig.name,
-              chunkCount: chunkCount,
-              elapsedMs: Date.now() - startTime,
-              isComplete: chunk.choices[0]?.finish_reason === 'stop',
-            });
           }
 
           yield chunk;
@@ -230,13 +201,6 @@ export class UnifiedAdapterService {
     startTime: number
   ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
     try {
-      logger.debug('开始非流式请求', {
-        requestId,
-        provider: modelConfig.provider,
-        model: modelConfig.name,
-        endpoint: modelConfig.endpoint || modelConfig.name,
-      });
-
       const response = await client.chat.completions.create({
         ...request,
         stream: false,
@@ -248,19 +212,6 @@ export class UnifiedAdapterService {
       if (chatLogger.isEnabled()) {
         await chatLogger.logRequestComplete(requestId, response, responseTime, false);
       }
-
-      // 记录响应统计信息
-      logger.info('非流式请求完成', {
-        requestId,
-        provider: modelConfig.provider,
-        model: modelConfig.name,
-        responseId: response.id,
-        responseTimeMs: responseTime,
-        promptTokens: response.usage?.prompt_tokens || 0,
-        completionTokens: response.usage?.completion_tokens || 0,
-        totalTokens: response.usage?.total_tokens || 0,
-        contentLength: response.choices[0]?.message?.content?.length || 0,
-      });
 
       return response;
     } catch (error) {

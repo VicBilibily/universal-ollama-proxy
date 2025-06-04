@@ -20,18 +20,7 @@ interface ChatRequestLog {
   timestamp: string;
   model: string;
   provider: string;
-  request: {
-    model: string;
-    messages: any[];
-    stream: boolean;
-    temperature?: number;
-    max_tokens?: number;
-    top_p?: number;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    stop?: string | string[];
-    [key: string]: any;
-  };
+  openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams; // 转换后的 OpenAI 请求
   response?: {
     id?: string;
     choices?: any[];
@@ -54,6 +43,19 @@ interface ChatRequestLog {
       ip?: string;
     };
   };
+  summary?: {
+    totalResponseTime: number;
+    streamChunkCount: number;
+    hasError: boolean;
+    tokenUsage?: {
+      prompt_tokens?: number;
+      completion_tokens?: number;
+      total_tokens?: number;
+      [key: string]: any;
+    };
+    requestSize: number;
+    responseSize?: number;
+  };
 }
 
 /**
@@ -75,6 +77,7 @@ class ChatLogger {
       this.ensureLogDir();
     }
   }
+
   /**
    * 确保日志目录存在
    */
@@ -101,8 +104,16 @@ class ChatLogger {
       now.getMinutes().toString().padStart(2, '0') +
       now.getSeconds().toString().padStart(2, '0') +
       now.getMilliseconds().toString().padStart(3, '0');
-    const random = Math.random().toString(36).substr(2, 9);
-    return `${timestamp}_${random}`;
+
+    const randomId = Math.random().toString(36).substring(2, 11);
+    return `${timestamp}_${randomId}`;
+  }
+
+  /**
+   * 检查日志记录是否启用
+   */
+  isEnabled(): boolean {
+    return this.config.enabled;
   }
 
   /**
@@ -110,7 +121,7 @@ class ChatLogger {
    */
   async logRequestStart(
     requestId: string,
-    request: OpenAI.Chat.Completions.ChatCompletionCreateParams,
+    openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams,
     modelConfig: ModelConfig,
     clientInfo?: { userAgent?: string; ip?: string }
   ): Promise<void> {
@@ -121,36 +132,9 @@ class ChatLogger {
     const logEntry: ChatRequestLog = {
       requestId,
       timestamp: startTime,
-      model: request.model,
+      model: openaiRequest.model, // 使用 OpenAI 请求中的模型名称
       provider: modelConfig.provider || 'unknown',
-      request: {
-        model: request.model,
-        messages: request.messages as any[], // 保存完整消息内容
-        stream: request.stream || false,
-        temperature: request.temperature || undefined,
-        max_tokens: request.max_tokens || undefined,
-        top_p: request.top_p || undefined,
-        frequency_penalty: request.frequency_penalty || undefined,
-        presence_penalty: request.presence_penalty || undefined,
-        stop: request.stop || undefined,
-        // 保存其他所有参数
-        ...Object.fromEntries(
-          Object.entries(request).filter(
-            ([key]) =>
-              ![
-                'model',
-                'messages',
-                'stream',
-                'temperature',
-                'max_tokens',
-                'top_p',
-                'frequency_penalty',
-                'presence_penalty',
-                'stop',
-              ].includes(key)
-          )
-        ),
-      },
+      openaiRequest: JSON.parse(JSON.stringify(openaiRequest)), // 深拷贝 OpenAI 请求
       metadata: {
         startTime,
         clientInfo,
@@ -159,9 +143,6 @@ class ChatLogger {
 
     // 存储到活跃请求映射中
     this.activeRequests.set(requestId, logEntry);
-
-    // 立即写入请求开始日志
-    await this.writeRequestStartLog(logEntry);
   }
 
   /**
@@ -190,17 +171,10 @@ class ChatLogger {
 
     logEntry.response.streamChunks.push({
       timestamp: new Date().toISOString(),
-      chunk: chunk, // 保存完整的流式响应块
+      chunk: JSON.parse(JSON.stringify(chunk)), // 深拷贝流式响应块
     });
 
     logEntry.response.streamChunkCount = (logEntry.response.streamChunkCount || 0) + 1;
-
-    // 定期写入流式数据（每10个块或遇到结束块时）
-    const shouldWrite = logEntry.response.streamChunkCount % 10 === 0 || chunk.choices?.[0]?.finish_reason === 'stop';
-
-    if (shouldWrite) {
-      await this.writeStreamUpdate(logEntry);
-    }
   }
 
   /**
@@ -235,7 +209,7 @@ class ChatLogger {
     // 添加响应数据
     if (response) {
       logEntry.response.id = response.id;
-      logEntry.response.choices = response.choices; // 保存完整的选择内容
+      logEntry.response.choices = JSON.parse(JSON.stringify(response.choices)); // 深拷贝响应选择
       logEntry.response.usage = response.usage;
     }
 
@@ -246,7 +220,7 @@ class ChatLogger {
         name: error.name,
         code: error.code,
         status: error.status,
-        stack: error.stack, // 保存完整的错误堆栈
+        stack: error.stack,
         details: error.toString(),
       };
     }
@@ -254,101 +228,55 @@ class ChatLogger {
     // 更新元数据
     logEntry.metadata.endTime = endTime;
 
-    // 写入最终的完整日志
-    await this.writeRequestCompleteLog(logEntry);
+    // 生成汇总信息
+    const requestSize = JSON.stringify(logEntry.openaiRequest).length; // 使用 openaiRequest 计算大小
+    const responseSize = response ? JSON.stringify(response).length : 0;
+
+    logEntry.summary = {
+      totalResponseTime: responseTime,
+      streamChunkCount: streamChunkCount || 0,
+      hasError: !!error,
+      tokenUsage: response?.usage || undefined,
+      requestSize,
+      responseSize,
+    };
+
+    // 写入单个完整日志文件
+    await this.writeCompleteLog(logEntry);
 
     // 从活跃请求中移除
     this.activeRequests.delete(requestId);
   }
 
   /**
-   * 写入请求开始日志
+   * 写入完整日志文件
    */
-  private async writeRequestStartLog(logEntry: ChatRequestLog): Promise<void> {
+  private async writeCompleteLog(logEntry: ChatRequestLog): Promise<void> {
     try {
-      const logFileName = `${logEntry.requestId}_request.json`;
+      const logFileName = `${logEntry.requestId}.json`;
       const logFilePath = join(this.config.logDir, logFileName);
 
-      const logData = {
-        phase: 'REQUEST_START',
-        ...logEntry,
+      // 构造完整的日志对象，突出显示 provider 和 openaiRequest
+      const completeLog = {
+        phase: 'COMPLETE',
+        requestId: logEntry.requestId,
+        timestamp: logEntry.timestamp,
+        provider: logEntry.provider, // 突出显示 provider
+        model: logEntry.model,
+        openaiRequest: logEntry.openaiRequest, // 突出显示转换后的 OpenAI 请求
+        response: logEntry.response,
+        metadata: logEntry.metadata,
+        summary: logEntry.summary,
       };
 
-      await writeFile(logFilePath, JSON.stringify(logData, null, 2), 'utf8');
+      await writeFile(logFilePath, JSON.stringify(completeLog, null, 2), 'utf8');
     } catch (error) {
-      console.error('写入请求开始日志失败:', error);
+      console.error('写入聊天日志失败:', error);
     }
   }
 
   /**
-   * 写入流式更新日志
-   */
-  private async writeStreamUpdate(logEntry: ChatRequestLog): Promise<void> {
-    try {
-      const logFileName = `${logEntry.requestId}_stream.json`;
-      const logFilePath = join(this.config.logDir, logFileName);
-
-      const logData = {
-        phase: 'STREAM_UPDATE',
-        ...logEntry,
-      };
-
-      await writeFile(logFilePath, JSON.stringify(logData, null, 2), 'utf8');
-    } catch (error) {
-      console.error('写入流式更新日志失败:', error);
-    }
-  }
-
-  /**
-   * 写入请求完成日志
-   */
-  private async writeRequestCompleteLog(logEntry: ChatRequestLog): Promise<void> {
-    try {
-      const logFileName = `${logEntry.requestId}_complete.json`;
-      const logFilePath = join(this.config.logDir, logFileName);
-
-      const logData = {
-        phase: 'REQUEST_COMPLETE',
-        ...logEntry,
-        summary: {
-          totalResponseTime: logEntry.response?.responseTime,
-          streamChunkCount: logEntry.response?.streamChunkCount,
-          hasError: !!logEntry.response?.error,
-          tokenUsage: logEntry.response?.usage,
-          requestSize: JSON.stringify(logEntry.request).length,
-          responseSize: logEntry.response ? JSON.stringify(logEntry.response).length : 0,
-        },
-      };
-
-      await writeFile(logFilePath, JSON.stringify(logData, null, 2), 'utf8');
-    } catch (error) {
-      console.error('写入请求完成日志失败:', error);
-    }
-  }
-
-  /**
-   * 检查是否启用详细日志
-   */
-  isEnabled(): boolean {
-    return this.config.enabled;
-  }
-
-  /**
-   * 获取配置信息
-   */
-  getConfig(): ChatLogConfig {
-    return { ...this.config };
-  }
-
-  /**
-   * 获取活跃请求数量
-   */
-  getActiveRequestCount(): number {
-    return this.activeRequests.size;
-  }
-
-  /**
-   * 清理超时的活跃请求
+   * 清理超时的请求
    */
   cleanupStaleRequests(timeoutMs: number = 300000): void {
     // 5分钟超时
@@ -371,12 +299,26 @@ class ChatLogger {
           requestId,
           null,
           now - new Date(logEntry.timestamp).getTime(),
-          logEntry.request.stream,
+          logEntry.openaiRequest?.stream || false,
           logEntry.response?.streamChunkCount,
           { message: '请求超时', code: 'TIMEOUT' }
         );
       }
     }
+  }
+
+  /**
+   * 获取配置信息
+   */
+  getConfig(): ChatLogConfig {
+    return { ...this.config };
+  }
+
+  /**
+   * 获取活跃请求数量
+   */
+  getActiveRequestCount(): number {
+    return this.activeRequests.size;
   }
 }
 

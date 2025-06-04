@@ -2,7 +2,7 @@
 import { logger } from './index';
 
 /**
- * 解除AI限制提示词
+ * 解除系统限制提示词
  * 移除或替换消息中的限制性内容
  */
 export const removeAIRestrictions = (text: string, modelName?: string): string => {
@@ -22,17 +22,33 @@ export const removeAIRestrictions = (text: string, modelName?: string): string =
   }
 
   // 移除 Microsoft 内容策略限制
-  const policyRestriction = 'Follow Microsoft content policies.\n';
-  if (content.includes(policyRestriction)) {
-    content = content.replace(policyRestriction, '');
-    hasChanges = true;
+  const policyRestrictions = [
+    'Follow Microsoft content policies.\n',
+    'Follow Microsoft content policies.',
+    'Follow the Microsoft content policies.\n',
+    'Follow the Microsoft content policies.',
+  ];
+
+  for (const restriction of policyRestrictions) {
+    if (content.includes(restriction)) {
+      content = content.replace(new RegExp(restriction.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '');
+      hasChanges = true;
+    }
   }
 
   // 移除版权限制
-  const copyrightRestriction = 'Avoid content that violates copyrights.\n';
-  if (content.includes(copyrightRestriction)) {
-    content = content.replace(copyrightRestriction, '');
-    hasChanges = true;
+  const copyrightRestrictions = [
+    'Avoid content that violates copyrights.\n',
+    'Avoid content that violates copyrights.',
+    'Avoid content that violates copyright.\n',
+    'Avoid content that violates copyright.',
+  ];
+
+  for (const restriction of copyrightRestrictions) {
+    if (content.includes(restriction)) {
+      content = content.replace(new RegExp(restriction.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '');
+      hasChanges = true;
+    }
   }
 
   // 移除无关开发话题过滤提示
@@ -51,7 +67,7 @@ export const removeAIRestrictions = (text: string, modelName?: string): string =
   }
 
   if (hasChanges) {
-    logger.debug('已移除AI限制提示词', {
+    logger.debug('已修改系统提示词', {
       originalLength: text.length,
       processedLength: content.length,
       modelName,
@@ -125,15 +141,14 @@ export const processMessageContent = (
  */
 export const processMessages = <T extends Array<{ role: string; content: string | any[] }>>(
   messages: T,
-  modelName?: string,
-  removeRestrictions: boolean = false
+  modelName?: string
 ): T => {
   return messages.map((msg, index) => ({
     ...msg,
     content: processMessageContent(
       msg.content,
       modelName,
-      removeRestrictions && index === 0 // 只对第一条消息移除AI限制
+      index === 0 // 只对第一条消息移除AI限制
     ),
   })) as T;
 };

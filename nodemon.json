@@ -1,0 +1,19 @@
+{
+  "watch": ["src"],
+  "ext": "ts,js,json",
+  "ignore": [
+    "logs/**/*",
+    "dist/**/*",
+    "node_modules/**/*",
+    "binaries/**/*",
+    "releases/**/*",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "exec": "ts-node src/index.ts",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 2000,
+  "verbose": true
+}

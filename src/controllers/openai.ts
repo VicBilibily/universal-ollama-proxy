@@ -85,32 +85,4 @@ export class OpenAIController {
       }
     }
   }
-
-  /**
-   * GET /v1/models - OpenAI 模型列表接口（非关键接口，模拟返回）
-   */
-  async listModels(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      res.json({
-        object: 'list',
-        data: [
-          {
-            id: 'doubao-1.5-lite-32k-250115',
-            object: 'model',
-            created: Math.floor(Date.now() / 1000),
-            owned_by: 'volcengine',
-          },
-        ],
-      });
-    } catch (error) {
-      logger.error('OpenAI 模型列表错误:', error);
-      const openaiError: OpenAIErrorResponse = {
-        error: {
-          message: 'Failed to retrieve models',
-          type: 'server_error',
-        },
-      };
-      res.status(500).json(openaiError);
-    }
-  }
 }

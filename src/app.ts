@@ -17,7 +17,6 @@ import {
 } from './middleware';
 import { ModelDiscoveryService } from './services/modelDiscovery';
 import { OllamaService } from './services/ollama';
-import { OllamaCompatibilityService } from './services/ollama-compatibility';
 import { OpenAICompatService } from './services/openai';
 import { UnifiedAdapterService } from './services/unified-adapter';
 import { UnifiedAdapterConfig } from './types';
@@ -31,7 +30,6 @@ class App {
   public app: express.Application;
   private modelDiscoveryService!: ModelDiscoveryService;
   private unifiedAdapterService!: UnifiedAdapterService;
-  private ollamaCompatibilityService!: OllamaCompatibilityService;
   private ollamaService!: OllamaService;
   private openaiService!: OpenAICompatService;
   private ollamaController!: OllamaController;
@@ -82,11 +80,8 @@ class App {
       // 初始化统一适配器
       this.unifiedAdapterService = new UnifiedAdapterService(this.modelDiscoveryService, unifiedConfig);
 
-      // 初始化兼容性服务
-      this.ollamaCompatibilityService = new OllamaCompatibilityService(this.modelDiscoveryService);
-
-      // 初始化Ollama服务（只保留兼容性服务，其他方法为占位符）
-      this.ollamaService = new OllamaService(this.ollamaCompatibilityService);
+      // 初始化Ollama服务（直接使用ModelDiscoveryService）
+      this.ollamaService = new OllamaService(this.modelDiscoveryService);
 
       // 初始化OpenAI兼容服务（通过统一适配器）
       this.openaiService = new OpenAICompatService(this.unifiedAdapterService);
@@ -116,13 +111,21 @@ class App {
       })
     );
 
-    // CORS 配置
+    // CORS 配置 - 允许所有来源访问
     this.app.use(
       cors({
-        origin: ['http://localhost:3000', 'http://localhost:11434'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'User-Agent'],
-        credentials: true,
+        origin: true, // 允许所有来源
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+        allowedHeaders: [
+          'Content-Type',
+          'Authorization',
+          'User-Agent',
+          'Accept',
+          'X-Requested-With',
+          'Cache-Control',
+          'Pragma',
+        ],
+        credentials: false, // API服务不需要credentials
       })
     );
 
@@ -187,29 +190,11 @@ class App {
 
     // OpenAI 兼容接口
     this.app.post('/v1/chat/completions', this.openaiController.chatCompletions.bind(this.openaiController));
-    this.app.get('/v1/models', this.openaiController.listModels.bind(this.openaiController));
 
-    // 官方 Ollama API 端点
-    // 模型生成端点
-    this.app.post('/api/chat', this.ollamaController.chat.bind(this.ollamaController));
-    this.app.post('/api/generate', this.ollamaController.generate.bind(this.ollamaController));
-
-    // 嵌入端点
-    this.app.post('/api/embed', this.ollamaController.embed.bind(this.ollamaController));
-    this.app.post('/api/embeddings', this.ollamaController.embeddings.bind(this.ollamaController));
-
+    // 官方 Ollama API 端点 - 仅保留核心端点
     // 模型管理端点
     this.app.get('/api/tags', this.ollamaController.getTags.bind(this.ollamaController));
-    this.app.get('/api/list', this.ollamaController.getTags.bind(this.ollamaController)); // 别名
     this.app.post('/api/show', this.ollamaController.show.bind(this.ollamaController));
-    this.app.post('/api/create', this.ollamaController.create.bind(this.ollamaController));
-    this.app.post('/api/copy', this.ollamaController.copy.bind(this.ollamaController));
-    this.app.delete('/api/delete', this.ollamaController.delete.bind(this.ollamaController));
-    this.app.post('/api/pull', this.ollamaController.pull.bind(this.ollamaController));
-    this.app.post('/api/push', this.ollamaController.push.bind(this.ollamaController));
-
-    // 运行模型端点
-    this.app.get('/api/ps', this.ollamaController.ps.bind(this.ollamaController));
 
     // 404 处理
     this.app.use('*', (req, res) => {
@@ -230,7 +215,6 @@ class App {
     this.app.listen(config.port, async () => {
       logger.success(`🚀 Ollama 兼容服务器启动成功，监听端口 ${config.port}`);
       logger.info(`🔍 健康检查: http://localhost:${config.port}/`);
-      logger.info(`📚 API 文档: http://localhost:${config.port}/api/version`);
 
       try {
         const supportedModels = await this.modelDiscoveryService.getAvailableModels();

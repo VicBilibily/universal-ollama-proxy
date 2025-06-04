@@ -4,8 +4,6 @@ import { ProviderConfig } from '../config/models';
 import {
   ModelDiscoveryService as IModelDiscoveryService,
   ModelConfig,
-  ModelQueryOptions,
-  ModelStats,
   UnifiedAdapterConfig,
 } from '../types';
 import { logger } from '../utils';
@@ -13,9 +11,10 @@ import { logger } from '../utils';
 /**
  * 统一的模型发现服务
  * 直接从配置文件读取模型信息，不依赖具体的服务实现
+ * 只保留实际使用的方法：getAvailableModels 和 getModelConfig
  */
 export class ModelDiscoveryService implements IModelDiscoveryService {
-  private models: Map<string, ModelConfig> = new Map();
+  private models: Map<string, ModelConfig> = new Map(); // 使用 provider:modelName 作为键
   private modelsByCategory: Map<string, ModelConfig[]> = new Map();
   private lastRefreshTime: Date = new Date(0);
   private readonly configDir: string;
@@ -36,7 +35,9 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       logger.error('模型发现服务初始化失败:', error);
       throw error;
     }
-  } /**
+  }
+
+  /**
    * 加载所有提供商的模型配置
    */
   private async loadAllProviderModels(): Promise<void> {
@@ -66,7 +67,7 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
         await this.loadProviderModels(provider);
       } catch (error) {
         logger.warn(`加载 ${provider} 模型配置失败:`, error);
-        // 继续加载其他提供商的模型，但不使用后备列表
+        // 继续加载其他提供商的模型
       }
     }
 
@@ -100,7 +101,10 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
             category: categoryData.category,
           };
 
-          this.models.set(modelConfig.name, enrichedModel);
+          // 使用 provider:modelName 作为唯一键
+          const uniqueKey = `${provider}:${modelConfig.name}`;
+          this.models.set(uniqueKey, enrichedModel);
+
           categoryModels.push(enrichedModel);
         }
 
@@ -117,187 +121,36 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   }
 
   /**
-   * 获取所有可用模型名称
+   * 生成完整的模型键
+   */
+  private generateModelKey(provider: string, modelName: string): string {
+    return `${provider}:${modelName}`;
+  }
+
+  /**
+   * 解析模型键
+   */
+  private parseModelKey(key: string): { provider: string; modelName: string } | null {
+    const parts = key.split(':');
+    if (parts.length === 2) {
+      return { provider: parts[0], modelName: parts[1] };
+    }
+    return null;
+  }
+
+  /**
+   * 获取所有可用模型名称（强制使用组合键格式）
    */
   async getAvailableModels(): Promise<string[]> {
-    return Array.from(this.models.keys());
+    // 直接返回所有组合键格式的模型名称
+    return Array.from(this.models.keys()).sort();
   }
 
   /**
-   * 获取指定模型的配置
+   * 获取指定模型的配置（只接受 provider:modelName 格式）
    */
   async getModelConfig(modelName: string): Promise<ModelConfig | null> {
+    // 只接受完整的 provider:modelName 格式
     return this.models.get(modelName) || null;
-  }
-
-  /**
-   * 根据分类获取模型
-   */
-  async getModelsByCategory(category: string): Promise<ModelConfig[]> {
-    return this.modelsByCategory.get(category) || [];
-  }
-
-  /**
-   * 获取推荐模型
-   */
-  async getRecommendedModels(): Promise<ModelConfig[]> {
-    return Array.from(this.models.values()).filter(model => model.recommended);
-  }
-
-  /**
-   * 检查模型是否支持
-   */
-  async isModelSupported(modelName: string): Promise<boolean> {
-    return this.models.has(modelName);
-  }
-
-  /**
-   * 刷新模型配置
-   */
-  async refreshModels(): Promise<void> {
-    logger.info('开始刷新模型配置...');
-    this.models.clear();
-    this.modelsByCategory.clear();
-    await this.loadAllProviderModels();
-    logger.info('模型配置刷新完成');
-  }
-
-  /**
-   * 获取模型统计信息
-   */
-  async getModelStats(): Promise<ModelStats> {
-    const allModels = Array.from(this.models.values());
-
-    const modelsByCategory: Record<string, number> = {};
-    const modelsByType: Record<string, number> = {};
-
-    for (const model of allModels) {
-      // 按分类统计
-      if (model.category) {
-        modelsByCategory[model.category] = (modelsByCategory[model.category] || 0) + 1;
-      }
-
-      // 按类型统计
-      modelsByType[model.type] = (modelsByType[model.type] || 0) + 1;
-    }
-
-    return {
-      totalModels: allModels.length,
-      modelsByCategory,
-      modelsByType,
-      recommendedCount: allModels.filter(model => model.recommended).length,
-    };
-  }
-
-  /**
-   * 根据查询选项获取模型
-   */
-  async queryModels(options: ModelQueryOptions): Promise<ModelConfig[]> {
-    let filteredModels = Array.from(this.models.values());
-
-    if (options.category) {
-      filteredModels = filteredModels.filter(model => model.category === options.category);
-    }
-
-    if (options.type) {
-      filteredModels = filteredModels.filter(model => model.type === options.type);
-    }
-
-    if (options.recommended !== undefined) {
-      filteredModels = filteredModels.filter(model => model.recommended === options.recommended);
-    }
-
-    if (options.supportedFormat) {
-      filteredModels = filteredModels.filter(model => model.supportedFormats.includes(options.supportedFormat!));
-    }
-
-    if (options.minContextLength) {
-      filteredModels = filteredModels.filter(model => model.contextLength >= options.minContextLength!);
-    }
-
-    if (options.maxContextLength) {
-      filteredModels = filteredModels.filter(model => model.contextLength <= options.maxContextLength!);
-    }
-
-    return filteredModels;
-  }
-
-  /**
-   * 获取指定提供商的所有模型
-   */
-  async getModelsByProvider(provider: string): Promise<ModelConfig[]> {
-    return Array.from(this.models.values()).filter(model => model.provider === provider);
-  }
-
-  /**
-   * 获取所有分类
-   */
-  async getAvailableCategories(): Promise<string[]> {
-    return Array.from(this.modelsByCategory.keys());
-  }
-
-  /**
-   * 获取最后刷新时间
-   */
-  getLastRefreshTime(): Date {
-    return this.lastRefreshTime;
-  }
-
-  /**
-   * 验证模型配置的完整性
-   */
-  async validateModelConfig(modelName: string): Promise<boolean> {
-    const model = this.models.get(modelName);
-    if (!model) {
-      return false;
-    }
-
-    // 检查必需的字段
-    const requiredFields = ['name', 'displayName', 'type', 'capabilities', 'contextLength'];
-    for (const field of requiredFields) {
-      if (!(field in model) || (model as any)[field] === undefined) {
-        logger.warn(`模型 ${modelName} 缺少必需字段: ${field}`);
-        return false;
-      }
-    }
-
-    // 检查数值字段的有效性
-    if (model.contextLength <= 0 || model.inputLength <= 0) {
-      logger.warn(`模型 ${modelName} 的长度配置无效`);
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * 获取模型的完整信息（包含默认参数等）
-   */
-  async getModelFullInfo(modelName: string): Promise<any> {
-    const model = await this.getModelConfig(modelName);
-    if (!model) {
-      return null;
-    }
-
-    // 尝试从对应的提供商配置文件获取默认参数
-    const provider = model.provider;
-    if (provider) {
-      try {
-        const configFile = path.join(this.configDir, `${provider}-models.json`);
-        const configContent = fs.readFileSync(configFile, 'utf-8');
-        const config = JSON.parse(configContent) as ProviderConfig;
-
-        return {
-          ...model,
-          defaultParameters: config.defaultParameters,
-          endpoints: config.endpoints,
-          meta: config.meta,
-        };
-      } catch (error) {
-        logger.warn(`获取 ${provider} 提供商的默认参数失败:`, error);
-      }
-    }
-
-    return model;
   }
 }

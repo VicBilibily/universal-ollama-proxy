@@ -48,26 +48,4 @@ export interface DefaultParameters {
 export interface ModelDiscoveryService {
   getAvailableModels(): Promise<string[]>;
   getModelConfig(modelName: string): Promise<ModelConfig | null>;
-  getModelsByCategory(category: string): Promise<ModelConfig[]>;
-  getRecommendedModels(): Promise<ModelConfig[]>;
-  isModelSupported(modelName: string): Promise<boolean>;
-  refreshModels(): Promise<void>;
-}
-
-// 模型统计信息
-export interface ModelStats {
-  totalModels: number;
-  modelsByCategory: Record<string, number>;
-  modelsByType: Record<string, number>;
-  recommendedCount: number;
-}
-
-// 模型查询选项
-export interface ModelQueryOptions {
-  category?: string;
-  type?: 'chat' | 'embedding';
-  recommended?: boolean;
-  supportedFormat?: string;
-  minContextLength?: number;
-  maxContextLength?: number;
 }

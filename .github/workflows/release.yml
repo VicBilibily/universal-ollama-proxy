@@ -175,8 +175,8 @@ jobs:
           # 删除双v前缀的文件（如果存在）
           rm -f universal-ollama-proxy-v*v*.* 2>/dev/null || true
 
-          # 删除不正确格式的文件
-          rm -f universal-ollama-proxy-*${RAW_VERSION}*.* 2>/dev/null || true
+          # 删除没有v前缀的不正确格式文件（不删除正确的v前缀文件）
+          rm -f universal-ollama-proxy-${RAW_VERSION}-*.* 2>/dev/null || true
 
           # 确保只保留正确格式的文件（v前缀版本）
           echo "清理后的文件列表:"

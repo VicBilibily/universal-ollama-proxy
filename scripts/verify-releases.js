@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { parseConfigFile } = require('./jsonParser');
 
 const RELEASES_DIR = 'releases';
 const REQUIRED_FILES = [
@@ -88,7 +89,7 @@ function verifyPackage(packagePath) {
         const unifiedConfigPath = path.join(tempDir, 'config', 'unified-providers.json');
         if (fs.existsSync(unifiedConfigPath)) {
           const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
-          const unifiedConfig = JSON.parse(unifiedConfigContent);
+          const unifiedConfig = parseConfigFile(unifiedConfigContent, unifiedConfigPath);
 
           // 从配置中提取所有API KEY环境变量
           const apiKeys = unifiedConfig.providers

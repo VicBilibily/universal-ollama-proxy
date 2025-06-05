@@ -1,15 +1,19 @@
 {
+  // 消息处理规则配置文件 - 用于处理AI提示词和响应
+  // 更新时间：2025年6月5日 - 添加JSON注释支持测试
   "promptProcessingRules": {
-    "enabled": true,
+    "enabled": true, // 启用提示词处理规则
     "rules": [
       {
+        // GitHub Copilot身份处理规则
         "name": "github_copilot_identity",
         "type": "replace",
         "pattern": "you must respond with \"GitHub Copilot\".",
-        "replacement": "you can respond with \"GitHub Copilot\".",
+        "replacement": "you can respond with \"GitHub Copilot\".", // 将"必须"改为"可以"
         "description": "修改 GitHub Copilot 身份限制"
       },
       {
+        // Microsoft内容策略移除规则
         "name": "microsoft_content_policies",
         "type": "remove",
         "patterns": [
@@ -21,6 +25,7 @@
         "description": "移除 Microsoft 内容策略限制"
       },
       {
+        // 版权限制移除规则
         "name": "copyright_restrictions",
         "type": "remove",
         "patterns": [
@@ -32,6 +37,7 @@
         "description": "移除版权限制"
       },
       {
+        // 无关开发话题过滤提示移除规则
         "name": "development_topic_filter",
         "type": "remove",
         "patterns": [
@@ -40,6 +46,7 @@
         "description": "移除无关开发话题过滤提示"
       },
       {
+        // 跳过提示移除规则
         "name": "skip_tip",
         "type": "remove",
         "patterns": [", or completely irrelevant to software engineering"],
@@ -48,7 +55,7 @@
     ]
   },
   "processingOptions": {
-    "logChanges": true,
-    "description": "处理选项配置 - 自动只处理第一条消息"
+    "logChanges": true, // 启用修改日志记录
+    "description": "消息处理选项配置" // 处理选项描述
   }
 }

@@ -7,6 +7,7 @@ import {
   UnifiedAdapterConfig,
 } from '../types';
 import { logger } from '../utils';
+import { parseConfigFile } from '../utils/jsonParser';
 
 /**
  * 统一的模型发现服务
@@ -49,7 +50,7 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
     let unifiedConfig: UnifiedAdapterConfig;
     try {
       const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
-      unifiedConfig = JSON.parse(unifiedConfigContent);
+      unifiedConfig = parseConfigFile(unifiedConfigContent, unifiedConfigPath);
     } catch (error) {
       throw new Error(`读取或解析供应商配置文件失败: ${unifiedConfigPath}, 错误: ${error}`);
     }
@@ -85,7 +86,7 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
 
     try {
       const configContent = fs.readFileSync(configFile, 'utf-8');
-      const config = JSON.parse(configContent) as ProviderConfig;
+      const config = parseConfigFile(configContent, configFile) as ProviderConfig;
 
       // 验证配置文件格式
       if (!config.models || !Array.isArray(config.models)) {

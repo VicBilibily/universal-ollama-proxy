@@ -27,37 +27,11 @@
       }
     },
     {
-      "id": "doubao-1.5-pro-128k-250115",
-      "name": "豆包1.5 Pro 128K",
-      "object": "model",
-      "vendor": "ByteDance",
-      "version": "doubao-1.5-pro-128k-250115",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "doubao-1.5-pro",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 123904
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
-          "structured_outputs": true
-        },
-        "tokenizer": "cl100k_base",
-        "type": "chat"
-      }
-    },
-    {
-      "id": "doubao-1.5-pro-256k-250115",
+      "id": "doubao-1-5-pro-256k-250115",
       "name": "豆包1.5 Pro 256K",
       "object": "model",
       "vendor": "ByteDance",
-      "version": "doubao-1.5-pro-256k-250115",
+      "version": "doubao-1-5-pro-256k-250115",
       "preview": false,
       "model_picker_enabled": true,
       "capabilities": {
@@ -118,47 +92,6 @@
           "max_context_window_tokens": 32000,
           "max_output_tokens": 4096,
           "max_prompt_tokens": 27904,
-          "vision": {
-            "max_images": 10,
-            "max_image_size": 20971520,
-            "supported_formats": [
-              "jpg",
-              "jpeg",
-              "png",
-              "webp",
-              "gif",
-              "mp4",
-              "avi",
-              "mov"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
-          "vision": true,
-          "structured_outputs": true
-        },
-        "tokenizer": "cl100k_base",
-        "type": "chat"
-      }
-    },
-    {
-      "id": "doubao-1.5-vision-pro-250115",
-      "name": "豆包1.5视觉Pro",
-      "object": "model",
-      "vendor": "ByteDance",
-      "version": "doubao-1.5-vision-pro-250115",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "doubao-1.5-vision",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 123904,
           "vision": {
             "max_images": 10,
             "max_image_size": 20971520,

@@ -22,6 +22,7 @@ import { UnifiedAdapterService } from './services/unified-adapter';
 import { UnifiedAdapterConfig } from './types';
 import { logger } from './utils';
 import { chatLogger } from './utils/chatLogger';
+import { parseConfigFile } from './utils/jsonParser';
 
 // 加载环境变量
 dotenv.config();
@@ -53,7 +54,7 @@ class App {
       // 加载统一适配器配置
       const unifiedConfigPath = path.join(process.cwd(), 'config', 'unified-providers.json');
       const unifiedConfigData = await fs.readFile(unifiedConfigPath, 'utf-8');
-      const unifiedConfig: UnifiedAdapterConfig = JSON.parse(unifiedConfigData);
+      const unifiedConfig: UnifiedAdapterConfig = parseConfigFile(unifiedConfigData, unifiedConfigPath);
 
       // 替换环境变量
       for (const provider of unifiedConfig.providers) {

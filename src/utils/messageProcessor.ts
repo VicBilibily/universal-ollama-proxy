@@ -2,6 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { logger } from './index';
+import { parseConfigFile } from './jsonParser';
 
 // 配置接口定义
 interface ProcessingRule {
@@ -35,7 +36,7 @@ const loadProcessingConfig = (): MessageProcessingConfig => {
   try {
     const configPath = path.join(__dirname, '../../config/message-processing-rules.json');
     const configContent = fs.readFileSync(configPath, 'utf-8');
-    processingConfig = JSON.parse(configContent);
+    processingConfig = parseConfigFile(configContent, configPath);
     logger.debug('已加载消息处理规则配置', { rulesCount: processingConfig?.promptProcessingRules.rules.length });
     return processingConfig!;
   } catch (error) {

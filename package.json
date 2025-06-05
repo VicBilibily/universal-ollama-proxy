@@ -65,7 +65,8 @@
     "form-data": "^4.0.2",
     "helmet": "^8.1.0",
     "morgan": "^1.10.0",
-    "openai": "^5.0.2"
+    "openai": "^5.0.2",
+    "strip-json-comments": "^3.1.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",

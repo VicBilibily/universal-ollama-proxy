@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseConfigFile } = require('./jsonParser');
 
 function checkEnvFile() {
   const envPath = path.join(__dirname, '..', '.env');
@@ -30,7 +31,7 @@ function checkEnvFile() {
   try {
     const unifiedConfigPath = path.join(__dirname, '..', 'config', 'unified-providers.json');
     const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
-    const unifiedConfig = JSON.parse(unifiedConfigContent);
+    const unifiedConfig = parseConfigFile(unifiedConfigContent, unifiedConfigPath);
 
     apiKeys = unifiedConfig.providers
       .map(provider => {
@@ -69,7 +70,7 @@ function checkEnvFile() {
     try {
       const unifiedConfigPath = path.join(__dirname, '..', 'config', 'unified-providers.json');
       const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf8');
-      const unifiedConfig = JSON.parse(unifiedConfigContent);
+      const unifiedConfig = parseConfigFile(unifiedConfigContent, unifiedConfigPath);
 
       unifiedConfig.providers.forEach(provider => {
         const envVar = provider.apiKey.slice(2, -1);

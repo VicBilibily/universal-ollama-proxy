@@ -8,6 +8,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { parseConfigFile } = require('./jsonParser');
 
 const BINARIES_DIR = 'binaries';
 const RELEASES_DIR = 'releases';
@@ -103,7 +104,7 @@ function createReadme(targetDir, platform, arch, binaryName) {
     const unifiedConfigPath = path.join('config', 'unified-providers.json');
     if (fs.existsSync(unifiedConfigPath)) {
       const unifiedConfigContent = fs.readFileSync(unifiedConfigPath, 'utf-8');
-      const unifiedConfig = JSON.parse(unifiedConfigContent);
+      const unifiedConfig = parseConfigFile(unifiedConfigContent, unifiedConfigPath);
 
       if (unifiedConfig && unifiedConfig.providers && Array.isArray(unifiedConfig.providers)) {
         unifiedConfig.providers.forEach(provider => {

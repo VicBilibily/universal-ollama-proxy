@@ -1,4 +1,3 @@
-// 统一的OpenAI适配器服务
 import { OpenAI } from 'openai';
 import { ModelConfig } from '../types';
 import { UnifiedAdapterConfig, UnifiedProvider } from '../types/unified-adapter';
@@ -43,14 +42,14 @@ export class UnifiedAdapterService {
       try {
         const client = new OpenAI({
           baseURL: provider.baseURL,
-          apiKey: provider.apiKey,
+          apiKey: provider.apiKey || 'dummy-key', // 对于无需认证的提供商，使用占位符
           defaultHeaders: this.getProviderHeaders(provider),
           timeout: 300000, // 5分钟超时
           // 注意：OpenAI SDK 内部会处理HTTP连接，我们通过全局axios配置来优化连接池
         });
 
         this.providers.set(provider.name, client);
-        logger.info(`初始化${provider.displayName}提供商成功`, {
+        logger.debug(`初始化${provider.displayName}提供商成功`, {
           provider: provider.name,
           baseURL: provider.baseURL,
         });

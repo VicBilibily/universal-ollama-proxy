@@ -2,7 +2,7 @@
   "models": [
     {
       "id": "qwen-max",
-      "name": "通义千问Max（稳定版）",
+      "name": "通义千问 Max (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-max",
@@ -30,7 +30,7 @@
     },
     {
       "id": "qwen-max-latest",
-      "name": "通义千问Max（最新版）",
+      "name": "通义千问 Max (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-max-latest",
@@ -58,7 +58,7 @@
     },
     {
       "id": "qwen-plus",
-      "name": "通义千问Plus（稳定版）",
+      "name": "通义千问 Plus (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-plus",
@@ -86,7 +86,7 @@
     },
     {
       "id": "qwen-plus-latest",
-      "name": "通义千问Plus（最新版）",
+      "name": "通义千问 Plus (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-plus-latest",
@@ -115,7 +115,7 @@
     },
     {
       "id": "qwen-turbo",
-      "name": "通义千问Turbo（稳定版）",
+      "name": "通义千问 Turbo (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-turbo",
@@ -143,7 +143,7 @@
     },
     {
       "id": "qwen-turbo-latest",
-      "name": "通义千问Turbo（最新版）",
+      "name": "通义千问 Turbo (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-turbo-latest",
@@ -172,7 +172,7 @@
     },
     {
       "id": "qwen-long",
-      "name": "通义千问Long（稳定版）",
+      "name": "通义千问 Long (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-long",
@@ -200,7 +200,7 @@
     },
     {
       "id": "qwen-long-latest",
-      "name": "通义千问Long（最新版）",
+      "name": "通义千问 Long (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-long-latest",
@@ -228,7 +228,7 @@
     },
     {
       "id": "qwen-vl-max",
-      "name": "通义千问VL Max（稳定版）",
+      "name": "通义千问 VL Max (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-vl-max",
@@ -269,7 +269,7 @@
     },
     {
       "id": "qwen-vl-max-latest",
-      "name": "通义千问VL Max（最新版）",
+      "name": "通义千问 VL Max (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-vl-max-latest",
@@ -310,7 +310,7 @@
     },
     {
       "id": "qwen-vl-plus",
-      "name": "通义千问VL Plus（稳定版）",
+      "name": "通义千问 VL Plus (稳定版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-vl-plus",
@@ -351,7 +351,7 @@
     },
     {
       "id": "qwen-vl-plus-latest",
-      "name": "通义千问VL Plus（最新版）",
+      "name": "通义千问 VL Plus (最新版)",
       "object": "model",
       "vendor": "Alibaba",
       "version": "qwen-vl-plus-latest",

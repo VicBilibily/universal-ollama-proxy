@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { logger } = require('./utils/logger');
 
 const WORKFLOWS_DIR = '.github/workflows';
 const REQUIRED_WORKFLOWS = ['ci.yml', 'release.yml'];
@@ -25,25 +26,19 @@ const WORKFLOW_CONFIGS = {
   },
 };
 
-function log(message, type = 'info') {
-  const timestamp = new Date().toISOString();
-  const colors = {
-    info: '\x1b[34m',
-    success: '\x1b[32m',
-    warn: '\x1b[33m',
-    error: '\x1b[31m',
-    reset: '\x1b[0m',
-  };
-
-  const color = colors[type] || colors.info;
-  console.log(`\x1b[90m${timestamp}\x1b[0m ${color}[${type.toUpperCase()}]\x1b[0m ${message}`);
-}
+// 使用统一的logger系统
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
+};
 
 function checkWorkflowFiles() {
-  log('检查工作流文件...');
+  log.info('检查工作流文件...');
 
   if (!fs.existsSync(WORKFLOWS_DIR)) {
-    log(`工作流目录不存在: ${WORKFLOWS_DIR}`, 'error');
+    log.error(`工作流目录不存在: ${WORKFLOWS_DIR}`);
     return false;
   }
 
@@ -54,11 +49,11 @@ function checkWorkflowFiles() {
     const config = WORKFLOW_CONFIGS[workflow];
 
     if (fs.existsSync(workflowPath)) {
-      log(`✅ ${config.name} (${workflow})`, 'success');
-      log(`   描述: ${config.description}`);
-      log(`   触发: ${config.triggers.join(', ')}`);
+      log.success(`✅ ${config.name} (${workflow})`);
+      log.info(`   描述: ${config.description}`);
+      log.info(`   触发: ${config.triggers.join(', ')}`);
     } else {
-      log(`❌ ${config.name} (${workflow}) - 文件不存在`, 'error');
+      log.error(`❌ ${config.name} (${workflow}) - 文件不存在`);
       allExists = false;
     }
   }
@@ -67,11 +62,11 @@ function checkWorkflowFiles() {
 }
 
 function checkPackageScripts() {
-  log('\n检查 package.json 脚本...');
+  log.info('\n检查 package.json 脚本...');
 
   const packagePath = 'package.json';
   if (!fs.existsSync(packagePath)) {
-    log('package.json 不存在', 'error');
+    log.error('package.json 不存在');
     return false;
   }
 
@@ -84,9 +79,9 @@ function checkPackageScripts() {
 
   for (const script of requiredScripts) {
     if (scripts[script]) {
-      log(`✅ ${script}: ${scripts[script]}`, 'success');
+      log.success(`✅ ${script}: ${scripts[script]}`);
     } else {
-      log(`❌ ${script} - 脚本不存在`, 'error');
+      log.error(`❌ ${script} - 脚本不存在`);
       allScriptsExist = false;
     }
   }
@@ -95,7 +90,7 @@ function checkPackageScripts() {
 }
 
 function checkBuildScripts() {
-  log('\n检查构建脚本...');
+  log.info('\n检查构建脚本...');
 
   const buildScripts = ['build-binaries.js', 'create-release.js', 'verify-binaries.js', 'verify-releases.js'];
 
@@ -105,9 +100,9 @@ function checkBuildScripts() {
     const scriptPath = path.join(__dirname, script);
     if (fs.existsSync(scriptPath)) {
       const stats = fs.statSync(scriptPath);
-      log(`✅ ${script} (${(stats.size / 1024).toFixed(1)} KB)`, 'success');
+      log.success(`✅ ${script} (${(stats.size / 1024).toFixed(1)} KB)`);
     } else {
-      log(`❌ ${script} - 文件不存在`, 'error');
+      log.error(`❌ ${script} - 文件不存在`);
       allScriptsExist = false;
     }
   }
@@ -116,7 +111,7 @@ function checkBuildScripts() {
 }
 
 function checkGitStatus() {
-  log('\n检查 Git 状态...');
+  log.info('\n检查 Git 状态...');
 
   try {
     // 检查是否在 Git 仓库中
@@ -125,24 +120,24 @@ function checkGitStatus() {
     // 检查远程仓库
     const remotes = execSync('git remote -v', { encoding: 'utf8' });
     if (remotes.includes('github.com')) {
-      log('✅ 检测到 GitHub 远程仓库', 'success');
+      log.success('✅ 检测到 GitHub 远程仓库');
     } else {
-      log('⚠️  未检测到 GitHub 远程仓库', 'warn');
+      log.warn('⚠️  未检测到 GitHub 远程仓库');
     }
 
     // 检查当前分支
     const branch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
-    log(`✅ 当前分支: ${branch}`, 'success');
+    log.success(`✅ 当前分支: ${branch}`);
 
     return true;
   } catch (error) {
-    log('❌ 不在 Git 仓库中或 Git 配置有问题', 'error');
+    log.error('❌ 不在 Git 仓库中或 Git 配置有问题');
     return false;
   }
 }
 
 function checkDirectories() {
-  log('\n检查目录结构...');
+  log.info('\n检查目录结构...');
 
   const directories = [
     { path: 'src', description: '源代码目录' },
@@ -155,17 +150,17 @@ function checkDirectories() {
   for (const dir of directories) {
     if (fs.existsSync(dir.path)) {
       const files = fs.readdirSync(dir.path);
-      log(`✅ ${dir.path}/ (${files.length} 个文件) - ${dir.description}`, 'success');
+      log.success(`✅ ${dir.path}/ (${files.length} 个文件) - ${dir.description}`);
     } else if (dir.optional) {
-      log(`⚠️  ${dir.path}/ - ${dir.description} (可选，构建时创建)`, 'warn');
+      log.warn(`⚠️  ${dir.path}/ - ${dir.description} (可选，构建时创建)`);
     } else {
-      log(`❌ ${dir.path}/ - ${dir.description} (必需)`, 'error');
+      log.error(`❌ ${dir.path}/ - ${dir.description} (必需)`);
     }
   }
 }
 
 function generateReport() {
-  log('\n生成 CI/CD 状态报告...');
+  log.info('\n生成 CI/CD 状态报告...');
 
   const report = {
     timestamp: new Date().toISOString(),
@@ -212,37 +207,37 @@ function generateReport() {
   }
   const reportPath = path.join(logsDir, 'cicd-status-report.json');
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-  log(`📋 状态报告已保存: ${path.relative(process.cwd(), reportPath)}`, 'success');
+  log.success(`📋 状态报告已保存: ${path.relative(process.cwd(), reportPath)}`);
 
   return report;
 }
 
 function displaySummary(report) {
-  log('\n📊 CI/CD 配置状态总结');
-  log('=' + '='.repeat(50));
+  log.info('\n📊 CI/CD 配置状态总结');
+  log.info('=' + '='.repeat(50));
 
   const workflowCount = Object.values(report.workflows).filter(w => w.exists).length;
   const totalWorkflows = Object.keys(report.workflows).length;
 
-  log(`工作流文件: ${workflowCount}/${totalWorkflows} 个已配置`);
-  log(`Git 仓库: ${report.git?.inRepo ? '✅' : '❌'}`);
-  log(`GitHub 远程: ${report.git?.hasGitHub ? '✅' : '❌'}`);
+  log.info(`工作流文件: ${workflowCount}/${totalWorkflows} 个已配置`);
+  log.info(`Git 仓库: ${report.git?.inRepo ? '✅' : '❌'}`);
+  log.info(`GitHub 远程: ${report.git?.hasGitHub ? '✅' : '❌'}`);
 
   if (workflowCount === totalWorkflows && report.git?.inRepo && report.git?.hasGitHub) {
-    log('\n🎉 CI/CD 配置完整！可以使用自动化发布功能', 'success');
-    log('\n💡 使用方法:');
-    log('1. 进入 GitHub 仓库的 "Releases" 页面');
-    log('2. 点击 "Create a new release" 创建新版本');
-    log('3. 系统会自动构建并上传所有平台的程序包');
+    log.success('\n🎉 CI/CD 配置完整！可以使用自动化发布功能');
+    log.info('\n💡 使用方法:');
+    log.info('1. 进入 GitHub 仓库的 "Releases" 页面');
+    log.info('2. 点击 "Create a new release" 创建新版本');
+    log.info('3. 系统会自动构建并上传所有平台的程序包');
   } else {
-    log('\n⚠️  CI/CD 配置不完整，请检查上述问题', 'warn');
+    log.warn('\n⚠️  CI/CD 配置不完整，请检查上述问题');
   }
 }
 
 function main() {
   console.clear();
-  log('🔍 开始 CI/CD 状态检查...');
-  log('=' + '='.repeat(52));
+  log.info('🔍 开始 CI/CD 状态检查...');
+  log.info('=' + '='.repeat(52));
 
   const checks = [checkWorkflowFiles, checkPackageScripts, checkBuildScripts, checkGitStatus, checkDirectories];
 

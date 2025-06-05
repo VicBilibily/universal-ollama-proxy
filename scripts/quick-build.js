@@ -7,6 +7,7 @@
 
 const { execSync } = require('child_process');
 const readline = require('readline');
+const { logger } = require('./utils/logger');
 
 const QUICK_OPTIONS = [
   { name: '构建所有平台', command: 'npm run build:binaries' },
@@ -18,9 +19,13 @@ const QUICK_OPTIONS = [
   { name: '验证已有二进制文件', command: 'npm run verify:binaries' },
 ];
 
-function log(message) {
-  console.log(`[${new Date().toISOString()}] ${message}`);
-}
+// 使用统一的logger系统
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
+};
 
 function displayMenu() {
   console.log('\n🚀 Universal Ollama Proxy - 快速构建工具\n');
@@ -32,12 +37,12 @@ function displayMenu() {
 }
 
 function runCommand(command) {
-  log(`执行命令: ${command}`);
+  log.info(`执行命令: ${command}`);
   try {
     execSync(command, { stdio: 'inherit', cwd: process.cwd() });
-    log('✅ 命令执行成功');
+    log.success('✅ 命令执行成功');
   } catch (error) {
-    log(`❌ 命令执行失败: ${error.message}`);
+    log.error(`❌ 命令执行失败: ${error.message}`);
   }
 }
 

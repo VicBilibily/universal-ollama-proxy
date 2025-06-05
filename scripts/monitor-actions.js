@@ -8,27 +8,14 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { logger } = require('./utils/logger');
 
-/**
- * 日志工具
- */
-const logger = {
-  info: message => {
-    const timestamp = new Date().toISOString();
-    console.log(`${timestamp} [INFO] ${message}`);
-  },
-  success: message => {
-    const timestamp = new Date().toISOString();
-    console.log(`${timestamp} [SUCCESS] ✅ ${message}`);
-  },
-  error: message => {
-    const timestamp = new Date().toISOString();
-    console.error(`${timestamp} [ERROR] ❌ ${message}`);
-  },
-  warn: message => {
-    const timestamp = new Date().toISOString();
-    console.warn(`${timestamp} [WARN] ⚠️ ${message}`);
-  },
+// 使用统一的logger，使用中文本地时间格式
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
 };
 
 /**
@@ -57,7 +44,7 @@ function getRepositoryInfo() {
       repo: 'universal-ollama-proxy',
     };
   } catch (error) {
-    logger.warn('无法读取 package.json，使用默认仓库信息');
+    log.warn('无法读取 package.json，使用默认仓库信息');
     return {
       owner: 'VicBilibily',
       repo: 'universal-ollama-proxy',
@@ -145,26 +132,26 @@ function formatWorkflowStatus(status, conclusion) {
  * 显示工作流状态
  */
 async function showWorkflowStatus() {
-  logger.info('📊 GitHub Actions 状态监控');
-  logger.info('='.repeat(60));
+  log.info('📊 GitHub Actions 状态监控');
+  log.info('='.repeat(60));
 
   const { owner, repo } = getRepositoryInfo();
-  logger.info(`仓库: ${owner}/${repo}`);
+  log.info(`仓库: ${owner}/${repo}`);
 
   try {
-    logger.info('\\n🔍 获取工作流运行记录...');
+    log.info('\n🔍 获取工作流运行记录...');
     const data = await getWorkflowRuns(owner, repo);
 
     if (!data.workflow_runs || data.workflow_runs.length === 0) {
-      logger.warn('没有找到工作流运行记录');
-      logger.info('💡 可能原因:');
-      logger.info('  - 还没有触发过工作流');
-      logger.info('  - 仓库是私有的且没有访问权限');
-      logger.info('  - 仓库信息不正确');
+      log.warn('没有找到工作流运行记录');
+      log.info('💡 可能原因:');
+      log.info('  - 还没有触发过工作流');
+      log.info('  - 仓库是私有的且没有访问权限');
+      log.info('  - 仓库信息不正确');
       return;
     }
 
-    logger.success(`找到 ${data.workflow_runs.length} 条运行记录\\n`);
+    log.success(`找到 ${data.workflow_runs.length} 条运行记录\n`);
 
     // 按工作流分组
     const workflowGroups = {};
@@ -181,13 +168,13 @@ async function showWorkflowStatus() {
       const runs = workflowGroups[workflowName];
       const latestRun = runs[0]; // API 返回的是按时间倒序排列的
 
-      logger.info(`🔧 ${workflowName}`);
-      logger.info(`   最新状态: ${formatWorkflowStatus(latestRun.status, latestRun.conclusion)}`);
-      logger.info(`   运行时间: ${new Date(latestRun.created_at).toLocaleString()}`);
-      logger.info(`   触发事件: ${latestRun.event}`);
-      logger.info(`   分支: ${latestRun.head_branch}`);
-      logger.info(`   链接: ${latestRun.html_url}`);
-      logger.info('');
+      log.info(`🔧 ${workflowName}`);
+      log.info(`   最新状态: ${formatWorkflowStatus(latestRun.status, latestRun.conclusion)}`);
+      log.info(`   运行时间: ${new Date(latestRun.created_at).toLocaleString()}`);
+      log.info(`   触发事件: ${latestRun.event}`);
+      log.info(`   分支: ${latestRun.head_branch}`);
+      log.info(`   链接: ${latestRun.html_url}`);
+      log.info('');
     });
 
     // 显示统计信息
@@ -196,16 +183,16 @@ async function showWorkflowStatus() {
     const failureRuns = data.workflow_runs.filter(run => run.conclusion === 'failure').length;
     const inProgressRuns = data.workflow_runs.filter(run => run.status === 'in_progress').length;
 
-    logger.info('📈 统计信息');
-    logger.info('-'.repeat(30));
-    logger.info(`总运行次数: ${totalRuns}`);
-    logger.info(`成功: ${successRuns}`);
-    logger.info(`失败: ${failureRuns}`);
-    logger.info(`进行中: ${inProgressRuns}`);
+    log.info('📈 统计信息');
+    log.info('-'.repeat(30));
+    log.info(`总运行次数: ${totalRuns}`);
+    log.info(`成功: ${successRuns}`);
+    log.info(`失败: ${failureRuns}`);
+    log.info(`进行中: ${inProgressRuns}`);
 
     if (totalRuns > 0) {
       const successRate = ((successRuns / totalRuns) * 100).toFixed(1);
-      logger.info(`成功率: ${successRate}%`);
+      log.info(`成功率: ${successRate}%`);
     }
 
     // 保存详细报告
@@ -232,17 +219,17 @@ async function showWorkflowStatus() {
     // 保存到状态目录
     const statusFile = path.join(logsDir, 'github-actions-status.json');
     fs.writeFileSync(statusFile, JSON.stringify(report, null, 2));
-    logger.success(`\n📋 详细状态已保存: ${statusFile}`);
+    log.success(`\n📋 详细状态已保存: ${statusFile}`);
   } catch (error) {
-    logger.error(`获取工作流状态失败: ${error.message}`);
+    log.error(`获取工作流状态失败: ${error.message}`);
 
     if (error.message.includes('API rate limit')) {
-      logger.info('💡 GitHub API 速率限制，请稍后重试');
+      log.info('💡 GitHub API 速率限制，请稍后重试');
     } else if (error.message.includes('Not Found')) {
-      logger.info('💡 仓库不存在或没有访问权限');
-      logger.info('   请检查仓库信息是否正确');
+      log.info('💡 仓库不存在或没有访问权限');
+      log.info('   请检查仓库信息是否正确');
     } else {
-      logger.info('💡 请检查网络连接和仓库信息');
+      log.info('💡 请检查网络连接和仓库信息');
     }
   }
 }
@@ -251,33 +238,33 @@ async function showWorkflowStatus() {
  * 显示本地 CI/CD 状态
  */
 function showLocalStatus() {
-  logger.info('\\n🏠 本地 CI/CD 状态');
-  logger.info('-'.repeat(30));
+  log.info('\\n🏠 本地 CI/CD 状态');
+  log.info('-'.repeat(30));
 
   // 检查工作流文件
   const workflowFiles = ['.github/workflows/ci.yml', '.github/workflows/release.yml'];
 
   workflowFiles.forEach(file => {
     if (fs.existsSync(file)) {
-      logger.success(`${file}`);
+      log.success(`${file}`);
     } else {
-      logger.error(`${file} (缺失)`);
+      log.error(`${file} (缺失)`);
     }
   });
 
   // 检查构建产物
   if (fs.existsSync('binaries')) {
     const binaries = fs.readdirSync('binaries').length;
-    logger.info(`📦 二进制文件: ${binaries} 个`);
+    log.info(`📦 二进制文件: ${binaries} 个`);
   } else {
-    logger.warn('📦 二进制文件: 目录不存在');
+    log.warn('📦 二进制文件: 目录不存在');
   }
 
   if (fs.existsSync('releases')) {
     const releases = fs.readdirSync('releases').length;
-    logger.info(`🎁 发布包: ${releases} 个`);
+    log.info(`🎁 发布包: ${releases} 个`);
   } else {
-    logger.warn('🎁 发布包: 目录不存在');
+    log.warn('🎁 发布包: 目录不存在');
   }
 }
 

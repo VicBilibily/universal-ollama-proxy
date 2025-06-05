@@ -54,17 +54,48 @@ class App {
       const unifiedConfigData = await fs.readFile(unifiedConfigPath, 'utf-8');
       const unifiedConfig: UnifiedAdapterConfig = parseConfigFile(unifiedConfigData, unifiedConfigPath);
 
-      // 替换环境变量
-      for (const provider of unifiedConfig.providers) {
-        if (provider.apiKey.startsWith('${') && provider.apiKey.endsWith('}')) {
-          const envVar = provider.apiKey.slice(2, -1);
-          provider.apiKey = process.env[envVar] || '';
+      // 替换环境变量并过滤可用的提供商
+      const validProviders: UnifiedAdapterConfig['providers'] = [];
 
-          if (!provider.apiKey) {
+      for (const provider of unifiedConfig.providers) {
+        let isProviderAvailable = false;
+
+        // 情况1: 以${开头，表示从环境变量获取
+        if (provider.apiKey && provider.apiKey.startsWith('${') && provider.apiKey.endsWith('}')) {
+          const envVar = provider.apiKey.slice(2, -1);
+          const envValue = process.env[envVar];
+
+          if (envValue && envValue.trim() !== '') {
+            provider.apiKey = envValue;
+            isProviderAvailable = true;
+            logger.info(`从环境变量 ${envVar} 获取 ${provider.displayName} 提供商的 API Key`);
+          } else {
             logger.warn(`环境变量 ${envVar} 未设置，${provider.displayName} 提供商将不可用`);
+            isProviderAvailable = false;
           }
         }
+        // 情况2: 不以${开头且非空，表示配置中已有配置密钥
+        else if (provider.apiKey && provider.apiKey.trim() !== '') {
+          logger.info(`使用配置文件中的配置密钥配置 ${provider.displayName} 提供商`);
+          isProviderAvailable = true;
+        }
+        // 情况3: 为空，表示此供应商不需要认证
+        else if (!provider.apiKey || provider.apiKey.trim() === '') {
+          logger.info(`${provider.displayName} 提供商不需要认证，使用空 API Key`);
+          provider.apiKey = '';
+          isProviderAvailable = true;
+        }
+
+        // 只添加可用的提供商到配置中
+        if (isProviderAvailable) {
+          validProviders.push(provider);
+        }
       }
+
+      // 更新配置，只包含可用的提供商
+      unifiedConfig.providers = validProviders;
+
+      logger.info(`过滤后可用的提供商: ${validProviders.map(p => p.displayName).join(', ')}`);
 
       // 初始化日志配置
       chatLogger.reloadConfig();
@@ -75,9 +106,21 @@ class App {
 
       // 初始化模型发现服务（统一实现，不依赖特定服务）
       this.modelDiscoveryService = new ModelDiscoveryService();
+      await this.modelDiscoveryService.initialize();
 
       // 初始化统一适配器
       this.unifiedAdapterService = new UnifiedAdapterService(this.modelDiscoveryService, unifiedConfig);
+
+      // 更新模型发现服务的可用提供商列表
+      const availableProviders = this.unifiedAdapterService.getActiveProviders();
+      this.modelDiscoveryService.updateAvailableProviders(availableProviders);
+      logger.info('已更新模型发现服务的可用提供商列表', { availableProviders });
+
+      logger.info('统一适配器服务初始化完成');
+
+      // 等待模型发现服务完全初始化后，输出按供应商分组的注册模型信息
+      logger.info('=== 服务初始化完成，输出可用模型信息 ===');
+      this.modelDiscoveryService.logModelsByProvider();
 
       // 初始化Ollama服务（直接使用ModelDiscoveryService）
       this.ollamaService = new OllamaService(this.modelDiscoveryService);
@@ -88,8 +131,6 @@ class App {
       // 初始化控制器
       this.ollamaController = new OllamaController(this.ollamaService);
       this.openaiController = new OpenAIController(this.openaiService);
-
-      logger.info('统一适配器服务初始化完成');
     } catch (error) {
       logger.error('服务初始化失败:', error);
       process.exit(1);
@@ -180,24 +221,53 @@ class App {
       const unifiedConfigData = await fs.readFile(unifiedConfigPath, 'utf-8');
       const unifiedConfig: UnifiedAdapterConfig = parseConfigFile(unifiedConfigData, unifiedConfigPath);
 
-      // 替换环境变量
-      for (const provider of unifiedConfig.providers) {
-        if (provider.apiKey.startsWith('${') && provider.apiKey.endsWith('}')) {
-          const envVar = provider.apiKey.slice(2, -1);
-          provider.apiKey = process.env[envVar] || '';
+      // 替换环境变量并过滤可用的提供商
+      const validProvidersForHotReload: UnifiedAdapterConfig['providers'] = [];
 
-          if (!provider.apiKey) {
+      for (const provider of unifiedConfig.providers) {
+        let isProviderAvailable = false;
+
+        // 情况1: 以${开头，表示从环境变量获取
+        if (provider.apiKey && provider.apiKey.startsWith('${') && provider.apiKey.endsWith('}')) {
+          const envVar = provider.apiKey.slice(2, -1);
+          const envValue = process.env[envVar];
+
+          if (envValue && envValue.trim() !== '') {
+            provider.apiKey = envValue;
+            isProviderAvailable = true;
+            logger.info(`从环境变量 ${envVar} 获取 ${provider.displayName} 提供商的 API Key`);
+          } else {
             logger.warn(`环境变量 ${envVar} 未设置，${provider.displayName} 提供商将不可用`);
+            isProviderAvailable = false;
           }
+        }
+        // 情况2: 不以${开头且非空，表示配置中已有配置密钥
+        else if (provider.apiKey && provider.apiKey.trim() !== '') {
+          logger.info(`使用配置文件中的配置密钥配置 ${provider.displayName} 提供商`);
+          isProviderAvailable = true;
+        }
+        // 情况3: 为空，表示此供应商不需要认证
+        else if (!provider.apiKey || provider.apiKey.trim() === '') {
+          logger.info(`${provider.displayName} 提供商不需要认证，使用空 API Key`);
+          provider.apiKey = '';
+          isProviderAvailable = true;
+        }
+
+        // 只添加可用的提供商到配置中
+        if (isProviderAvailable) {
+          validProvidersForHotReload.push(provider);
         }
       }
 
-      // 获取新配置中的供应商列表
-      const availableProviders = unifiedConfig.providers.map(provider => provider.name);
+      // 更新配置，只包含可用的提供商
+      unifiedConfig.providers = validProvidersForHotReload;
 
-      // 先更新模型发现服务，同步供应商配置（这会移除不存在的供应商的模型）
+      logger.info(`热重载过滤后可用的提供商: ${validProvidersForHotReload.map(p => p.displayName).join(', ')}`);
+
+      // 获取新配置中的供应商列表
+      const configProviderNames = unifiedConfig.providers.map(provider => provider.name); // 先更新模型发现服务，同步供应商配置（这会移除不存在的供应商的模型）
       if (this.modelDiscoveryService) {
-        await this.modelDiscoveryService.syncWithProviderConfig(availableProviders);
+        await this.modelDiscoveryService.syncWithProviderConfig(configProviderNames);
         logger.info('模型发现服务已与供应商配置同步');
       }
 
@@ -205,6 +275,13 @@ class App {
       if (this.unifiedAdapterService) {
         this.unifiedAdapterService.updateConfig(unifiedConfig);
         logger.info('统一适配器服务配置已更新');
+
+        // 更新模型发现服务的可用提供商列表
+        const activeProviders = this.unifiedAdapterService.getActiveProviders();
+        if (this.modelDiscoveryService) {
+          this.modelDiscoveryService.updateAvailableProviders(activeProviders);
+          logger.info('已更新模型发现服务的可用提供商列表', { availableProviders: activeProviders });
+        }
       }
 
       // 记录最终状态
@@ -212,11 +289,17 @@ class App {
       const activeProviders = this.unifiedAdapterService?.getActiveProviders();
 
       logger.info('统一提供商配置变化处理完成', {
-        configProviders: availableProviders.length,
+        configProviders: configProviderNames.length,
         activeProviders: activeProviders?.length || 0,
         totalModels: modelStats?.totalModels || 0,
         modelProviders: modelStats?.providerCount || 0,
       });
+
+      // 输出按供应商分组的注册模型信息
+      if (this.modelDiscoveryService) {
+        logger.info('=== 配置热重载完成，输出可用模型信息 ===');
+        this.modelDiscoveryService.logModelsByProvider();
+      }
     } catch (error) {
       logger.error('处理统一提供商配置变化失败:', error);
     }
@@ -249,6 +332,10 @@ class App {
 
         const stats = this.modelDiscoveryService.getModelStats();
         logger.info(`${providerName} 提供商模型配置重新加载完成`, stats);
+
+        // 输出按供应商分组的注册模型信息
+        logger.info(`=== ${providerName} 提供商配置更新完成，输出可用模型信息 ===`);
+        this.modelDiscoveryService.logModelsByProvider();
       }
     } catch (error) {
       logger.error(`处理 ${providerName} 提供商模型配置变化失败:`, error);

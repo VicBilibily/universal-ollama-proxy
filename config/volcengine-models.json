@@ -2,7 +2,7 @@
   "models": [
     {
       "id": "doubao-1.5-pro-32k-250115",
-      "name": "豆包1.5 Pro 32K",
+      "name": "豆包1.5大模型 Pro 32K",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-pro-32k-250115",
@@ -28,7 +28,7 @@
     },
     {
       "id": "doubao-1-5-pro-256k-250115",
-      "name": "豆包1.5 Pro 256K",
+      "name": "豆包1.5大模型 Pro 256K",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1-5-pro-256k-250115",
@@ -54,7 +54,7 @@
     },
     {
       "id": "doubao-1.5-lite-32k-250115",
-      "name": "豆包1.5 Lite 32K",
+      "name": "豆包1.5大模型 Lite 32K",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-lite-32k-250115",
@@ -80,7 +80,7 @@
     },
     {
       "id": "doubao-1.5-vision-pro-32k-250115",
-      "name": "豆包1.5视觉Pro 32K",
+      "name": "豆包1.5·视觉理解 Pro 32K",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-vision-pro-32k-250115",
@@ -121,7 +121,7 @@
     },
     {
       "id": "doubao-1.5-vision-lite-250315",
-      "name": "豆包1.5视觉Lite",
+      "name": "豆包1.5·视觉理解 Lite",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-vision-lite-250315",
@@ -160,7 +160,7 @@
     },
     {
       "id": "doubao-1.5-vision-pro-250328",
-      "name": "豆包1.5视觉Pro",
+      "name": "豆包1.5·视觉理解 Pro",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-vision-pro-250328",
@@ -202,7 +202,7 @@
     },
     {
       "id": "doubao-1.5-thinking-pro-250415",
-      "name": "豆包1.5深度思考Pro",
+      "name": "豆包1.5·深度思考 Pro",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-thinking-pro-250415",
@@ -229,7 +229,7 @@
     },
     {
       "id": "doubao-1.5-thinking-pro-m-250428",
-      "name": "豆包1.5深度思考Pro-M",
+      "name": "豆包1.5·深度思考 Pro-M",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-thinking-pro-m-250428",
@@ -256,7 +256,7 @@
     },
     {
       "id": "doubao-1.5-thinking-vision-pro-250428",
-      "name": "豆包1.5深度思考视觉Pro",
+      "name": "豆包1.5·视觉深度思考 Pro",
       "object": "model",
       "vendor": "ByteDance",
       "version": "doubao-1.5-thinking-vision-pro-250428",
@@ -298,7 +298,7 @@
     },
     {
       "id": "deepseek-v3-241226",
-      "name": "DeepSeek V3 初始版",
+      "name": "DeepSeek V3 (方舟)",
       "object": "model",
       "vendor": "DeepSeek",
       "version": "deepseek-v3-241226",
@@ -323,7 +323,7 @@
     },
     {
       "id": "deepseek-v3-250324",
-      "name": "DeepSeek V3-250324",
+      "name": "DeepSeek V3-250324 (方舟)",
       "object": "model",
       "vendor": "DeepSeek",
       "version": "deepseek-v3-250324",
@@ -348,7 +348,7 @@
     },
     {
       "id": "deepseek-r1-250120",
-      "name": "DeepSeek R1 旧版",
+      "name": "DeepSeek R1 (方舟)",
       "object": "model",
       "vendor": "DeepSeek",
       "version": "deepseek-r1-250120",
@@ -375,7 +375,7 @@
     },
     {
       "id": "deepseek-r1-250528",
-      "name": "DeepSeek R1",
+      "name": "DeepSeek R1-0528 (方舟)",
       "object": "model",
       "vendor": "DeepSeek",
       "version": "deepseek-r1-250528",

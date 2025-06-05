@@ -8,26 +8,31 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { logger } = require('./utils/logger');
+
+// 使用统一的logger，使用中文本地时间格式
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
+};
 
 const BINARIES_DIR = 'binaries';
 
-function log(message) {
-  console.log(`[${new Date().toISOString()}] ${message}`);
-}
-
 function testBinary(binaryPath) {
   return new Promise(resolve => {
-    log(`测试可执行文件: ${binaryPath}`);
+    log.info(`测试可执行文件: ${binaryPath}`);
 
     if (!fs.existsSync(binaryPath)) {
-      log(`❌ 文件不存在: ${binaryPath}`);
+      log.error(`❌ 文件不存在: ${binaryPath}`);
       resolve(false);
       return;
     }
 
     const stats = fs.statSync(binaryPath);
     const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
-    log(`📦 文件大小: ${sizeMB} MB`);
+    log.info(`📦 文件大小: ${sizeMB} MB`);
 
     const fileName = path.basename(binaryPath);
 
@@ -44,8 +49,8 @@ function testBinary(binaryPath) {
       if (isCurrentSystemWindows) {
         // 在Windows系统上，只测试匹配当前架构的文件
         if ((isArm64Binary && !isCurrentSystemArm64) || (isX64Binary && !isCurrentSystemX64)) {
-          log(`⚠️  跳过跨架构测试: ${fileName} (当前系统: ${process.arch})`);
-          log(`✅ ${fileName} 文件生成成功`);
+          log.warn(`⚠️  跳过跨架构测试: ${fileName} (当前系统: ${process.arch})`);
+          log.success(`✅ ${fileName} 文件生成成功`);
           resolve(true);
           return;
         }
@@ -67,38 +72,38 @@ function testBinary(binaryPath) {
 
         child.on('close', code => {
           if (code === 0 || output.includes('version') || output.includes('1.0.0')) {
-            log(`✅ ${fileName} 测试通过`);
+            log.success(`✅ ${fileName} 测试通过`);
             resolve(true);
           } else {
-            log(`⚠️  ${fileName} 可能有问题 (退出码: ${code})`);
-            log(`输出: ${output.trim()}`);
+            log.warn(`⚠️  ${fileName} 可能有问题 (退出码: ${code})`);
+            log.info(`输出: ${output.trim()}`);
             resolve(false);
           }
         });
 
         child.on('error', err => {
-          log(`❌ ${fileName} 启动失败: ${err.message}`);
+          log.error(`❌ ${fileName} 启动失败: ${err.message}`);
           resolve(false);
         });
       } else {
         // 在非Windows系统上，无法测试Windows可执行文件
-        log(`⚠️  跳过Windows可执行文件测试: ${fileName} (当前系统: ${process.platform})`);
-        log(`✅ ${fileName} 文件生成成功`);
+        log.warn(`⚠️  跳过Windows可执行文件测试: ${fileName} (当前系统: ${process.platform})`);
+        log.success(`✅ ${fileName} 文件生成成功`);
         resolve(true);
       }
     } else {
       // 对于Linux/macOS，只检查文件是否存在和大小
-      log(`✅ ${fileName} 文件生成成功`);
+      log.success(`✅ ${fileName} 文件生成成功`);
       resolve(true);
     }
   });
 }
 
 async function main() {
-  log('开始验证可执行文件...');
+  log.info('开始验证可执行文件...');
 
   if (!fs.existsSync(BINARIES_DIR)) {
-    log(`❌ 二进制文件目录不存在: ${BINARIES_DIR}`);
+    log.error(`❌ 二进制文件目录不存在: ${BINARIES_DIR}`);
     process.exit(1);
   }
 
@@ -109,12 +114,12 @@ async function main() {
   );
 
   if (binaries.length === 0) {
-    log('❌ 没有找到可执行文件');
+    log.error('❌ 没有找到可执行文件');
     process.exit(1);
   }
 
-  log(`找到 ${binaries.length} 个可执行文件:`);
-  binaries.forEach(binary => log(`  - ${binary}`));
+  log.info(`找到 ${binaries.length} 个可执行文件:`);
+  binaries.forEach(binary => log.info(`  - ${binary}`));
 
   let passedTests = 0;
   for (const binary of binaries) {
@@ -123,12 +128,12 @@ async function main() {
     if (result) passedTests++;
   }
 
-  log(`\n验证完成: ${passedTests}/${binaries.length} 个文件通过测试`);
+  log.info(`\n验证完成: ${passedTests}/${binaries.length} 个文件通过测试`);
 
   if (passedTests === binaries.length) {
-    log('🎉 所有可执行文件验证通过！');
+    log.success('🎉 所有可执行文件验证通过！');
   } else {
-    log('⚠️  部分可执行文件可能有问题');
+    log.warn('⚠️  部分可执行文件可能有问题');
   }
 }
 

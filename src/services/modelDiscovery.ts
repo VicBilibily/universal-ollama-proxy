@@ -17,16 +17,17 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   private models: Map<string, ModelConfig> = new Map(); // 使用 provider:modelName 作为键
   private lastRefreshTime: Date = new Date(0);
   private readonly configDir: string;
+  private availableProviders: Set<string> = new Set(); // 跟踪可用的提供商
 
   constructor() {
     this.configDir = path.join(process.cwd(), 'config');
-    this.initializeModels();
+    // 不在构造函数中初始化，而是提供一个显式的初始化方法
   }
 
   /**
-   * 初始化模型配置
+   * 初始化模型配置（需要显式调用）
    */
-  private async initializeModels(): Promise<void> {
+  async initialize(): Promise<void> {
     try {
       await this.loadAllProviderModels();
       logger.info(`模型发现服务初始化完成，共加载 ${this.models.size} 个模型`);
@@ -109,16 +110,37 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
 
   /**
    * 获取所有可用模型名称（强制使用组合键格式）
+   * 只返回来自可用提供商的模型
    */
   async getAvailableModels(): Promise<string[]> {
-    // 直接返回所有组合键格式的模型名称
-    return Array.from(this.models.keys()).sort();
+    // 如果没有设置可用提供商列表（即未限制任何提供商），则返回所有模型
+    if (this.availableProviders.size === 0) {
+      return Array.from(this.models.keys()).sort();
+    }
+
+    // 否则，只返回来自可用提供商的模型
+    return Array.from(this.models.keys())
+      .filter(key => {
+        const providerName = key.split(':')[0];
+        return this.availableProviders.has(providerName);
+      })
+      .sort();
   }
 
   /**
    * 获取指定模型的配置（只接受 provider:modelName 格式）
+   * 如果提供商不可用，则返回null
    */
   async getModelConfig(modelName: string): Promise<ModelConfig | null> {
+    // 检查提供商是否可用
+    if (this.availableProviders.size > 0) {
+      const providerName = modelName.split(':')[0];
+      if (!this.availableProviders.has(providerName)) {
+        logger.debug(`模型 ${modelName} 所属的提供商 ${providerName} 不可用`);
+        return null;
+      }
+    }
+
     // 只接受完整的 provider:modelName 格式
     return this.models.get(modelName) || null;
   }
@@ -129,6 +151,19 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   async refreshModels(): Promise<void> {
     this.models.clear();
     await this.loadAllProviderModels();
+  }
+
+  /**
+   * 更新可用提供商列表
+   * 这将影响模型的可见性 - 只有来自可用提供商的模型才会被返回
+   */
+  updateAvailableProviders(providers: string[]): void {
+    this.availableProviders.clear();
+    providers.forEach(provider => this.availableProviders.add(provider));
+    logger.info('已更新可用提供商列表', {
+      availableProviders: Array.from(this.availableProviders),
+      count: this.availableProviders.size,
+    });
   }
 
   /**
@@ -166,12 +201,86 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   /**
    * 获取模型统计信息
    */
-  getModelStats(): { totalModels: number; providerCount: number; lastRefresh: Date } {
+  getModelStats(): { totalModels: number; providerCount: number; availableProviders: number; lastRefresh: Date } {
     return {
       totalModels: this.models.size,
       providerCount: this.getLoadedProviders().length,
+      availableProviders: this.availableProviders.size,
       lastRefresh: this.lastRefreshTime,
     };
+  }
+
+  /**
+   * 获取当前可用的提供商列表
+   */
+  getAvailableProviders(): string[] {
+    return Array.from(this.availableProviders).sort();
+  }
+
+  /**
+   * 获取按供应商分组的模型信息
+   * 只返回可用提供商的模型
+   */
+  getModelsByProvider(): Record<string, { count: number; models: string[] }> {
+    const modelsByProvider: Record<string, { count: number; models: string[] }> = {};
+
+    for (const modelKey of this.models.keys()) {
+      const providerName = modelKey.split(':')[0];
+
+      // 只包含可用提供商的模型
+      if (this.availableProviders.size > 0 && !this.availableProviders.has(providerName)) {
+        continue;
+      }
+
+      if (!modelsByProvider[providerName]) {
+        modelsByProvider[providerName] = {
+          count: 0,
+          models: [],
+        };
+      }
+
+      modelsByProvider[providerName].count++;
+      modelsByProvider[providerName].models.push(modelKey);
+    }
+
+    // 对每个提供商的模型列表进行排序
+    for (const provider in modelsByProvider) {
+      modelsByProvider[provider].models.sort();
+    }
+
+    return modelsByProvider;
+  }
+
+  /**
+   * 输出按供应商分组的模型注册信息
+   */
+  logModelsByProvider(): void {
+    const modelsByProvider = this.getModelsByProvider();
+    const totalProviders = Object.keys(modelsByProvider).length;
+    const totalModels = Object.values(modelsByProvider).reduce((sum, provider) => sum + provider.count, 0);
+
+    if (totalProviders === 0) {
+      logger.info('当前没有可用的模型提供商');
+      return;
+    }
+
+    logger.info(`已注册的模型总览: ${totalProviders} 个提供商，共 ${totalModels} 个模型`);
+
+    // 按提供商名称排序输出
+    const sortedProviders = Object.keys(modelsByProvider).sort();
+
+    for (const provider of sortedProviders) {
+      const providerInfo = modelsByProvider[provider];
+      logger.info(`[${provider}] ${providerInfo.count} 个模型:`);
+
+      // 将模型分组输出，每行最多显示5个模型
+      const modelsPerLine = 5;
+      for (let i = 0; i < providerInfo.models.length; i += modelsPerLine) {
+        const modelGroup = providerInfo.models.slice(i, i + modelsPerLine);
+        const modelNames = modelGroup.map(model => model.split(':')[1]).join(', ');
+        logger.info(`  ${modelNames}`);
+      }
+    }
   }
 
   /**

@@ -8,42 +8,29 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { logger } = require('./utils/logger');
 
-/**
- * 日志工具
- */
-const logger = {
-  info: message => {
-    const timestamp = new Date().toISOString();
-    console.log(`${timestamp} [INFO] ${message}`);
-  },
-  success: message => {
-    const timestamp = new Date().toISOString();
-    console.log(`${timestamp} [SUCCESS] ✅ ${message}`);
-  },
-  error: message => {
-    const timestamp = new Date().toISOString();
-    console.error(`${timestamp} [ERROR] ❌ ${message}`);
-  },
-  warn: message => {
-    const timestamp = new Date().toISOString();
-    console.warn(`${timestamp} [WARN] ⚠️ ${message}`);
-  },
+// 配置日志使用中文本地时间格式
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
 };
 
 /**
  * 运行命令并返回结果
  */
 function runCommand(command, description) {
-  logger.info(`开始: ${description}`);
+  log.info(`开始: ${description}`);
   try {
     const startTime = Date.now();
     const result = execSync(command, { stdio: 'pipe', encoding: 'utf-8' });
     const duration = Date.now() - startTime;
-    logger.success(`完成: ${description} (${duration}ms)`);
+    log.success(`完成: ${description} (${duration}ms)`);
     return { success: true, output: result, duration };
   } catch (error) {
-    logger.error(`失败: ${description} - ${error.message}`);
+    log.error(`失败: ${description} - ${error.message}`);
     return { success: false, error: error.message, duration: 0 };
   }
 }

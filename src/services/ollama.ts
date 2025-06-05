@@ -31,7 +31,7 @@ export class OllamaService {
           const modelId = modelName; // modelName 已经是 provider:modelName 格式
 
           models.push({
-            name: modelId,
+            name: modelConfig.name || modelId,
             model: modelId,
             size: this.getModelSizeFromConfig(modelConfig),
             digest: this.generateModelDigest(modelName),

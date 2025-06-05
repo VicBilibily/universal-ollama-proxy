@@ -8,6 +8,7 @@
 const http = require('http');
 const https = require('https');
 const url = require('url');
+const { logger } = require('./utils/logger');
 
 // 配置
 const config = {
@@ -25,12 +26,13 @@ const results = {
   startTime: new Date(),
 };
 
-/**
- * 日志输出函数，与项目其他脚本保持一致
- */
-function log(message) {
-  console.log(`[${new Date().toISOString()}] ${message}`);
-}
+// 使用统一的logger系统
+const log = {
+  info: message => logger.info(message, false),
+  success: message => logger.success(message, false),
+  error: message => logger.error(message, false),
+  warn: message => logger.warn(message, false),
+};
 
 /**
  * 发送HTTP请求
@@ -101,7 +103,7 @@ function makeRequest(requestUrl, options = {}) {
  * 获取模型列表
  */
 async function getModels() {
-  log('📋 正在获取模型列表...');
+  log.info('📋 正在获取模型列表...');
 
   try {
     const response = await makeRequest(`${config.baseUrl}/api/tags`);
@@ -114,15 +116,21 @@ async function getModels() {
       throw new Error('模型列表响应格式错误');
     }
 
-    const models = response.data.models.map(model => model.name || model.model);
-    log(`✅ 成功获取 ${models.length} 个模型:`);
+    // 返回包含模型ID和显示名称的对象数组
+    const models = response.data.models.map(model => ({
+      id: model.model,
+      name: model.name,
+      displayName: model.name || model.model,
+    }));
+
+    log.success(`✅ 成功获取 ${models.length} 个模型:`);
     models.forEach((model, index) => {
-      console.log(`   ${index + 1}. ${model}`);
+      console.log(`   ${index + 1}. ${model.id} (${model.displayName})`);
     });
 
     return models;
   } catch (error) {
-    log(`❌ 获取模型列表失败: ${error.message}`);
+    log.error(`❌ 获取模型列表失败: ${error.message}`);
     throw error;
   }
 }
@@ -130,16 +138,19 @@ async function getModels() {
 /**
  * 测试单个模型
  */
-async function testModel(modelName) {
+async function testModel(modelInfo) {
   const startTime = Date.now();
 
   try {
-    console.log(`🧪 测试模型: ${modelName}`);
+    // 使用友好的显示名称
+    const { id: modelId, displayName } = modelInfo;
+
+    console.log(`🧪 测试模型: ${modelId}`);
 
     const response = await makeRequest(`${config.baseUrl}/v1/chat/completions`, {
       method: 'POST',
       body: {
-        model: modelName,
+        model: modelId, // 使用正确的模型ID进行API调用
         messages: [
           {
             role: 'user',
@@ -161,7 +172,7 @@ async function testModel(modelName) {
         const choice = data.choices[0];
         const replyContent = choice.message?.content || choice.text || '无回复内容';
 
-        console.log(`✅ ${modelName} - 成功 (${duration}ms)`);
+        console.log(`✅ ${displayName} - 成功 (${duration}ms)`);
         console.log(`   回复: ${replyContent.substring(0, 100)}${replyContent.length > 100 ? '...' : ''}`);
 
         if (data.usage) {
@@ -171,7 +182,8 @@ async function testModel(modelName) {
         }
 
         return {
-          model: modelName,
+          model: modelId,
+          displayName: displayName,
           success: true,
           duration,
           response: replyContent,
@@ -187,10 +199,12 @@ async function testModel(modelName) {
     }
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.log(`❌ ${modelName} - 失败 (${duration}ms): ${error.message}`);
+    const { displayName, id: modelId } = modelInfo;
+    console.log(`❌ ${displayName} - 失败 (${duration}ms): ${error.message}`);
 
     return {
-      model: modelName,
+      model: modelId,
+      displayName: displayName,
       success: false,
       duration,
       error: error.message,
@@ -210,7 +224,7 @@ async function testModelsInBatches(models) {
     const batch = models.slice(i, i + config.maxConcurrent);
     console.log(`📦 批次 ${Math.floor(i / config.maxConcurrent) + 1}: 测试 ${batch.length} 个模型`);
 
-    const batchPromises = batch.map(model => testModel(model));
+    const batchPromises = batch.map(modelInfo => testModel(modelInfo));
     const batchResults = await Promise.all(batchPromises);
 
     results.push(...batchResults);
@@ -246,7 +260,9 @@ function generateReport(testResults) {
   if (successful.length > 0) {
     console.log(`\n✅ 成功的模型 (${successful.length}个):`);
     successful.forEach((result, index) => {
-      console.log(`   ${index + 1}. ${result.model} - ${result.duration}ms`);
+      const displayName =
+        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+      console.log(`   ${index + 1}. ${displayName} - ${result.duration}ms`);
     });
 
     const avgDuration = successful.reduce((sum, r) => sum + r.duration, 0) / successful.length;
@@ -256,7 +272,9 @@ function generateReport(testResults) {
   if (failed.length > 0) {
     console.log(`\n❌ 失败的模型 (${failed.length}个):`);
     failed.forEach((result, index) => {
-      console.log(`   ${index + 1}. ${result.model} - ${result.error}`);
+      const displayName =
+        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+      console.log(`   ${index + 1}. ${displayName} - ${result.error}`);
     });
 
     // 统计错误类型
@@ -305,15 +323,15 @@ function generateReport(testResults) {
 
   try {
     fs.writeFileSync(reportFile, JSON.stringify(reportData, null, 2));
-    log(`💾 详细报告已保存到: ${path.relative(process.cwd(), reportFile)}`);
+    log.success(`💾 详细报告已保存到: ${path.relative(process.cwd(), reportFile)}`);
 
     // 同时生成简要的markdown报告
     const markdownReport = generateMarkdownReport(testResults, successful, failed, totalDuration);
     const markdownFile = path.join(logsDir, `model-test-${timestamp}.md`);
     fs.writeFileSync(markdownFile, markdownReport);
-    log(`📝 Markdown报告已保存到: ${path.relative(process.cwd(), markdownFile)}`);
+    log.success(`📝 Markdown报告已保存到: ${path.relative(process.cwd(), markdownFile)}`);
   } catch (error) {
-    log(`⚠️  保存报告失败: ${error.message}`);
+    log.warn(`⚠️  保存报告失败: ${error.message}`);
   }
 
   console.log('\n' + '='.repeat(80));
@@ -349,7 +367,9 @@ function generateMarkdownReport(testResults, successful, failed, totalDuration) 
     markdown += `| 序号 | 模型名称 | 响应时间 |\n`;
     markdown += `|------|----------|----------|\n`;
     successful.forEach((result, index) => {
-      markdown += `| ${index + 1} | ${result.model} | ${result.duration}ms |\n`;
+      const displayName =
+        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+      markdown += `| ${index + 1} | ${displayName} | ${result.duration}ms |\n`;
     });
   }
 
@@ -358,7 +378,9 @@ function generateMarkdownReport(testResults, successful, failed, totalDuration) 
     markdown += `| 序号 | 模型名称 | 错误信息 |\n`;
     markdown += `|------|----------|----------|\n`;
     failed.forEach((result, index) => {
-      markdown += `| ${index + 1} | ${result.model} | ${result.error} |\n`;
+      const displayName =
+        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+      markdown += `| ${index + 1} | ${displayName} | ${result.error} |\n`;
     });
 
     // 错误类型统计

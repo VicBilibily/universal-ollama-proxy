@@ -191,8 +191,7 @@ class App {
     // OpenAI 兼容接口
     this.app.post('/v1/chat/completions', this.openaiController.chatCompletions.bind(this.openaiController));
 
-    // 官方 Ollama API 端点 - 仅保留核心端点
-    // 模型管理端点
+    // Ollama API 端点
     this.app.get('/api/tags', this.ollamaController.getTags.bind(this.ollamaController));
     this.app.post('/api/show', this.ollamaController.show.bind(this.ollamaController));
 

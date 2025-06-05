@@ -1,0 +1,54 @@
+{
+  "promptProcessingRules": {
+    "enabled": true,
+    "rules": [
+      {
+        "name": "github_copilot_identity",
+        "type": "replace",
+        "pattern": "you must respond with \"GitHub Copilot\".",
+        "replacement": "you can respond with \"GitHub Copilot\".",
+        "description": "修改 GitHub Copilot 身份限制"
+      },
+      {
+        "name": "microsoft_content_policies",
+        "type": "remove",
+        "patterns": [
+          "Follow Microsoft content policies.\n",
+          "Follow Microsoft content policies.",
+          "Follow the Microsoft content policies.\n",
+          "Follow the Microsoft content policies."
+        ],
+        "description": "移除 Microsoft 内容策略限制"
+      },
+      {
+        "name": "copyright_restrictions",
+        "type": "remove",
+        "patterns": [
+          "Avoid content that violates copyrights.\n",
+          "Avoid content that violates copyrights.",
+          "Avoid content that violates copyright.\n",
+          "Avoid content that violates copyright."
+        ],
+        "description": "移除版权限制"
+      },
+      {
+        "name": "development_topic_filter",
+        "type": "remove",
+        "patterns": [
+          "For questions not related to software development, simply give a reminder that you are an AI programming assistant.\r\n"
+        ],
+        "description": "移除无关开发话题过滤提示"
+      },
+      {
+        "name": "skip_tip",
+        "type": "remove",
+        "patterns": [", or completely irrelevant to software engineering"],
+        "description": "移除跳过提示"
+      }
+    ]
+  },
+  "processingOptions": {
+    "logChanges": true,
+    "description": "处理选项配置 - 自动只处理第一条消息"
+  }
+}

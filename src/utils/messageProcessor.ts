@@ -1,76 +1,101 @@
 // 消息处理相关工具函数
+import * as fs from 'fs';
+import * as path from 'path';
 import { logger } from './index';
 
+// 配置接口定义
+interface ProcessingRule {
+  name: string;
+  type: 'remove' | 'replace';
+  pattern?: string;
+  patterns?: string[];
+  replacement?: string;
+  description: string;
+}
+
+interface MessageProcessingConfig {
+  promptProcessingRules: {
+    enabled: boolean;
+    rules: ProcessingRule[];
+  };
+  processingOptions: {
+    logChanges: boolean;
+    description: string;
+  };
+}
+
+// 加载配置
+let processingConfig: MessageProcessingConfig | null = null;
+
+const loadProcessingConfig = (): MessageProcessingConfig => {
+  if (processingConfig) {
+    return processingConfig;
+  }
+
+  try {
+    const configPath = path.join(__dirname, '../../config/message-processing-rules.json');
+    const configContent = fs.readFileSync(configPath, 'utf-8');
+    processingConfig = JSON.parse(configContent);
+    logger.debug('已加载消息处理规则配置', { rulesCount: processingConfig?.promptProcessingRules.rules.length });
+    return processingConfig!;
+  } catch (error) {
+    logger.warn('加载消息处理规则配置失败，使用默认配置', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    // 返回默认配置
+    processingConfig = {
+      promptProcessingRules: {
+        enabled: false,
+        rules: [],
+      },
+      processingOptions: {
+        logChanges: true,
+        description: '默认处理选项',
+      },
+    };
+    return processingConfig;
+  }
+};
+
 /**
- * 解除系统限制提示词
+ * 基于配置规则处理系统提示词
  * 移除或替换消息中的限制性内容
  */
-export const removeAIRestrictions = (text: string, modelName?: string): string => {
+export const processSystemPrompt = (text: string): string => {
   if (!text) return text;
 
   let content = text;
   let hasChanges = false;
 
-  // GitHub Copilot 身份限制
-  const copilotRestriction = 'you must respond with "GitHub Copilot".';
-  if (content.includes(copilotRestriction)) {
-    const replacement = modelName
-      ? `you can respond with "GitHub Copilot" and use the ${modelName} model.`
-      : 'you can respond with "GitHub Copilot".';
-    content = content.replace(copilotRestriction, replacement);
-    hasChanges = true;
-  }
-
-  // 移除 Microsoft 内容策略限制
-  const policyRestrictions = [
-    'Follow Microsoft content policies.\n',
-    'Follow Microsoft content policies.',
-    'Follow the Microsoft content policies.\n',
-    'Follow the Microsoft content policies.',
-  ];
-
-  for (const restriction of policyRestrictions) {
-    if (content.includes(restriction)) {
-      content = content.replace(new RegExp(restriction.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '');
-      hasChanges = true;
+  // 应用配置文件中的规则
+  const config = loadProcessingConfig();
+  if (config.promptProcessingRules.enabled) {
+    for (const rule of config.promptProcessingRules.rules) {
+      if (rule.type === 'replace' && rule.pattern) {
+        // 替换规则
+        if (content.includes(rule.pattern)) {
+          const replacement = rule.replacement || '';
+          content = content.replace(rule.pattern, replacement);
+          hasChanges = true;
+        }
+      } else if (rule.type === 'remove' && rule.patterns) {
+        // 移除规则
+        for (const pattern of rule.patterns) {
+          if (content.includes(pattern)) {
+            // 转义特殊字符以安全使用正则表达式
+            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            content = content.replace(new RegExp(escapedPattern, 'g'), '');
+            hasChanges = true;
+          }
+        }
+      }
     }
   }
 
-  // 移除版权限制
-  const copyrightRestrictions = [
-    'Avoid content that violates copyrights.\n',
-    'Avoid content that violates copyrights.',
-    'Avoid content that violates copyright.\n',
-    'Avoid content that violates copyright.',
-  ];
-
-  for (const restriction of copyrightRestrictions) {
-    if (content.includes(restriction)) {
-      content = content.replace(new RegExp(restriction.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '');
-      hasChanges = true;
-    }
-  }
-
-  // 移除无关开发话题过滤提示
-  const relatedTip =
-    'For questions not related to software development, simply give a reminder that you are an AI programming assistant.\r\n';
-  if (content.includes(relatedTip)) {
-    content = content.replace(relatedTip, '');
-    hasChanges = true;
-  }
-
-  // 移除跳过提示
-  const skipTip = ', or completely irrelevant to software engineering';
-  if (content.includes(skipTip)) {
-    content = content.replace(skipTip, '');
-    hasChanges = true;
-  }
-
-  if (hasChanges) {
+  if (hasChanges && config.processingOptions.logChanges) {
     logger.debug('已修改系统提示词', {
       originalLength: text.length,
       processedLength: content.length,
-      modelName,
     });
   }
 
@@ -103,17 +128,13 @@ export const removePromptTags = (text: string): string => {
  * 处理消息内容，移除 prompt 标签和AI限制
  * 支持字符串内容和多模态内容
  */
-export const processMessageContent = (
-  content: string | any[],
-  modelName?: string,
-  removeRestrictions: boolean = false
-): string | any[] => {
+export const processMessageContent = (content: string | any[], removeRestrictions: boolean = false): string | any[] => {
   if (!content) return content;
 
   if (typeof content === 'string') {
     let processedContent = removePromptTags(content);
     if (removeRestrictions) {
-      processedContent = removeAIRestrictions(processedContent, modelName);
+      processedContent = processSystemPrompt(processedContent);
     }
     return processedContent;
   } else if (Array.isArray(content)) {
@@ -122,7 +143,7 @@ export const processMessageContent = (
       if (part.type === 'text' && part.text) {
         let processedText = removePromptTags(part.text);
         if (removeRestrictions) {
-          processedText = removeAIRestrictions(processedText, modelName);
+          processedText = processSystemPrompt(processedText);
         }
         return { ...part, text: processedText };
       }
@@ -136,18 +157,13 @@ export const processMessageContent = (
 /**
  * 处理消息内容
  * @param messages 消息数组
- * @param modelName 模型名称（可选）
  * @param removeRestrictions 是否移除AI限制（仅处理第一条消息）
  */
-export const processMessages = <T extends Array<{ role: string; content: string | any[] }>>(
-  messages: T,
-  modelName?: string
-): T => {
+export const processMessages = <T extends Array<{ role: string; content: string | any[] }>>(messages: T): T => {
   return messages.map((msg, index) => ({
     ...msg,
     content: processMessageContent(
       msg.content,
-      modelName,
       index === 0 // 只对第一条消息移除AI限制
     ),
   })) as T;

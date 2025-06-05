@@ -95,7 +95,7 @@ export class UnifiedAdapterService {
 
         // 处理消息内容，移除 prompt 标签 - 只对 messages 进行过滤处理
         if (Array.isArray(request.messages)) {
-          (request as any).messages = processMessages(request.messages as any, request.model);
+          (request as any).messages = processMessages(request.messages as any);
         }
 
         // 获取对应的OpenAI客户端

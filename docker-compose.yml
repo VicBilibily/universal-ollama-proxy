@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  ai-ollama-proxy:
+  universal-ollama-proxy:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ai-ollama-proxy:dev
-    container_name: ai-ollama-proxy-dev
+    image: universal-ollama-proxy:dev
+    container_name: universal-ollama-proxy-dev
     restart: unless-stopped
     ports:
       - '11434:11434'
@@ -40,16 +40,16 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - ai-proxy-network
+      - universal-proxy-network
 
 networks:
-  ai-proxy-network:
+  universal-proxy-network:
     driver: bridge
 # 使用方法:
 # 开发环境:
 # 1. 复制 .env.example 到 .env 并填入配置
 # 2. 运行: docker-compose up -d
-# 3. 查看日志: docker-compose logs -f ai-ollama-proxy
+# 3. 查看日志: docker-compose logs -f universal-ollama-proxy
 # 4. 停止服务: docker-compose down
 #
 # 生产环境:

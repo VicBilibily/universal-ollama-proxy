@@ -1,14 +1,12 @@
 {
   // 统一配置文件 - 支持所有AI提供商的配置
-  // 调试注释：用于测试JSON注释支持功能
-  // 更新时间：2025年6月5日 - 添加注释支持
   "providers": [
     {
       // 火山方舟引擎配置 - 字节跳动旗下AI服务
       "name": "volcengine",
       "displayName": "火山方舟引擎",
       "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
-      "apiKey": "${VOLCENGINE_API_KEY}", // 从环境变量读取API密钥
+      "apiKey": "${VOLCENGINE_API_KEY}",
       "headers": {
         "Content-Type": "application/json"
       }
@@ -18,7 +16,7 @@
       "name": "dashscope",
       "displayName": "阿里云百炼",
       "baseURL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-      "apiKey": "${DASHSCOPE_API_KEY}", // 阿里云API密钥
+      "apiKey": "${DASHSCOPE_API_KEY}",
       "headers": {
         "Content-Type": "application/json",
         "X-DashScope-SSE": "enable"
@@ -29,7 +27,7 @@
       "name": "deepseek",
       "displayName": "DeepSeek官方",
       "baseURL": "https://api.deepseek.com/v1",
-      "apiKey": "${DEEPSEEK_API_KEY}", // DeepSeek API密钥
+      "apiKey": "${DEEPSEEK_API_KEY}",
       "headers": {
         "Content-Type": "application/json"
       }
@@ -39,7 +37,7 @@
       "name": "tencentds",
       "displayName": "腾讯云DeepSeek",
       "baseURL": "https://api.lkeap.cloud.tencent.com/v1",
-      "apiKey": "${TENCENTDS_API_KEY}", // 腾讯云API密钥
+      "apiKey": "${TENCENTDS_API_KEY}",
       "headers": {
         "Content-Type": "application/json"
       }

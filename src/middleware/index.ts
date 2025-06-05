@@ -57,22 +57,6 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction): 
 };
 
 /**
- * CORS 中间件（如果需要自定义）
- */
-export const customCors = (req: Request, res: Response, next: NextFunction): void => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-    return;
-  }
-
-  next();
-};
-
-/**
  * 请求体大小限制检查（内网优化版本）
  */
 export const validateRequestSize = (req: Request, res: Response, next: NextFunction): void => {
@@ -85,20 +69,6 @@ export const validateRequestSize = (req: Request, res: Response, next: NextFunct
       path: req.path,
       method: req.method,
     });
-  }
-
-  next();
-};
-
-/**
- * API 版本检查
- */
-export const validateApiVersion = (req: Request, res: Response, next: NextFunction): void => {
-  const userAgent = req.get('user-agent') || '';
-
-  // 如果是 Ollama 客户端，确保兼容性
-  if (userAgent.includes('ollama')) {
-    logger.debug('检测到 Ollama 客户端请求');
   }
 
   next();

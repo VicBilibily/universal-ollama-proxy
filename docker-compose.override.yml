@@ -3,7 +3,7 @@
 version: '3.8'
 
 services:
-  ai-ollama-proxy:
+  universal-ollama-proxy:
     # 开发模式下启用热重载（如果需要）
     # volumes:
     #   - ./src:/app/src:ro

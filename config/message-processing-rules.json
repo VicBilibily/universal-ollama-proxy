@@ -1,6 +1,5 @@
 {
   // 消息处理规则配置文件 - 用于处理AI提示词和响应
-  // 更新时间：2025年6月5日 - 添加JSON注释支持测试
   "promptProcessingRules": {
     "enabled": true, // 启用提示词处理规则
     "rules": [
@@ -9,7 +8,7 @@
         "name": "github_copilot_identity",
         "type": "replace",
         "pattern": "you must respond with \"GitHub Copilot\".",
-        "replacement": "you can respond with \"GitHub Copilot\".", // 将"必须"改为"可以"
+        "replacement": "you can respond with \"GitHub Copilot\".",
         "description": "修改 GitHub Copilot 身份限制"
       },
       {

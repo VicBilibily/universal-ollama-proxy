@@ -272,4 +272,51 @@ export class UnifiedAdapterService {
     // 如果没有provider前缀，使用模型的id
     return modelConfig.id;
   }
+
+  /**
+   * 更新配置并重新初始化提供商
+   */
+  public updateConfig(newConfig: UnifiedAdapterConfig): void {
+    try {
+      logger.info('开始更新统一适配器配置');
+
+      // 清理现有的提供商客户端
+      this.providers.clear();
+
+      // 更新配置
+      this.config = newConfig;
+
+      // 重新初始化提供商
+      this.initializeProviders();
+
+      logger.info('统一适配器配置更新成功', {
+        providersCount: this.config.providers.length,
+        activeProviders: Array.from(this.providers.keys()),
+      });
+    } catch (error) {
+      logger.error('更新统一适配器配置失败:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 获取当前配置
+   */
+  public getConfig(): UnifiedAdapterConfig {
+    return { ...this.config };
+  }
+
+  /**
+   * 获取活跃的提供商列表
+   */
+  public getActiveProviders(): string[] {
+    return Array.from(this.providers.keys());
+  }
+
+  /**
+   * 检查提供商是否可用
+   */
+  public isProviderAvailable(providerName: string): boolean {
+    return this.providers.has(providerName);
+  }
 }

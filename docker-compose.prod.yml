@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  ai-ollama-proxy:
+  universal-ollama-proxy:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ai-ollama-proxy:latest
-    container_name: ai-ollama-proxy
+    image: universal-ollama-proxy:latest
+    container_name: universal-ollama-proxy
     restart: unless-stopped
     ports:
       - '11434:11434'
@@ -37,7 +37,7 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - ai-proxy-network
+      - universal-proxy-network
     deploy:
       resources:
         limits:
@@ -48,5 +48,5 @@ services:
           cpus: '0.25'
 
 networks:
-  ai-proxy-network:
+  universal-proxy-network:
     driver: bridge

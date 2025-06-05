@@ -130,4 +130,100 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
     this.models.clear();
     await this.loadAllProviderModels();
   }
+
+  /**
+   * 重新加载指定提供商的模型配置
+   */
+  async refreshProviderModels(providerName: string): Promise<void> {
+    try {
+      // 移除该提供商的所有模型
+      const keysToDelete = Array.from(this.models.keys()).filter(key => key.startsWith(`${providerName}:`));
+      keysToDelete.forEach(key => this.models.delete(key));
+
+      // 重新加载该提供商的模型
+      await this.loadProviderModels(providerName);
+
+      logger.info(`已重新加载 ${providerName} 提供商的模型配置`);
+    } catch (error) {
+      logger.error(`重新加载 ${providerName} 提供商模型配置失败:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * 获取当前加载的提供商列表
+   */
+  getLoadedProviders(): string[] {
+    const providers = new Set<string>();
+    for (const modelKey of this.models.keys()) {
+      if (modelKey.includes(':')) {
+        providers.add(modelKey.split(':')[0]);
+      }
+    }
+    return Array.from(providers).sort();
+  }
+
+  /**
+   * 获取模型统计信息
+   */
+  getModelStats(): { totalModels: number; providerCount: number; lastRefresh: Date } {
+    return {
+      totalModels: this.models.size,
+      providerCount: this.getLoadedProviders().length,
+      lastRefresh: this.lastRefreshTime,
+    };
+  }
+
+  /**
+   * 同步供应商配置 - 移除不再存在的供应商的模型，并重新加载现有供应商的模型
+   */
+  async syncWithProviderConfig(availableProviders: string[]): Promise<void> {
+    try {
+      logger.info('开始同步模型发现服务与供应商配置');
+
+      // 获取当前已加载的供应商
+      const currentProviders = this.getLoadedProviders();
+
+      // 找出需要移除的供应商（存在于当前已加载但不在新配置中）
+      const providersToRemove = currentProviders.filter(provider => !availableProviders.includes(provider));
+
+      // 找出需要重新加载的供应商（存在于新配置中）
+      const providersToReload = availableProviders;
+
+      // 移除不再存在的供应商的所有模型
+      for (const providerToRemove of providersToRemove) {
+        const keysToDelete = Array.from(this.models.keys()).filter(key => key.startsWith(`${providerToRemove}:`));
+        keysToDelete.forEach(key => this.models.delete(key));
+        logger.info(`已移除 ${providerToRemove} 提供商的 ${keysToDelete.length} 个模型`);
+      }
+
+      // 重新加载所有当前供应商的模型（包括新增和已存在的）
+      for (const provider of providersToReload) {
+        try {
+          // 先移除该提供商的现有模型，再重新加载
+          const keysToDelete = Array.from(this.models.keys()).filter(key => key.startsWith(`${provider}:`));
+          keysToDelete.forEach(key => this.models.delete(key));
+
+          // 重新加载该提供商的模型
+          await this.loadProviderModels(provider);
+        } catch (error) {
+          logger.warn(`重新加载 ${provider} 模型配置失败:`, error);
+          // 继续处理其他提供商
+        }
+      }
+
+      this.lastRefreshTime = new Date();
+
+      const stats = this.getModelStats();
+      logger.info('模型发现服务与供应商配置同步完成', {
+        removedProviders: providersToRemove,
+        reloadedProviders: providersToReload,
+        totalModels: stats.totalModels,
+        activeProviders: stats.providerCount,
+      });
+    } catch (error) {
+      logger.error('同步模型发现服务与供应商配置失败:', error);
+      throw error;
+    }
+  }
 }

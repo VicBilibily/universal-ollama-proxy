@@ -28,6 +28,9 @@
     "monitor:actions": "node scripts/monitor-actions.js",
     "prerelease": "npm run validate:release",
     "test-all-models-chat": "node scripts/test-all-models.js",
+    "generate:openrouter": "node scripts/models/generate-openrouter-models.js",
+    "generate:models": "npm run generate:openrouter",
+    "update:models": "npm run generate:models",
     "prepare": "husky install",
     "setup:hooks": "node scripts/setup-hooks.js",
     "postinstall": "npm run setup:hooks"

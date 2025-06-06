@@ -5,7 +5,7 @@
       // 火山方舟引擎配置 - 字节跳动旗下AI服务
       "name": "volcengine",
       "displayName": "火山方舟引擎",
-      "enabled": false, // 设置为false可临时停用该提供商
+      "enabled": true, // 设置为false可临时停用该提供商
       "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
       "apiKey": "${VOLCENGINE_API_KEY}",
       "headers": {
@@ -16,7 +16,7 @@
       // 阿里云百炼平台配置
       "name": "dashscope",
       "displayName": "阿里云百炼",
-      "enabled": false,
+      "enabled": true,
       "baseURL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
       "apiKey": "${DASHSCOPE_API_KEY}",
       "headers": {
@@ -28,7 +28,7 @@
       // 深度求索AI配置
       "name": "deepseek",
       "displayName": "DeepSeek官方",
-      "enabled": false,
+      "enabled": true,
       "baseURL": "https://api.deepseek.com/v1",
       "apiKey": "${DEEPSEEK_API_KEY}",
       "headers": {
@@ -39,7 +39,7 @@
       // 腾讯云DeepSeek配置
       "name": "tencentds",
       "displayName": "腾讯云DeepSeek",
-      "enabled": false,
+      "enabled": true,
       "baseURL": "https://api.lkeap.cloud.tencent.com/v1",
       "apiKey": "${TENCENTDS_API_KEY}",
       "headers": {

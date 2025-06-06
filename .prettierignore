@@ -36,5 +36,5 @@ temp/
 # Ignore status report files
 logs/status/*.json
 
-# Ignore GitHub Model files
-scripts/models.json
+# Ignore Model files
+scripts/models/*.json

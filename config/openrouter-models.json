@@ -21,13 +21,8 @@
       "name": "GPT 3.5 Turbo",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-3.5-turbo",
-      "_original": {
-        "id": "gpt-3.5-turbo",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-3.5-turbo-0613"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-3.5-turbo-0613"
     },
     {
       "capabilities": {
@@ -50,13 +45,8 @@
       "name": "GPT 3.5 Turbo",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-3.5-turbo-0613",
-      "_original": {
-        "id": "gpt-3.5-turbo-0613",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-3.5-turbo-0613"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-3.5-turbo-0613"
     },
     {
       "capabilities": {
@@ -80,13 +70,8 @@
       "name": "GPT-4o mini",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-mini",
-      "_original": {
-        "id": "gpt-4o-mini",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-mini-2024-07-18"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-mini-2024-07-18"
     },
     {
       "capabilities": {
@@ -110,13 +95,8 @@
       "name": "GPT-4o mini",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-mini-2024-07-18",
-      "_original": {
-        "id": "gpt-4o-mini-2024-07-18",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-mini-2024-07-18"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-mini-2024-07-18"
     },
     {
       "capabilities": {
@@ -139,42 +119,8 @@
       "name": "GPT 4",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4",
-      "_original": {
-        "id": "gpt-4",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4-0613"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "gpt-4",
-        "limits": {
-          "max_context_window_tokens": 32768,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32768
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "tool_calls": true
-        },
-        "tokenizer": "cl100k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4-0613",
-      "model_picker_enabled": false,
-      "name": "GPT 4",
-      "object": "model",
-      "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4-0613",
-      "_original": {
-        "id": "gpt-4-0613",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4-0613"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4-0613"
     },
     {
       "capabilities": {
@@ -204,18 +150,49 @@
         "tokenizer": "o200k_base",
         "type": "chat"
       },
-      "id": "openai/gpt-4o-2024-11-20",
+      "id": "openai/gpt-4o-2024-05-13",
+      "model_picker_enabled": false,
+      "name": "GPT-4o",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-05-13"
+    },
+    {
+      "capabilities": {
+        "family": "gpt-4o",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 64000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/gpt-4o",
       "model_picker_enabled": true,
       "name": "GPT-4o",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-2024-11-20",
-      "_original": {
-        "id": "gpt-4o",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-2024-11-20"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-11-20"
     },
     {
       "capabilities": {
@@ -250,54 +227,8 @@
       "name": "GPT-4o",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-2024-11-20",
-      "_original": {
-        "id": "gpt-4o-2024-11-20",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-2024-11-20"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "gpt-4o",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 64000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4o-2024-05-13",
-      "model_picker_enabled": false,
-      "name": "GPT-4o",
-      "object": "model",
-      "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-2024-05-13",
-      "_original": {
-        "id": "gpt-4o-2024-05-13",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-2024-05-13"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-11-20"
     },
     {
       "capabilities": {
@@ -316,18 +247,13 @@
         "tokenizer": "o200k_base",
         "type": "chat"
       },
-      "id": "openai/gpt-4o-2024-05-13",
+      "id": "openai/gpt-4o-search-preview",
       "model_picker_enabled": false,
       "name": "GPT-4o",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-2024-05-13",
-      "_original": {
-        "id": "gpt-4-o-preview",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-2024-05-13"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-05-13"
     },
     {
       "capabilities": {
@@ -351,13 +277,8 @@
       "name": "GPT-4o",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4o-2024-08-06",
-      "_original": {
-        "id": "gpt-4o-2024-08-06",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4o-2024-08-06"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-08-06"
     },
     {
       "capabilities": {
@@ -374,106 +295,13 @@
         "tokenizer": "o200k_base",
         "type": "chat"
       },
-      "id": "openai/o1-2024-12-17",
+      "id": "openai/o1",
       "model_picker_enabled": true,
       "name": "o1 (Preview)",
       "object": "model",
       "preview": true,
-      "vendor": "OpenRouter",
-      "version": "openai/o1-2024-12-17",
-      "_original": {
-        "id": "o1",
-        "vendor": "Azure OpenAI",
-        "version": "o1-2024-12-17"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "o1-ga",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_prompt_tokens": 16384
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "structured_outputs": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o1-2024-12-17",
-      "model_picker_enabled": false,
-      "name": "o1 (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "OpenRouter",
-      "version": "openai/o1-2024-12-17",
-      "_original": {
-        "id": "o1-2024-12-17",
-        "vendor": "Azure OpenAI",
-        "version": "o1-2024-12-17"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "o3-mini",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_output_tokens": 100000,
-          "max_prompt_tokens": 64000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "structured_outputs": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o3-mini-2025-01-31",
-      "model_picker_enabled": true,
-      "name": "o3-mini",
-      "object": "model",
-      "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/o3-mini-2025-01-31",
-      "_original": {
-        "id": "o3-mini",
-        "vendor": "Azure OpenAI",
-        "version": "o3-mini-2025-01-31"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "o3-mini",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_output_tokens": 100000,
-          "max_prompt_tokens": 64000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "structured_outputs": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o3-mini-2025-01-31",
-      "model_picker_enabled": false,
-      "name": "o3-mini",
-      "object": "model",
-      "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/o3-mini-2025-01-31",
-      "_original": {
-        "id": "o3-mini-2025-01-31",
-        "vendor": "Azure OpenAI",
-        "version": "o3-mini-2025-01-31"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "o1-2024-12-17"
     },
     {
       "capabilities": {
@@ -493,17 +321,12 @@
         "type": "chat"
       },
       "id": "openai/o3-mini",
-      "model_picker_enabled": false,
+      "model_picker_enabled": true,
       "name": "o3-mini",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/o3-mini",
-      "_original": {
-        "id": "o3-mini-paygo",
-        "vendor": "Azure OpenAI",
-        "version": "o3-mini-paygo"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "o3-mini-2025-01-31"
     },
     {
       "capabilities": {
@@ -533,13 +356,8 @@
       "name": "Claude 3.5 Sonnet",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "anthropic/claude-3.5-sonnet",
-      "_original": {
-        "id": "claude-3.5-sonnet",
-        "vendor": "Anthropic",
-        "version": "claude-3.5-sonnet"
-      }
+      "vendor": "Anthropic",
+      "version": "claude-3.5-sonnet"
     },
     {
       "capabilities": {
@@ -564,18 +382,13 @@
         "tokenizer": "o200k_base",
         "type": "chat"
       },
-      "id": "anthropic/claude-3.5-sonnet-20241022",
+      "id": "anthropic/claude-3.7-sonnet",
       "model_picker_enabled": true,
       "name": "Claude 3.7 Sonnet",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "anthropic/claude-3.5-sonnet-20241022",
-      "_original": {
-        "id": "claude-3.7-sonnet",
-        "vendor": "Anthropic",
-        "version": "claude-3.7-sonnet"
-      }
+      "vendor": "Anthropic",
+      "version": "claude-3.7-sonnet"
     },
     {
       "capabilities": {
@@ -584,12 +397,12 @@
           "max_context_window_tokens": 200000,
           "max_output_tokens": 16384,
           "max_prompt_tokens": 90000,
-          "reasoning_tokens": 32000,
           "vision": {
             "max_prompt_image_size": 3145728,
             "max_prompt_images": 1,
             "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
-          }
+          },
+          "reasoning_tokens": 4096
         },
         "object": "model_capabilities",
         "supports": {
@@ -605,13 +418,8 @@
       "name": "Claude 3.7 Sonnet Thinking",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "anthropic/claude-3.7-sonnet:thinking",
-      "_original": {
-        "id": "claude-3.7-sonnet-thought",
-        "vendor": "Anthropic",
-        "version": "claude-3.7-sonnet-thought"
-      }
+      "vendor": "Anthropic",
+      "version": "claude-3.7-sonnet-thought"
     },
     {
       "capabilities": {
@@ -635,13 +443,8 @@
       "name": "Claude Sonnet 4",
       "object": "model",
       "preview": true,
-      "vendor": "OpenRouter",
-      "version": "anthropic/claude-sonnet-4",
-      "_original": {
-        "id": "claude-sonnet-4",
-        "vendor": "Anthropic",
-        "version": "claude-sonnet-4"
-      }
+      "vendor": "Anthropic",
+      "version": "claude-sonnet-4"
     },
     {
       "capabilities": {
@@ -677,55 +480,8 @@
       "name": "Gemini 2.0 Flash",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "google/gemini-2.0-flash-001",
-      "_original": {
-        "id": "gemini-2.0-flash-001",
-        "vendor": "Google",
-        "version": "gemini-2.0-flash-001"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "gemini-2.5-pro",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 64000,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/heic",
-              "image/heif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "google/gemini-2.5-pro-preview",
-      "model_picker_enabled": true,
-      "name": "Gemini 2.5 Pro (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "OpenRouter",
-      "version": "google/gemini-2.5-pro-preview",
-      "_original": {
-        "id": "gemini-2.5-pro",
-        "vendor": "Google",
-        "version": "gemini-2.5-pro-preview-05-06"
-      }
+      "vendor": "Google",
+      "version": "gemini-2.0-flash-001"
     },
     {
       "capabilities": {
@@ -761,13 +517,8 @@
       "name": "Gemini 2.5 Pro (Preview)",
       "object": "model",
       "preview": true,
-      "vendor": "OpenRouter",
-      "version": "google/gemini-2.5-pro-preview-05-06",
-      "_original": {
-        "id": "gemini-2.5-pro-preview-05-06",
-        "vendor": "Google",
-        "version": "gemini-2.5-pro-preview-05-06"
-      }
+      "vendor": "Google",
+      "version": "gemini-2.5-pro-preview-05-06"
     },
     {
       "capabilities": {
@@ -803,55 +554,8 @@
       "name": "o4-mini (Preview)",
       "object": "model",
       "preview": true,
-      "vendor": "OpenRouter",
-      "version": "openai/o4-mini",
-      "_original": {
-        "id": "o4-mini",
-        "vendor": "Azure OpenAI",
-        "version": "o4-mini-2025-04-16"
-      }
-    },
-    {
-      "capabilities": {
-        "family": "o4-mini",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "structured_outputs": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o4-mini-2025-04-16",
-      "model_picker_enabled": false,
-      "name": "o4-mini (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "OpenRouter",
-      "version": "openai/o4-mini-2025-04-16",
-      "_original": {
-        "id": "o4-mini-2025-04-16",
-        "vendor": "OpenAI",
-        "version": "o4-mini-2025-04-16"
-      }
+      "vendor": "Azure OpenAI",
+      "version": "o4-mini-2025-04-16"
     },
     {
       "capabilities": {
@@ -887,54 +591,1961 @@
       "name": "GPT-4.1",
       "object": "model",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4.1",
-      "_original": {
-        "id": "gpt-4.1",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4.1-2025-04-14"
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4.1-2025-04-14"
+    },
+    {
+      "id": "x-ai/grok-3-mini-beta",
+      "name": "xAI: Grok 3 Mini Beta",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "3",
+      "preview": true,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
       }
     },
     {
+      "id": "x-ai/grok-3-beta",
+      "name": "xAI: Grok 3 Beta",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "3",
+      "preview": true,
+      "model_picker_enabled": false,
       "capabilities": {
-        "family": "gpt-4.1",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
+        "family": "Grok",
         "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
         "supports": {
-          "parallel_tool_calls": true,
           "streaming": true,
-          "structured_outputs": true,
           "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "x-ai/grok-2-vision-1212",
+      "name": "xAI: Grok 2 Vision 1212",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "2",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
           "vision": true
         },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4.1-2025-04-14",
-      "model_picker_enabled": false,
-      "name": "GPT-4.1",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "x-ai/grok-2-1212",
+      "name": "xAI: Grok 2 1212",
       "object": "model",
+      "vendor": "x-ai",
+      "version": "2",
       "preview": false,
-      "vendor": "OpenRouter",
-      "version": "openai/gpt-4.1-2025-04-14",
-      "_original": {
-        "id": "gpt-4.1-2025-04-14",
-        "vendor": "Azure OpenAI",
-        "version": "gpt-4.1-2025-04-14"
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "x-ai/grok-vision-beta",
+      "name": "xAI: Grok Vision Beta",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "beta",
+      "preview": true,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 8192,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "x-ai/grok-beta",
+      "name": "xAI: Grok Beta",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "beta",
+      "preview": true,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-7b",
+      "name": "DeepSeek: R1 Distill Qwen 7B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "7b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-0528-qwen3-8b:free",
+      "name": "DeepSeek: Deepseek R1 0528 Qwen3 8B (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "0528",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-0528-qwen3-8b",
+      "name": "DeepSeek: Deepseek R1 0528 Qwen3 8B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "0528",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 131072,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-30b-a3b:free",
+      "name": "Qwen: Qwen3 30B A3B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "30b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-30b-a3b",
+      "name": "Qwen: Qwen3 30B A3B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "30b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 40960,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-8b:free",
+      "name": "Qwen: Qwen3 8B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "8b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 40960,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-8b",
+      "name": "Qwen: Qwen3 8B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "8b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 20000,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-14b:free",
+      "name": "Qwen: Qwen3 14B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "14b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-14b",
+      "name": "Qwen: Qwen3 14B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "14b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 40960,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-32b:free",
+      "name": "Qwen: Qwen3 32B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-32b",
+      "name": "Qwen: Qwen3 32B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b:free",
+      "name": "Qwen: Qwen3 235B A22B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "235b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b",
+      "name": "Qwen: Qwen3 235B A22B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "235b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40960,
+          "max_output_tokens": 40960,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen2.5-vl-3b-instruct:free",
+      "name": "Qwen: Qwen2.5 VL 3B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 64000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen2.5-vl-32b-instruct:free",
+      "name": "Qwen: Qwen2.5 VL 32B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 8192,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen2.5-vl-32b-instruct",
+      "name": "Qwen: Qwen2.5 VL 32B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwq-32b:free",
+      "name": "Qwen: QwQ 32B (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 40000,
+          "max_output_tokens": 40000,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwq-32b",
+      "name": "Qwen: QwQ 32B",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-vl-plus",
+      "name": "Qwen: Qwen VL Plus",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 7500,
+          "max_output_tokens": 1500,
+          "max_prompt_tokens": 6000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-vl-max",
+      "name": "Qwen: Qwen VL Max",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 7500,
+          "max_output_tokens": 1500,
+          "max_prompt_tokens": 6000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-turbo",
+      "name": "Qwen: Qwen-Turbo",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "turbo",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 1000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen2.5-vl-72b-instruct:free",
+      "name": "Qwen: Qwen2.5 VL 72B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 2048,
+          "max_prompt_tokens": 129024
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen2.5-vl-72b-instruct",
+      "name": "Qwen: Qwen2.5 VL 72B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 32000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-plus",
+      "name": "Qwen: Qwen-Plus",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 129024
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-max",
+      "name": "Qwen: Qwen-Max ",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 30720
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-1.5b",
+      "name": "DeepSeek: R1 Distill Qwen 1.5B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "1",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Other",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-32b:free",
+      "name": "DeepSeek: R1 Distill Qwen 32B (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 16000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-32b",
+      "name": "DeepSeek: R1 Distill Qwen 32B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "32b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-14b:free",
+      "name": "DeepSeek: R1 Distill Qwen 14B (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "14b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 64000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-qwen-14b",
+      "name": "DeepSeek: R1 Distill Qwen 14B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "14b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 64000,
+          "max_output_tokens": 32000,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "qwen/qwq-32b-preview",
+      "name": "Qwen: QwQ 32B Preview",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "32b",
+      "preview": true,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "eva-unit-01/eva-qwen-2.5-72b",
+      "name": "EVA Qwen2.5 72B",
+      "object": "model",
+      "vendor": "eva-unit-01",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 16384,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-coder-32b-instruct:free",
+      "name": "Qwen2.5 Coder 32B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-coder-32b-instruct",
+      "name": "Qwen2.5 Coder 32B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "eva-unit-01/eva-qwen-2.5-32b",
+      "name": "EVA Qwen2.5 32B",
+      "object": "model",
+      "vendor": "eva-unit-01",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 16384,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "anthracite-org/magnum-v4-72b",
+      "name": "Magnum v4 72B",
+      "object": "model",
+      "vendor": "anthracite-org",
+      "version": "v4",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 16384,
+          "max_output_tokens": 1024,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-7b-instruct:free",
+      "name": "Qwen2.5 7B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-7b-instruct",
+      "name": "Qwen2.5 7B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "thedrummer/rocinante-12b",
+      "name": "TheDrummer: Rocinante 12B",
+      "object": "model",
+      "vendor": "thedrummer",
+      "version": "12b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "anthracite-org/magnum-v2-72b",
+      "name": "Magnum v2 72B",
+      "object": "model",
+      "vendor": "anthracite-org",
+      "version": "v2",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-72b-instruct:free",
+      "name": "Qwen2.5 72B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-72b-instruct",
+      "name": "Qwen2.5 72B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-vl-7b-instruct:free",
+      "name": "Qwen: Qwen2.5-VL 7B Instruct (free)",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2.5-vl-7b-instruct",
+      "name": "Qwen: Qwen2.5-VL 7B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2.5",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": true
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "alpindale/magnum-72b",
+      "name": "Magnum 72B",
+      "object": "model",
+      "vendor": "alpindale",
+      "version": "72b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 16384,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "qwen/qwen-2-72b-instruct",
+      "name": "Qwen 2 72B Instruct",
+      "object": "model",
+      "vendor": "qwen",
+      "version": "2",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-0528:free",
+      "name": "DeepSeek: R1 0528 (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "0528",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-0528",
+      "name": "DeepSeek: R1 0528",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "0528",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-prover-v2:free",
+      "name": "DeepSeek: DeepSeek Prover V2 (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v2",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-prover-v2",
+      "name": "DeepSeek: DeepSeek Prover V2",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v2",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "tngtech/deepseek-r1t-chimera:free",
+      "name": "TNG: DeepSeek R1T Chimera (free)",
+      "object": "model",
+      "vendor": "tngtech",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "microsoft/mai-ds-r1:free",
+      "name": "Microsoft: MAI DS R1 (free)",
+      "object": "model",
+      "vendor": "microsoft",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-v3-base:free",
+      "name": "DeepSeek: DeepSeek V3 Base (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v3",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-chat-v3-0324:free",
+      "name": "DeepSeek: DeepSeek V3 0324 (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v3",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-chat-v3-0324",
+      "name": "DeepSeek: DeepSeek V3 0324",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v3",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-zero:free",
+      "name": "DeepSeek: DeepSeek R1 Zero (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Other",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "perplexity/r1-1776",
+      "name": "Perplexity: R1 1776",
+      "object": "model",
+      "vendor": "perplexity",
+      "version": "1776",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-llama-8b",
+      "name": "DeepSeek: R1 Distill Llama 8B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "8b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Llama3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 32000,
+          "max_output_tokens": 32000,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-llama-70b:free",
+      "name": "DeepSeek: R1 Distill Llama 70B (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "70b",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "Llama3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 8192,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-llama-70b",
+      "name": "DeepSeek: R1 Distill Llama 70B",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "70b",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Llama3",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1:free",
+      "name": "DeepSeek: R1 (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-r1",
+      "name": "DeepSeek: R1",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "1.0",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false,
+          "thinking": true
+        },
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 32000,
+          "reasoning_tokens": 4096
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-chat:free",
+      "name": "DeepSeek: DeepSeek V3 (free)",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v3",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "deepseek/deepseek-chat",
+      "name": "DeepSeek: DeepSeek V3",
+      "object": "model",
+      "vendor": "deepseek",
+      "version": "v3",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "DeepSeek",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 163840,
+          "max_output_tokens": 163840,
+          "max_prompt_tokens": 32000
+        }
       }
     }
   ],
@@ -943,13 +2554,20 @@
     "version": "1.0.0",
     "lastUpdated": "2025-06-06",
     "source": "https://openrouter.ai/api/v1",
-    "description": "OpenRouter 模型配置文件 - 基于 GitHub Copilot models.json",
-    "officialDoc": "https://openrouter.ai/docs",
+    "description": "OpenRouter 模型配置文件 - 基于 GitHub Copilot 官方支持模型动态生成，并包含额外的Grok、Qwen、DeepSeek系列模型",
+    "originalSource": "scripts/models/GitHub.json",
+    "mappingCount": 90,
     "supportedFeatures": {
       "categories": ["chat"],
-      "capabilities": ["streaming", "tool_calls", "vision", "thinking"]
+      "capabilities": [
+        "tool_calls",
+        "streaming",
+        "structured_outputs",
+        "vision",
+        "parallel_tool_calls",
+        "thinking"
+      ]
     },
-    "originalSource": "scripts/models.json",
-    "mappingCount": 27
+    "additionalSeries": ["Grok", "Qwen", "Qwen3", "DeepSeek"]
   }
 }

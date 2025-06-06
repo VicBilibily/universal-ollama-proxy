@@ -108,7 +108,8 @@ async function validateReleaseProcess() {
 
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i];
-    logger.info(`\\n[${i + 1}/${steps.length}] ${step.name}`);
+    logger.info('');
+    logger.info(`[${i + 1}/${steps.length}] ${step.name}`);
     logger.info('-'.repeat(40));
 
     const result = runCommand(step.command, step.description);
@@ -129,7 +130,8 @@ async function validateReleaseProcess() {
   }
 
   // 验证生成的文件
-  logger.info('\\n📦 验证生成的文件...');
+  logger.info('');
+  logger.info('📦 验证生成的文件...');
   logger.info('-'.repeat(40));
 
   const expectedBinaries = [
@@ -168,7 +170,8 @@ async function validateReleaseProcess() {
   });
 
   // 生成报告
-  logger.info('\\n📊 验证报告');
+  logger.info('');
+  logger.info('📊 验证报告');
   logger.info('='.repeat(60));
   logger.info(`步骤完成: ${successCount}/${steps.length}`);
   logger.info(`文件验证: ${fileChecksPassed}/${expectedBinaries.length + expectedReleases.length}`);
@@ -215,11 +218,13 @@ async function validateReleaseProcess() {
   logger.success(`详细报告已保存: ${path.relative(process.cwd(), reportPath)}`);
 
   if (report.summary.success) {
-    logger.success('\\n🎉 发布流程验证成功！');
+    logger.info('');
+    logger.success('🎉 发布流程验证成功！');
     logger.info('💡 可以使用 GitHub Actions 进行自动发布了');
     return true;
   } else {
-    logger.error('\\n❌ 发布流程验证失败');
+    logger.info('');
+    logger.error('❌ 发布流程验证失败');
     logger.info('💡 请检查失败的步骤并修复问题');
     return false;
   }

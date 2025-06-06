@@ -1,7 +1,7 @@
 import { OpenAI } from 'openai';
 import { OpenAIChatRequest } from '../types';
 import { logger } from '../utils';
-import { UnifiedAdapterService } from './unified-adapter';
+import { UnifiedAdapterService } from './unifiedAdapter';
 
 /**
  * OpenAI API 兼容服务
@@ -27,9 +27,21 @@ export class OpenAICompatService {
 
     try {
       // 验证模型名称必须为组合ID格式 (provider:modelName)
-      if (!request.model.includes(':') || request.model.split(':').length !== 2) {
+      // 但允许模型名称部分包含额外的冒号和斜杠，例如 openrouter:anthropic/claude-3.7-sonnet:thinking
+      if (!request.model.includes(':')) {
         const error = new Error(`模型名称必须使用组合格式 'provider:modelName'，当前格式: ${request.model}`);
         logger.error('模型名称格式验证失败:', { model: request.model });
+        throw error;
+      }
+
+      // 解析提供商和模型名称（允许模型名称中包含冒号和斜杠）
+      const colonIndex = request.model.indexOf(':');
+      const provider = request.model.substring(0, colonIndex);
+      const modelName = request.model.substring(colonIndex + 1);
+
+      if (!provider || !modelName) {
+        const error = new Error(`模型名称格式无效，提供商或模型名称为空: ${request.model}`);
+        logger.error('模型名称格式验证失败:', { model: request.model, provider, modelName });
         throw error;
       }
 
@@ -49,6 +61,7 @@ export class OpenAICompatService {
         ...(request.function_call !== undefined && { function_call: request.function_call as any }),
         ...(request.tools !== undefined && { tools: request.tools as any }),
         ...(request.tool_choice !== undefined && { tool_choice: request.tool_choice as any }),
+        ...(request.reasoning !== undefined && { reasoning: request.reasoning as any }),
         stream: request.stream || false,
       };
 

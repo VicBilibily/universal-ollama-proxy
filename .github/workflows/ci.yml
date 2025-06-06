@@ -39,6 +39,9 @@ jobs:
           cp .env.example .env
           echo "VOLCENGINE_API_KEY=ci_test_key" >> .env
           echo "DASHSCOPE_API_KEY=ci_test_key" >> .env
+          echo "TENCENTDS_API_KEY=ci_test_key" >> .env
+          echo "DEEPSEEK_API_KEY=ci_test_key" >> .env
+          echo "OPENROUTER_API_KEY=ci_test_key" >> .env
 
       - name: 验证构建
         run: npm run check

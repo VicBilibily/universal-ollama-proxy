@@ -216,13 +216,15 @@ async function testModel(modelInfo) {
  * 批量测试模型（控制并发数）
  */
 async function testModelsInBatches(models) {
-  console.log(`\n🚀 开始测试 ${models.length} 个模型 (最大并发: ${config.maxConcurrent})\n`);
+  log.info('');
+  log.info(`🚀 开始测试 ${models.length} 个模型 (最大并发: ${config.maxConcurrent})`);
+  log.info('');
 
   const results = [];
 
   for (let i = 0; i < models.length; i += config.maxConcurrent) {
     const batch = models.slice(i, i + config.maxConcurrent);
-    console.log(`📦 批次 ${Math.floor(i / config.maxConcurrent) + 1}: 测试 ${batch.length} 个模型`);
+    log.info(`📦 批次 ${Math.floor(i / config.maxConcurrent) + 1}: 测试 ${batch.length} 个模型`);
 
     const batchPromises = batch.map(modelInfo => testModel(modelInfo));
     const batchResults = await Promise.all(batchPromises);
@@ -231,7 +233,8 @@ async function testModelsInBatches(models) {
 
     // 批次间暂停
     if (i + config.maxConcurrent < models.length) {
-      console.log('⏳ 批次间休息 2 秒...\n');
+      log.info('⏳ 批次间休息 2 秒...');
+      log.info('');
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
@@ -247,34 +250,40 @@ function generateReport(testResults) {
   const failed = testResults.filter(r => !r.success);
   const totalDuration = Date.now() - results.startTime.getTime();
 
-  console.log('\n' + '='.repeat(80));
-  console.log('📊 测试报告');
-  console.log('='.repeat(80));
+  log.info('');
+  log.info('='.repeat(80));
+  log.info('📊 测试报告');
+  log.info('='.repeat(80));
 
-  console.log(`\n📈 总体统计:`);
-  console.log(`   总模型数: ${testResults.length}`);
-  console.log(`   成功: ${successful.length} (${((successful.length / testResults.length) * 100).toFixed(1)}%)`);
-  console.log(`   失败: ${failed.length} (${((failed.length / testResults.length) * 100).toFixed(1)}%)`);
-  console.log(`   总耗时: ${(totalDuration / 1000).toFixed(1)}秒`);
+  log.info('');
+  log.info('📈 总体统计:');
+  log.info(`   总模型数: ${testResults.length}`);
+  log.info(`   成功: ${successful.length} (${((successful.length / testResults.length) * 100).toFixed(1)}%)`);
+  log.info(`   失败: ${failed.length} (${((failed.length / testResults.length) * 100).toFixed(1)}%)`);
+  log.info(`   总耗时: ${(totalDuration / 1000).toFixed(1)}秒`);
 
   if (successful.length > 0) {
-    console.log(`\n✅ 成功的模型 (${successful.length}个):`);
+    log.info('');
+    log.info(`✅ 成功的模型 (${successful.length}个):`);
     successful.forEach((result, index) => {
       const displayName =
-        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
-      console.log(`   ${index + 1}. ${displayName} - ${result.duration}ms`);
+        result.displayName ||
+        (result.model.includes(':') ? result.model.substring(result.model.indexOf(':') + 1) : result.model);
+      log.info(`   ${index + 1}. ${displayName} - ${result.duration}ms`);
     });
 
     const avgDuration = successful.reduce((sum, r) => sum + r.duration, 0) / successful.length;
-    console.log(`   平均响应时间: ${avgDuration.toFixed(0)}ms`);
+    log.info(`   平均响应时间: ${avgDuration.toFixed(0)}ms`);
   }
 
   if (failed.length > 0) {
-    console.log(`\n❌ 失败的模型 (${failed.length}个):`);
+    log.info('');
+    log.info(`❌ 失败的模型 (${failed.length}个):`);
     failed.forEach((result, index) => {
       const displayName =
-        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
-      console.log(`   ${index + 1}. ${displayName} - ${result.error}`);
+        result.displayName ||
+        (result.model.includes(':') ? result.model.substring(result.model.indexOf(':') + 1) : result.model);
+      log.info(`   ${index + 1}. ${displayName} - ${result.error}`);
     });
 
     // 统计错误类型
@@ -284,9 +293,10 @@ function generateReport(testResults) {
       errorCounts[errorType] = (errorCounts[errorType] || 0) + 1;
     });
 
-    console.log(`\n📋 错误类型统计:`);
+    log.info('');
+    log.info('📋 错误类型统计:');
     Object.entries(errorCounts).forEach(([type, count]) => {
-      console.log(`   ${type}: ${count}次`);
+      log.info(`   ${type}: ${count}次`);
     });
   }
 
@@ -334,7 +344,8 @@ function generateReport(testResults) {
     log.warn(`⚠️  保存报告失败: ${error.message}`);
   }
 
-  console.log('\n' + '='.repeat(80));
+  log.info('');
+  log.info('='.repeat(80));
 }
 
 /**
@@ -368,7 +379,8 @@ function generateMarkdownReport(testResults, successful, failed, totalDuration) 
     markdown += `|------|----------|----------|\n`;
     successful.forEach((result, index) => {
       const displayName =
-        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+        result.displayName ||
+        (result.model.includes(':') ? result.model.substring(result.model.indexOf(':') + 1) : result.model);
       markdown += `| ${index + 1} | ${displayName} | ${result.duration}ms |\n`;
     });
   }
@@ -379,7 +391,8 @@ function generateMarkdownReport(testResults, successful, failed, totalDuration) 
     markdown += `|------|----------|----------|\n`;
     failed.forEach((result, index) => {
       const displayName =
-        result.displayName || (result.model.includes(':') ? result.model.split(':')[1] : result.model);
+        result.displayName ||
+        (result.model.includes(':') ? result.model.substring(result.model.indexOf(':') + 1) : result.model);
       markdown += `| ${index + 1} | ${displayName} | ${result.error} |\n`;
     });
 

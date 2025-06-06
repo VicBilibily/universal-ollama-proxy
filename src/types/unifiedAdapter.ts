@@ -6,6 +6,7 @@ export interface UnifiedProvider {
   baseURL: string;
   apiKey: string;
   headers?: Record<string, string>;
+  enabled?: boolean; // 设置为false可临时停用该提供商
 }
 
 export interface UnifiedAdapterConfig {

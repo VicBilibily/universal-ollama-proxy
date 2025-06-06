@@ -27,32 +27,6 @@
       }
     },
     {
-      "id": "doubao-1-5-pro-256k-250115",
-      "name": "豆包1.5大模型 Pro 256K",
-      "object": "model",
-      "vendor": "ByteDance",
-      "version": "doubao-1-5-pro-256k-250115",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "doubao-1.5-pro",
-        "limits": {
-          "max_context_window_tokens": 256000,
-          "max_output_tokens": 12000,
-          "max_prompt_tokens": 244000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
-          "structured_outputs": true
-        },
-        "tokenizer": "cl100k_base",
-        "type": "chat"
-      }
-    },
-    {
       "id": "doubao-1.5-lite-32k-250115",
       "name": "豆包1.5大模型 Lite 32K",
       "object": "model",

@@ -104,17 +104,14 @@ function main() {
     return;
   }
 
-  // 初始化 Husky
-  if (runCommand('npx husky init', '初始化 Husky')) {
+  // 初始化 Husky (先安装，后添加钩子)
+  if (runCommand('npx husky install', '初始化 Husky')) {
     // 创建 pre-commit 钩子
-    const preCommitContent = `. "$(dirname -- "$0")/_/husky.sh"
-
-# 使用 lint-staged 只格式化暂存的文件
-npx lint-staged
-`;
-    createHuskyHook('pre-commit', preCommitContent);
-
-    log('Git Hooks 设置完成！现在每次提交前代码将自动格式化。', 'success');
+    if (runCommand('npx husky add .husky/pre-commit "npx lint-staged"', '添加 pre-commit 钩子')) {
+      log('Git Hooks 设置完成！现在每次提交前代码将自动格式化。', 'success');
+    } else {
+      log('添加 pre-commit 钩子失败', 'error');
+    }
   } else {
     log('Git Hooks 设置失败，请手动运行 "npx husky install" 并设置钩子', 'error');
   }

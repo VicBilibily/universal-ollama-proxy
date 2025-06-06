@@ -28,12 +28,15 @@ const log = {
 };
 
 function displayMenu() {
-  console.log('\n🚀 Universal Ollama Proxy - 快速构建工具\n');
-  console.log('请选择要执行的操作:');
+  log.info('');
+  log.info('🚀 Universal Ollama Proxy - 快速构建工具');
+  log.info('');
+  log.info('请选择要执行的操作:');
   QUICK_OPTIONS.forEach((option, index) => {
-    console.log(`  ${index + 1}. ${option.name}`);
+    log.info(`  ${index + 1}. ${option.name}`);
   });
-  console.log('  0. 退出\n');
+  log.info('  0. 退出');
+  log.info('');
 }
 
 function runCommand(command) {
@@ -62,21 +65,25 @@ async function main() {
     const choice = parseInt(answer);
 
     if (choice === 0) {
-      console.log('\n👋 再见！');
+      log.info('');
+      log.info('👋 再见！');
       break;
     }
 
     if (choice >= 1 && choice <= QUICK_OPTIONS.length) {
       const selectedOption = QUICK_OPTIONS[choice - 1];
-      console.log(`\n执行: ${selectedOption.name}`);
+      log.info('');
+      log.info(`执行: ${selectedOption.name}`);
       runCommand(selectedOption.command);
 
-      console.log('\n按回车键继续...');
+      log.info('');
+      log.info('按回车键继续...');
       await new Promise(resolve => {
         rl.question('', resolve);
       });
     } else {
-      console.log('\n❌ 无效的选项，请重新选择');
+      log.info('');
+      log.error('❌ 无效的选项，请重新选择');
     }
   }
 

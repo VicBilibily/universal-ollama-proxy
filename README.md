@@ -38,6 +38,14 @@ Copilot Chat 的 Ollama 接入优化**。
 - **格式转换**：自动处理不同提供商的消息格式差异
 - **兼容性**：确保与 GitHub Copilot Chat 完美兼容
 
+### 🛡️ 工具过滤
+
+- **安全防护**：自动验证和过滤工具定义，阻止危险函数调用
+- **规则引擎**：支持黑白名单、正则匹配和复杂条件规则
+- **格式转换**：自动补全兼容性所需的参数格式（例如 OpenRouter Anthropic 模型）
+- **性能优化**：内置缓存机制，提高过滤性能
+- **可配置**：热重载配置，运行时调整过滤策略
+
 ### 🌍 多平台支持
 
 - **预编译**：提供所有主流平台的预编译二进制文件
@@ -68,7 +76,7 @@ Copilot Chat 的 Ollama 接入优化**。
 **模型名称格式**：使用 `provider:model` 格式，如
 `volcengine:doubao-1.5-pro-32k-250115`
 
-## 🎯 支持的 AI 提供商和模型
+## 🎯 预置支持的 AI 提供商和模型
 
 ### 🔥 火山方舟引擎（豆包大模型）
 
@@ -76,28 +84,28 @@ Copilot Chat 的 Ollama 接入优化**。
 
 #### 深度思考模型系列
 
-- `volcengine:doubao-1.5-thinking-pro-250415` - 豆包1.5深度思考Pro
-- `volcengine:doubao-1.5-thinking-vision-pro-250428` - 豆包1.5深度思考视觉Pro
-- `volcengine:doubao-1.5-thinking-pro-m-250428` - 豆包1.5深度思考Pro-M
+- `volcengine:doubao-1.5-thinking-pro-250415` - 豆包1.5·深度思考 Pro
+- `volcengine:doubao-1.5-thinking-vision-pro-250428` - 豆包1.5·视觉深度思考 Pro
+- `volcengine:doubao-1.5-thinking-pro-m-250428` - 豆包1.5·深度思考 Pro-M
 
 #### 视觉理解模型系列
 
-- `volcengine:doubao-1.5-vision-pro-250328` - 豆包1.5视觉Pro
-- `volcengine:doubao-1.5-vision-lite-250315` - 豆包1.5视觉Lite
-- `volcengine:doubao-1.5-vision-pro-32k-250115` - 豆包1.5视觉Pro 32K
+- `volcengine:doubao-1.5-vision-pro-250328` - 豆包1.5·视觉理解 Pro
+- `volcengine:doubao-1.5-vision-lite-250315` - 豆包1.5·视觉理解 Lite
+- `volcengine:doubao-1.5-vision-pro-32k-250115` - 豆包1.5·视觉理解 Pro 32K
 
 #### 文本生成模型系列
 
-- `volcengine:doubao-1.5-pro-32k-250115` - 豆包1.5 Pro 32K
+- `volcengine:doubao-1.5-pro-32k-250115` - 豆包1.5大模型 Pro 32K
 - `volcengine:doubao-1.5-pro-256k-250115` - 豆包1.5 Pro 256K
-- `volcengine:doubao-1.5-lite-32k-250115` - 豆包1.5 Lite 32K
+- `volcengine:doubao-1.5-lite-32k-250115` - 豆包1.5大模型 Lite 32K
 
 #### DeepSeek 系列（火山代理）
 
-- `volcengine:deepseek-v3-250324` - DeepSeek V3
-- `volcengine:deepseek-v3-241226` - DeepSeek V3 初始版
-- `volcengine:deepseek-r1-250528` - DeepSeek R1
-- `volcengine:deepseek-r1-250120` - DeepSeek R1 旧版
+- `volcengine:deepseek-v3-250324` - DeepSeek V3-250324 (方舟)
+- `volcengine:deepseek-v3-241226` - DeepSeek V3 (方舟)
+- `volcengine:deepseek-r1-250528` - DeepSeek R1-0528 (方舟)
+- `volcengine:deepseek-r1-250120` - DeepSeek R1 (方舟)
 
 ### 🚀 阿里云百炼（通义千问）
 
@@ -105,15 +113,19 @@ Copilot Chat 的 Ollama 接入优化**。
 
 #### 文本生成模型系列
 
-- `dashscope:qwen-max` / `dashscope:qwen-max-latest` - 通义千问Max
-- `dashscope:qwen-plus` / `dashscope:qwen-plus-latest` - 通义千问Plus
-- `dashscope:qwen-turbo` / `dashscope:qwen-turbo-latest` - 通义千问Turbo
-- `dashscope:qwen-long` / `dashscope:qwen-long-latest` - 通义千问Long（长文本）
+- `dashscope:qwen-max` - 通义千问 Max (稳定版)
+- `dashscope:qwen-max-latest` - 通义千问 Max (最新版)
+- `dashscope:qwen-plus` - 通义千问 Plus (稳定版)
+- `dashscope:qwen-plus-latest` - 通义千问 Plus (最新版)
+- `dashscope:qwen-turbo` - 通义千问 Turbo (稳定版)
+- `dashscope:qwen-turbo-latest` - 通义千问 Turbo (最新版)
+- `dashscope:qwen-long` - 通义千问 Long (稳定版)
+- `dashscope:qwen-long-latest` - 通义千问 Long (最新版)
 
 #### 视觉理解模型系列
 
-- `dashscope:qwen-vl-max` - 通义千问VL Max
-- `dashscope:qwen-vl-plus` - 通义千问VL Plus
+- `dashscope:qwen-vl-max` - 通义千问 VL Max (稳定版)
+- `dashscope:qwen-vl-plus` - 通义千问 VL Plus (稳定版)
 
 ### 🔥 腾讯云 DeepSeek
 
@@ -121,14 +133,14 @@ Copilot Chat 的 Ollama 接入优化**。
 
 #### 推理模型系列
 
-- `tencentds:deepseek-r1` - DeepSeek R1 推理模型
-- `tencentds:deepseek-r1-0528` - DeepSeek R1-0528 版本
+- `tencentds:deepseek-r1` - DeepSeek R1 (腾讯)
+- `tencentds:deepseek-r1-0528` - DeepSeek R1-0528 (腾讯)
 
 #### 文本生成模型系列
 
-- `tencentds:deepseek-v3` - DeepSeek V3 文本生成
-- `tencentds:deepseek-v3-0324` - DeepSeek V3-0324 版本
-- `tencentds:deepseek-prover-v2` - DeepSeek Prover V2（数学证明专用）
+- `tencentds:deepseek-v3` - DeepSeek V3 (腾讯)
+- `tencentds:deepseek-v3-0324` - DeepSeek V3-0324 (腾讯)
+- `tencentds:deepseek-prover-v2` - DeepSeek Prover V2 (腾讯)
 
 ### 🎯 DeepSeek 官方
 
@@ -136,8 +148,33 @@ Copilot Chat 的 Ollama 接入优化**。
 
 #### 聊天模型系列
 
-- `deepseek:deepseek-chat` - DeepSeek Chat 官方版本
-- `deepseek:deepseek-reasoner` - DeepSeek Reasoner 推理专用
+- `deepseek:deepseek-chat` - DeepSeek V3 (官方)
+- `deepseek:deepseek-reasoner` - DeepSeek R1 (官方)
+
+### 🌐 OpenRouter
+
+**多模型聚合服务平台，提供统一接口访问各大 AI 模型**
+
+#### OpenAI 模型系列
+
+- `openrouter:openai/gpt-4o-2024-11-20` - GPT-4o
+- `openrouter:openai/o1-2024-12-17` - o1 (Preview)
+- `openrouter:openai/o3-mini-2025-01-31` - o3-mini
+- `openrouter:openai/o4-mini` - o4-mini
+- `openrouter:openai/gpt-4.1` - GPT-4.1
+
+#### Anthropic 模型系列
+
+- `openrouter:anthropic/claude-3.5-sonnet` - Claude 3.5 Sonnet
+- `openrouter:anthropic/claude-3.5-sonnet-20241022` - Claude 3.7 Sonnet
+- `openrouter:anthropic/claude-3.7-sonnet:thinking` - Claude 3.7 Sonnet:thinking
+  ✨ **已修复推理功能**
+- `openrouter:anthropic/claude-sonnet-4` - Claude Sonnet 4
+
+#### Google 模型系列
+
+- `openrouter:google/gemini-2.0-flash-001` - Gemini 2.0 Flash
+- `openrouter:google/gemini-2.5-pro-preview-05-06` - Gemini 2.5 Pro (Preview)
 
 ## 📥 快速开始（推荐：预编译版本）
 
@@ -301,102 +338,6 @@ npm start
 - **模型列表**: http://localhost:11434/api/tags
 - **服务版本**: http://localhost:11434/api/version
 
-## 🚀 API 使用示例
-
-### 💬 Ollama 兼容接口
-
-#### 获取可用模型列表
-
-```powershell
-# 获取所有可用模型
-Invoke-RestMethod -Uri "http://localhost:11434/api/tags" -Method GET
-```
-
-#### 获取模型详细信息
-
-```powershell
-# 获取特定模型信息
-$body = @{
-    model = "volcengine:doubao-1.5-pro-32k-250115"
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "http://localhost:11434/api/show" -Method POST -Body $body -ContentType "application/json"
-```
-
-### 🤖 OpenAI 兼容接口
-
-#### 非流式聊天对话
-
-```powershell
-# 标准聊天请求
-$chatBody = @{
-    model = "volcengine:doubao-1.5-pro-32k-250115"
-    messages = @(
-        @{
-            role = "user"
-            content = "你好，请介绍一下你自己"
-        }
-    )
-    temperature = 0.7
-    max_tokens = 1000
-} | ConvertTo-Json -Depth 10
-
-Invoke-RestMethod -Uri "http://localhost:11434/v1/chat/completions" -Method POST -Body $chatBody -ContentType "application/json"
-```
-
-#### 流式聊天对话
-
-```powershell
-# 流式聊天请求
-$streamBody = @{
-    model = "dashscope:qwen-plus"
-    messages = @(
-        @{
-            role = "user"
-            content = "写一个关于人工智能的短故事"
-        }
-    )
-    stream = $true
-    temperature = 0.8
-} | ConvertTo-Json -Depth 10
-
-# 使用 curl 处理流式响应
-curl.exe -X POST "http://localhost:11434/v1/chat/completions" `
-  -H "Content-Type: application/json" `
-  -d $streamBody `
-  --no-buffer
-```
-
-### 🌐 使用 curl 命令示例
-
-```bash
-# 获取模型列表
-curl http://localhost:11434/api/tags
-
-# 聊天对话
-curl -X POST "http://localhost:11434/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "tencentds:deepseek-v3",
-    "messages": [
-      {"role": "user", "content": "解释一下量子计算的基本原理"}
-    ],
-    "temperature": 0.7
-  }'
-
-# 流式聊天
-curl -X POST "http://localhost:11434/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "deepseek:deepseek-chat",
-    "messages": [
-      {"role": "user", "content": "写一首关于春天的诗"}
-    ],
-    "stream": true
-  }' \
-  --no-buffer
-```
-
 ## ⚙️ 配置参数详解
 
 ### 🔧 环境变量配置
@@ -415,6 +356,7 @@ curl -X POST "http://localhost:11434/v1/chat/completions" \
 | `DASHSCOPE_API_KEY`  | 阿里云百炼     | ⚠️   | [阿里云控制台](https://dashscope.console.aliyun.com/) |
 | `TENCENTDS_API_KEY`  | 腾讯云DeepSeek | ⚠️   | [腾讯云控制台](https://console.cloud.tencent.com/)    |
 | `DEEPSEEK_API_KEY`   | DeepSeek官方   | ⚠️   | [DeepSeek平台](https://platform.deepseek.com/)        |
+| `OPENROUTER_API_KEY` | OpenRouter     | ⚠️   | [OpenRouter平台](https://openrouter.ai/)              |
 
 > **⚠️ 重要**: 至少需要配置一个提供商的 API Key，系统会自动过滤不可用的提供商
 
@@ -530,15 +472,17 @@ universal-ollama-proxy/
 
 ### 📖 详细文档
 
-| 文档                    | 说明                            | 路径                                                                               |
-| ----------------------- | ------------------------------- | ---------------------------------------------------------------------------------- |
-| 🔧 **提供商配置指南**   | API密钥配置方式及模型可用性说明 | [docs/PROVIDER_CONFIGURATION.md](./docs/PROVIDER_CONFIGURATION.md)                 |
-| 📋 **模型配置规范**     | 模型配置文件格式定义和说明      | [docs/MODEL_CONFIG_SPECIFICATION.md](./docs/MODEL_CONFIG_SPECIFICATION.md)         |
-| 🔄 **配置热重载**       | 配置热重载功能详细说明          | [docs/CONFIG_HOT_RELOAD.md](./docs/CONFIG_HOT_RELOAD.md)                           |
-| 💬 **消息处理规则**     | 消息处理规则配置详细说明        | [docs/MESSAGE_PROCESSING_RULES.md](./docs/MESSAGE_PROCESSING_RULES.md)             |
-| 🚀 **消息处理快速入门** | 消息处理功能入门指南            | [docs/MESSAGE_PROCESSING_QUICK_START.md](./docs/MESSAGE_PROCESSING_QUICK_START.md) |
-| 🏗️ **构建指南**         | 源码构建和开发环境配置          | [docs/BUILD_GUIDE.md](./docs/BUILD_GUIDE.md)                                       |
-| 🤖 **自动发布指南**     | CI/CD自动化构建和发布流程       | [docs/AUTO_RELEASE_GUIDE.md](./docs/AUTO_RELEASE_GUIDE.md)                         |
+| 文档                                | 说明                                 | 路径                                                                                   |
+| ----------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- |
+| 🔧 **提供商配置指南**               | API密钥配置方式及模型可用性说明      | [docs/PROVIDER_CONFIGURATION.md](./docs/PROVIDER_CONFIGURATION.md)                     |
+| 📋 **模型配置规范**                 | 模型配置文件格式定义和说明           | [docs/MODEL_CONFIG_SPECIFICATION.md](./docs/MODEL_CONFIG_SPECIFICATION.md)             |
+| 🔄 **配置热重载**                   | 配置热重载功能详细说明               | [docs/CONFIG_HOT_RELOAD.md](./docs/CONFIG_HOT_RELOAD.md)                               |
+| 💬 **消息处理规则**                 | 消息处理规则配置详细说明             | [docs/MESSAGE_PROCESSING_RULES.md](./docs/MESSAGE_PROCESSING_RULES.md)                 |
+| 🚀 **消息处理快速入门**             | 消息处理功能入门指南                 | [docs/MESSAGE_PROCESSING_QUICK_START.md](./docs/MESSAGE_PROCESSING_QUICK_START.md)     |
+| 🛡️ **工具过滤指南**                 | 工具过滤功能配置和使用说明           | [docs/TOOL_FILTER_GUIDE.md](./docs/TOOL_FILTER_GUIDE.md)                               |
+| 🤖 **OpenRouter Anthropic工具配置** | OpenRouter Anthropic模型特殊工具配置 | [docs/OPENROUTER_ANTHROPIC_TOOL_FILTER.md](./docs/OPENROUTER_ANTHROPIC_TOOL_FILTER.md) |
+| 🏗️ **构建指南**                     | 源码构建和开发环境配置               | [docs/BUILD_GUIDE.md](./docs/BUILD_GUIDE.md)                                           |
+| 🤖 **自动发布指南**                 | CI/CD自动化构建和发布流程            | [docs/AUTO_RELEASE_GUIDE.md](./docs/AUTO_RELEASE_GUIDE.md)                             |
 
 ## 🔨 开发指令大全
 

@@ -11,6 +11,12 @@ export interface ConfigChangeEvent {
   timestamp: Date;
 }
 
+export interface ConfigDeleteEvent {
+  type: 'delete';
+  filePath: string;
+  timestamp: Date;
+}
+
 export class ConfigHotReload extends EventEmitter {
   private watchers: chokidar.FSWatcher[] = [];
   private debounceTimers: Map<string, NodeJS.Timeout> = new Map();
@@ -95,7 +101,7 @@ export class ConfigHotReload extends EventEmitter {
 
     watcher.on('unlink', changedPath => {
       if (path.extname(changedPath) === '.json') {
-        this.handleFileChange(changedPath);
+        this.handleFileDelete(changedPath);
       }
     });
 
@@ -133,6 +139,37 @@ export class ConfigHotReload extends EventEmitter {
   }
 
   /**
+   * 处理文件删除
+   */
+  private handleFileDelete(filePath: string): void {
+    logger.debug(`检测到配置文件删除: ${filePath}`);
+
+    const fileKey = `config:${filePath}`;
+
+    // 清除之前的定时器
+    if (this.debounceTimers.has(fileKey)) {
+      clearTimeout(this.debounceTimers.get(fileKey)!);
+      this.debounceTimers.delete(fileKey);
+      logger.debug(`清除删除文件的防抖定时器: ${fileKey}`);
+    }
+
+    // 设置新的防抖定时器
+    const timer = setTimeout(() => {
+      logger.info(`配置文件已删除: ${filePath}`);
+
+      const event: ConfigDeleteEvent = {
+        type: 'delete',
+        filePath,
+        timestamp: new Date(),
+      };
+
+      this.emit('configDeleted', event);
+    }, this.debounceDelay);
+
+    this.debounceTimers.set(fileKey, timer);
+  }
+
+  /**
    * 处理配置变化
    */
   private async processConfigChange(filePath: string): Promise<void> {
@@ -162,6 +199,13 @@ export class ConfigHotReload extends EventEmitter {
    */
   private async reloadJsonConfig(filePath: string): Promise<boolean> {
     try {
+      // 检查文件是否存在
+      if (!fs.existsSync(filePath)) {
+        // 文件不存在，可能已经被删除
+        logger.debug(`配置文件不存在，可能已被删除: ${path.basename(filePath)}`);
+        return false;
+      }
+
       // 重新读取配置文件
       const fileContent = fs.readFileSync(filePath, 'utf8');
       const configData = parseConfigFile(fileContent, filePath);

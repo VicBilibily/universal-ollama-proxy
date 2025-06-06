@@ -13,19 +13,20 @@ assignees: ''
 ## 🔧 当前配置
 
 - 操作系统: [例如 Windows 11, Ubuntu 20.04, macOS 12.0]
-- 程序版本: [例如 v1.0.1]
+- 程序版本: [例如 v1.0.2]
 - 使用方式: [预编译版本/源码运行/Docker]
-- AI 提供商: [火山引擎/阿里云/DeepSeek/腾讯云]
+- AI 提供商: [火山方舟引擎/阿里云百炼/DeepSeek官方/腾讯云DeepSeek/OpenRouter]
 
 ## 📋 相关配置
 
 请提供相关的配置信息（删除敏感信息）：
 
 ```env
-# 您的环境变量配置
+# 服务器配置
 PORT=11434
 LOG_LEVEL=info
-# ... 其他相关配置
+# 其他配置
+# CHAT_LOGS=false
 ```
 
 ## 🎯 期望行为

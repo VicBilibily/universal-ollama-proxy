@@ -44,6 +44,9 @@ export interface OpenAIChatRequest {
     };
   }[];
   tool_choice?: 'none' | 'auto' | 'required' | { type: 'function'; function: { name: string } };
+  reasoning?: {
+    max_tokens?: number;
+  };
 }
 
 export interface OpenAIErrorResponse {

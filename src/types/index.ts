@@ -10,4 +10,4 @@ export * from './openai';
 export * from './models';
 
 // 统一适配器类型
-export * from './unified-adapter';
+export * from './unifiedAdapter';

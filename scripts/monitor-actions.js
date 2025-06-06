@@ -238,7 +238,8 @@ async function showWorkflowStatus() {
  * 显示本地 CI/CD 状态
  */
 function showLocalStatus() {
-  log.info('\\n🏠 本地 CI/CD 状态');
+  log.info('');
+  log.info('🏠 本地 CI/CD 状态');
   log.info('-'.repeat(30));
 
   // 检查工作流文件

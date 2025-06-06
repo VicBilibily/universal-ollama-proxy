@@ -94,14 +94,19 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
         throw new Error(`配置文件格式错误: ${configFile} - 缺少 models 数组字段`);
       }
 
-      // 加载所有模型
+      // 只加载启用的模型（model_picker_enabled: true）
+      let enabledCount = 0;
       for (const modelConfig of config.models) {
-        // 使用 provider:modelId 作为唯一键
-        const uniqueKey = `${provider}:${modelConfig.id}`;
-        this.models.set(uniqueKey, modelConfig);
+        // 只加载 model_picker_enabled 为 true 的模型
+        if (modelConfig.model_picker_enabled === true) {
+          // 使用 provider:modelId 作为唯一键
+          const uniqueKey = `${provider}:${modelConfig.id}`;
+          this.models.set(uniqueKey, modelConfig);
+          enabledCount++;
+        }
       }
 
-      logger.info(`成功加载 ${provider} 提供商的 ${config.models.length} 个模型`);
+      logger.info(`成功加载 ${provider} 提供商的 ${enabledCount} 个启用模型（总共 ${config.models.length} 个模型）`);
     } catch (error) {
       logger.error(`解析 ${provider} 模型配置失败:`, error);
       throw error;
@@ -277,7 +282,13 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       const modelsPerLine = 5;
       for (let i = 0; i < providerInfo.models.length; i += modelsPerLine) {
         const modelGroup = providerInfo.models.slice(i, i + modelsPerLine);
-        const modelNames = modelGroup.map(model => model.split(':')[1]).join(', ');
+        const modelNames = modelGroup
+          .map(model => {
+            // 使用第一个冒号进行分割，允许模型名称中包含更多冒号
+            const colonIndex = model.indexOf(':');
+            return colonIndex !== -1 ? model.substring(colonIndex + 1) : model;
+          })
+          .join(', ');
         logger.info(`  ${modelNames}`);
       }
     }

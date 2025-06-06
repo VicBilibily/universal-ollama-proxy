@@ -16,6 +16,7 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
     {
       "name": "providerName",
       "displayName": "Provider Display Name",
+      "enabled": true, // 可选，设置为false可临时停用该提供商
       "baseURL": "https://api.provider.com/v1",
       "apiKey": "...", // API密钥配置
       "headers": {
@@ -26,11 +27,65 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
   ],
   "meta": {
     "version": "1.0.0",
-    "lastUpdated": "2025-06-05",
+    "lastUpdated": "2025-06-06",
     "description": "AI服务供应商配置文件"
   }
 }
 ```
+
+### 字段说明
+
+- **name**: 提供商的唯一标识符，用于内部识别
+- **displayName**: 提供商的显示名称，用于用户界面展示
+- **enabled**: 可选字段，默认为 `true`。设置为 `false`
+  可临时停用该提供商而不删除配置
+- **baseURL**: 提供商的API基础URL
+- **apiKey**: API密钥配置，支持环境变量引用、直接配置或空值
+- **headers**: 可选的自定义请求头，会与默认请求头合并
+
+## 提供商启用/禁用控制
+
+系统支持动态控制提供商的启用状态，通过 `enabled`
+字段可以临时停用提供商而不删除其配置：
+
+### 启用提供商（默认）
+
+```json
+{
+  "name": "openai",
+  "displayName": "OpenAI",
+  "enabled": true, // 明确启用
+  "baseURL": "https://api.openai.com/v1",
+  "apiKey": "${OPENAI_API_KEY}"
+}
+```
+
+当 `enabled` 字段为 `true` 或未设置时，提供商将正常初始化。
+
+### 禁用提供商
+
+```json
+{
+  "name": "openai",
+  "displayName": "OpenAI",
+  "enabled": false, // 临时禁用
+  "baseURL": "https://api.openai.com/v1",
+  "apiKey": "${OPENAI_API_KEY}"
+}
+```
+
+当 `enabled` 字段设置为 `false` 时：
+
+- 该提供商不会被初始化
+- 其模型不会出现在可用模型列表中
+- 配置信息得以保留，方便后续重新启用
+
+这个功能在以下场景中非常有用：
+
+- **临时禁用**：在维护期间暂时停用某个提供商
+- **开发测试**：在开发环境中只启用部分提供商
+- **成本控制**：临时停用付费提供商以控制成本
+- **故障排除**：逐个启用提供商来排查问题
 
 ## API密钥配置方式
 
@@ -85,16 +140,122 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
 
 这种机制确保了用户只能看到并使用那些实际可访问的模型，避免在尝试使用未授权服务时遇到错误。
 
+## 支持的提供商
+
+系统当前支持以下AI服务提供商：
+
+### 1. 火山方舟引擎 (Volcengine)
+
+- **提供商**: 字节跳动
+- **配置名**: `volcengine`
+- **环境变量**: `VOLCENGINE_API_KEY`
+- **模型配置**: `config/volcengine-models.json`
+
+```json
+{
+  "name": "volcengine",
+  "displayName": "火山方舟引擎",
+  "enabled": true,
+  "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
+  "apiKey": "${VOLCENGINE_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
+### 2. 阿里云百炼 (DashScope)
+
+- **提供商**: 阿里云
+- **配置名**: `dashscope`
+- **环境变量**: `DASHSCOPE_API_KEY`
+- **模型配置**: `config/dashscope-models.json`
+
+```json
+{
+  "name": "dashscope",
+  "displayName": "阿里云百炼",
+  "enabled": true,
+  "baseURL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "apiKey": "${DASHSCOPE_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json",
+    "X-DashScope-SSE": "enable"
+  }
+}
+```
+
+### 3. DeepSeek 官方
+
+- **提供商**: DeepSeek
+- **配置名**: `deepseek`
+- **环境变量**: `DEEPSEEK_API_KEY`
+- **模型配置**: `config/deepseek-models.json`
+
+```json
+{
+  "name": "deepseek",
+  "displayName": "DeepSeek官方",
+  "enabled": true,
+  "baseURL": "https://api.deepseek.com/v1",
+  "apiKey": "${DEEPSEEK_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
+### 4. 腾讯云 DeepSeek
+
+- **提供商**: 腾讯云
+- **配置名**: `tencentds`
+- **环境变量**: `TENCENTDS_API_KEY`
+- **模型配置**: `config/tencentds-models.json`
+
+```json
+{
+  "name": "tencentds",
+  "displayName": "腾讯云DeepSeek",
+  "enabled": true,
+  "baseURL": "https://api.lkeap.cloud.tencent.com/v1",
+  "apiKey": "${TENCENTDS_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
+### 5. OpenRouter
+
+- **提供商**: OpenRouter AI
+- **配置名**: `openrouter`
+- **环境变量**: `OPENROUTER_API_KEY`
+- **模型配置**: `config/openrouter-models.json`
+
+```json
+{
+  "name": "openrouter",
+  "displayName": "OpenRouter",
+  "enabled": true,
+  "baseURL": "https://openrouter.ai/api/v1",
+  "apiKey": "${OPENROUTER_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
 ## 提供商配置示例
 
 以下是一些常见提供商配置示例：
 
-### 环境变量方式（推荐）
+### 环境变量配置示例
 
 ```json
 {
   "name": "openai",
   "displayName": "OpenAI",
+  "enabled": true,
   "baseURL": "https://api.openai.com/v1",
   "apiKey": "${OPENAI_API_KEY}",
   "headers": {
@@ -103,18 +264,140 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
 }
 ```
 
-### 本地Ollama服务（无需认证）
+### 本地服务配置示例（无需认证）
 
 ```json
 {
   "name": "ollama",
   "displayName": "本地Ollama",
-  "baseURL": "http://localhost:11434/api",
+  "enabled": true,
+  "baseURL": "http://localhost:11434/v1",
   "apiKey": "",
   "headers": {
     "Content-Type": "application/json"
   }
 }
+```
+
+### 临时禁用的提供商示例
+
+```json
+{
+  "name": "expensive_provider",
+  "displayName": "昂贵的AI服务",
+  "enabled": false, // 临时禁用以控制成本
+  "baseURL": "https://api.expensive-ai.com/v1",
+  "apiKey": "${EXPENSIVE_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
+## 环境变量设置指南
+
+### Windows PowerShell
+
+```powershell
+# 设置环境变量
+$env:OPENAI_API_KEY = "sk-your-openai-key"
+$env:DEEPSEEK_API_KEY = "sk-your-deepseek-key"
+$env:DASHSCOPE_API_KEY = "sk-your-dashscope-key"
+
+# 验证环境变量
+echo $env:OPENAI_API_KEY
+```
+
+### Windows CMD
+
+```cmd
+set OPENAI_API_KEY=sk-your-openai-key
+set DEEPSEEK_API_KEY=sk-your-deepseek-key
+set DASHSCOPE_API_KEY=sk-your-dashscope-key
+```
+
+### Linux/macOS
+
+```bash
+# 临时设置
+export OPENAI_API_KEY="sk-your-openai-key"
+export DEEPSEEK_API_KEY="sk-your-deepseek-key"
+export DASHSCOPE_API_KEY="sk-your-dashscope-key"
+
+# 永久设置（添加到 ~/.bashrc 或 ~/.zshrc）
+echo 'export OPENAI_API_KEY="sk-your-openai-key"' >> ~/.bashrc
+```
+
+### Docker 环境
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  universal-ollama-proxy:
+    image: universal-ollama-proxy
+    environment:
+      - OPENAI_API_KEY=sk-your-openai-key
+      - DEEPSEEK_API_KEY=sk-your-deepseek-key
+      - DASHSCOPE_API_KEY=sk-your-dashscope-key
+```
+
+## 故障排除
+
+### 常见问题诊断
+
+#### 1. 提供商模型不显示
+
+**症状**: 某个提供商的模型没有出现在可用模型列表中
+
+**可能原因及解决方案**:
+
+- **API密钥未配置**: 检查环境变量是否正确设置
+- **提供商被禁用**: 确认配置中 `enabled` 字段不是 `false`
+- **模型配置文件缺失**: 确认 `config/{provider-name}-models.json` 文件存在
+- **网络连接问题**: 检查提供商的 `baseURL` 是否可访问
+
+#### 2. 环境变量未生效
+
+**症状**: 使用 `${ENV_VAR}` 格式但提示API密钥无效
+
+**解决步骤**:
+
+1. 确认环境变量名称拼写正确
+2. 重启应用以加载新的环境变量
+3. 使用 `echo $ENV_VAR` (Linux/macOS) 或 `echo %ENV_VAR%`
+   (Windows) 验证环境变量值
+
+#### 3. 提供商初始化失败
+
+**症状**: 日志显示提供商初始化错误
+
+**检查步骤**:
+
+1. 验证 `baseURL` 格式是否正确
+2. 检查API密钥格式是否符合提供商要求
+3. 确认网络防火墙没有阻止访问
+4. 查看详细错误日志获取更多信息
+
+### 日志检查
+
+查看应用日志以获取详细的错误信息：
+
+```bash
+# 查看最新日志
+tail -f logs/app.log
+
+# 查看特定提供商的日志
+grep "provider_name" logs/app.log
+```
+
+### 配置验证
+
+可以使用以下方法验证配置文件格式：
+
+```bash
+# 验证JSON格式
+node -e "console.log(JSON.parse(require('fs').readFileSync('config/unified-providers.json', 'utf8')))"
 ```
 
 ## 配置更新与热重载
@@ -130,19 +413,93 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
 
 ## 故障排除
 
-如果某个提供商的模型没有出现在可用模型列表中，请检查以下几点：
+### 配置最佳实践
 
-1. 确认API密钥配置正确
-2. 如果使用环境变量，确认环境变量已正确设置
-3. 检查应用日志，查找可能的API密钥验证错误
-4. 确认该提供商的模型配置文件（`config/{provider-name}-models.json`）存在且格式正确
+#### 开发环境配置示例
+
+```json
+{
+  "providers": [
+    {
+      "name": "local_ollama",
+      "displayName": "本地测试",
+      "enabled": true,
+      "baseURL": "http://localhost:11434/v1",
+      "apiKey": ""
+    },
+    {
+      "name": "openai",
+      "displayName": "OpenAI",
+      "enabled": false, // 开发时禁用付费服务
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "${OPENAI_API_KEY}"
+    }
+  ]
+}
+```
+
+#### 生产环境配置示例
+
+```json
+{
+  "providers": [
+    {
+      "name": "volcengine",
+      "displayName": "火山方舟引擎",
+      "enabled": true,
+      "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
+      "apiKey": "${VOLCENGINE_API_KEY}"
+    },
+    {
+      "name": "dashscope",
+      "displayName": "阿里云百炼",
+      "enabled": true,
+      "baseURL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "${DASHSCOPE_API_KEY}",
+      "headers": {
+        "X-DashScope-SSE": "enable"
+      }
+    }
+  ]
+}
+```
 
 ## 安全最佳实践
 
-为确保API密钥的安全，建议遵循以下最佳实践：
+### API密钥安全
 
-1. 始终优先使用环境变量方式存储API密钥
-2. 避免将实际API密钥提交到版本控制系统
-3. 在生产环境中，考虑使用密钥管理服务
-4. 定期轮换API密钥
-5. 对API密钥设置适当的权限范围，遵循最小权限原则
+1. **使用环境变量**: 始终优先使用环境变量方式存储API密钥
+2. **避免硬编码**: 不要将实际API密钥写入配置文件
+3. **版本控制排除**: 确保 `.env` 文件在 `.gitignore` 中
+4. **权限最小化**: 为API密钥设置最小必要权限
+5. **定期轮换**: 定期更新和轮换API密钥
+
+### 生产环境建议
+
+1. **密钥管理服务**: 考虑使用 AWS Secrets Manager、Azure Key Vault 等
+2. **访问控制**: 限制配置文件的读取权限
+3. **监控审计**: 监控API密钥的使用情况
+4. **备份恢复**: 建立配置备份和恢复机制
+
+### 配置文件安全
+
+```bash
+# 设置合适的文件权限
+chmod 600 config/unified-providers.json
+
+# 只允许应用用户读取
+chown app:app config/unified-providers.json
+```
+
+## 相关文档
+
+- [提供商启用/禁用功能详细说明](./PROVIDER_ENABLED_TOGGLE.md)
+- [工具过滤配置指南](./TOOL_FILTER_GUIDE.md)
+- [环境设置指南](./ENVIRONMENT_SETUP.md)
+- [配置热重载说明](./CONFIG_HOT_RELOAD.md)
+
+## 版本兼容性
+
+- **v1.0.0+**: 支持基本提供商配置
+- **v1.0.2+**: 支持 `enabled` 字段进行提供商启用/禁用控制
+- **当前版本**: 支持所有上述功能

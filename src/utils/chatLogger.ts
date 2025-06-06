@@ -21,7 +21,9 @@ interface ChatRequestLog {
   timestamp: string;
   model: string;
   provider: string;
+  originalRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams; // 转换前的原始请求
   openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams; // 转换后的 OpenAI 请求
+  rawResponse?: any; // API 返回的原始响应数据（解析前）
   response?: {
     id?: string;
     choices?: any[];
@@ -146,9 +148,15 @@ class ChatLogger {
 
   /**
    * 记录聊天请求开始
+   * @param requestId 请求ID
+   * @param originalRequest 转换前的原始请求
+   * @param openaiRequest 转换后的 OpenAI 请求
+   * @param modelConfig 模型配置
+   * @param clientInfo 客户端信息（可选）
    */
   async logRequestStart(
     requestId: string,
+    originalRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams,
     openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams,
     modelConfig: ModelConfig,
     clientInfo?: { userAgent?: string; ip?: string }
@@ -162,6 +170,7 @@ class ChatLogger {
       timestamp: startTime,
       model: openaiRequest.model, // 使用 OpenAI 请求中的模型名称
       provider: this.extractProviderFromModelId(modelConfig.id),
+      originalRequest: JSON.parse(JSON.stringify(originalRequest)), // 深拷贝原始请求
       openaiRequest: JSON.parse(JSON.stringify(openaiRequest)), // 深拷贝 OpenAI 请求
       metadata: {
         startTime,
@@ -214,7 +223,8 @@ class ChatLogger {
     responseTime: number,
     isStream: boolean,
     streamChunkCount?: number,
-    error?: any
+    error?: any,
+    rawResponse?: any // 新增：API 返回的原始响应数据
   ): Promise<void> {
     if (!this.config.enabled) return;
 
@@ -222,6 +232,11 @@ class ChatLogger {
     if (!logEntry) return;
 
     const endTime = new Date().toISOString();
+
+    // 记录原始响应数据
+    if (rawResponse) {
+      logEntry.rawResponse = JSON.parse(JSON.stringify(rawResponse)); // 深拷贝原始响应
+    }
 
     // 更新响应信息
     if (!logEntry.response) {
@@ -284,14 +299,16 @@ class ChatLogger {
       const logFileName = `${logEntry.requestId}.json`;
       const logFilePath = join(this.config.logDir, logFileName);
 
-      // 构造完整的日志对象，突出显示 provider 和 openaiRequest
+      // 构造完整的日志对象，突出显示 provider、originalRequest 和 openaiRequest
       const completeLog = {
         phase: 'COMPLETE',
         requestId: logEntry.requestId,
         timestamp: logEntry.timestamp,
         provider: logEntry.provider, // 突出显示 provider
         model: logEntry.model,
+        originalRequest: logEntry.originalRequest, // 添加转换前的原始请求
         openaiRequest: logEntry.openaiRequest, // 突出显示转换后的 OpenAI 请求
+        rawResponse: logEntry.rawResponse, // 添加 API 返回的原始响应数据
         response: logEntry.response,
         metadata: logEntry.metadata,
         summary: logEntry.summary,
@@ -329,7 +346,8 @@ class ChatLogger {
           now - new Date(logEntry.timestamp).getTime(),
           logEntry.openaiRequest?.stream || false,
           logEntry.response?.streamChunkCount,
-          { message: '请求超时', code: 'TIMEOUT' }
+          { message: '请求超时', code: 'TIMEOUT' },
+          null // 超时情况下没有原始响应
         );
       }
     }

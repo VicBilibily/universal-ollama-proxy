@@ -227,7 +227,7 @@ jobs:
             cat > release_body.md << 'EOF'
           # 🚀 Universal Ollama Proxy ${{ steps.get_version.outputs.version }} 发布
 
-          **统一的 AI 服务代理** - 专为 GitHub Copilot Chat 的 Ollama 接入优化，提供完整的 OpenAI 兼容接口。
+          **统一的 AI 服务代理** - 专为 GitHub Copilot Chat 的 Ollama 接入优化，提供其调用所使用到的兼容接口。
 
           ## ✨ 主要特性
 

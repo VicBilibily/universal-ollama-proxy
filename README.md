@@ -10,7 +10,7 @@ SDK 的统一适配器架构**，将多个 AI 服务提供商统一为 Ollama �
 Copilot Chat 的 Ollama 接入优化**。
 
 > **🎯 设计目的**：本项目专为兼容 GitHub Copilot
-> Chat 的 Ollama 接入而设计，同时提供完整的 OpenAI 兼容接口。
+> Chat 的 Ollama 接入而设计，提供其调用所使用到的兼容接口。
 
 ## ✨ 核心特性
 

@@ -11,18 +11,9 @@ export interface ToolFilterRule {
   /** 是否启用此规则 */
   enabled: boolean;
   /** 规则类型 (可选) */
-  type?: 'blacklist' | 'whitelist' | 'pattern' | 'validation';
-  /** 规则条件 - 可以是条件数组或条件对象 */
-  conditions:
-    | ToolFilterCondition[]
-    | {
-        /** 应用的提供商，空表示所有提供商 */
-        providers?: string[];
-        /** 应用的模型，空表示所有模型 */
-        models?: string[];
-        /** 匹配工具的正则表达式 */
-        toolPattern?: string;
-      };
+  type?: 'blacklist' | 'whitelist' | 'pattern' | 'validation' | 'transform';
+  /** 规则条件 - 支持多种条件组合模式 */
+  conditions: ToolFilterConditionGroup;
   /** 动作配置 */
   actions?: {
     /** 动作类型 */
@@ -37,25 +28,56 @@ export interface ToolFilterRule {
 }
 
 /**
+ * 工具过滤条件组 - 支持复杂的条件组合逻辑
+ */
+export interface ToolFilterConditionGroup {
+  /** 逻辑操作符，默认为 'AND' */
+  operator?: 'AND' | 'OR' | 'NOT';
+  /** 子条件组合 */
+  conditions?: Array<ToolFilterConditionGroup | ToolFilterCondition>;
+  /** 提供商条件 */
+  providers?: string[];
+  /** 模型条件 */
+  models?: string[];
+  /** 工具名称模式条件 */
+  toolPattern?: string;
+  /** 字段条件 */
+  field?: string;
+  /** 字段操作符 */
+  fieldOperator?: ToolFilterOperator;
+  /** 字段比较值 */
+  fieldValue?: any;
+  /** 正则表达式（当fieldOperator为matches时使用） */
+  regex?: string;
+}
+
+/**
+ * 工具过滤操作符
+ */
+export type ToolFilterOperator =
+  | 'equals'
+  | 'contains'
+  | 'matches'
+  | 'not_equals'
+  | 'not_contains'
+  | 'exists'
+  | 'not_exists'
+  | 'not_matches'
+  | 'greater_than'
+  | 'less_than'
+  | 'greater_than_or_equal'
+  | 'less_than_or_equal'
+  | 'in'
+  | 'not_in';
+
+/**
  * 工具过滤条件
  */
 export interface ToolFilterCondition {
   /** 字段路径，支持点号分隔的嵌套路径 */
   field: string;
   /** 操作符 */
-  operator:
-    | 'equals'
-    | 'contains'
-    | 'matches'
-    | 'not_equals'
-    | 'not_contains'
-    | 'exists'
-    | 'not_exists'
-    | 'not_matches'
-    | 'greater_than'
-    | 'less_than'
-    | 'greater_than_or_equal'
-    | 'less_than_or_equal';
+  operator: ToolFilterOperator;
   /** 比较值 */
   value?: any;
   /** 正则表达式（当operator为matches时使用） */

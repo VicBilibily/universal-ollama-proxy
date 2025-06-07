@@ -1,6 +1,12 @@
 // 工具过滤服务
 import { ModelConfig } from '../types';
-import { ToolFilterCondition, ToolFilterConfig, ToolFilterResult, ToolFilterRule } from '../types/toolFilter';
+import {
+  ToolFilterCondition,
+  ToolFilterConditionGroup,
+  ToolFilterConfig,
+  ToolFilterResult,
+  ToolFilterRule,
+} from '../types/toolFilter';
 import { logger } from '../utils';
 
 /**
@@ -163,7 +169,7 @@ export class ToolFilterService {
           toolStructure: JSON.stringify(currentTool, null, 2),
         });
 
-        const ruleResult = this.evaluateRule(rule, currentTool, i);
+        const ruleResult = this.evaluateRule(rule, currentTool, i, providerName, modelConfig.id);
 
         logger.debug(`规则 ${rule.name} 评估结果`, {
           matched: ruleResult.matched,
@@ -320,79 +326,160 @@ export class ToolFilterService {
    * 检查规则是否适用于当前提供商和模型
    */
   private isRuleApplicable(rule: ToolFilterRule, providerName: string, modelId: string): boolean {
-    // 从条件格式中获取providers和models限制
-    let providers: string[] | undefined;
-    let models: string[] | undefined;
-
-    if (!Array.isArray(rule.conditions) && typeof rule.conditions === 'object') {
-      // 从conditions对象中获取
-      providers = rule.conditions.providers;
-      models = rule.conditions.models;
-    }
-
-    // 检查提供商限制
-    if (providers && providers.length > 0) {
-      if (!providers.includes(providerName)) {
-        return false;
-      }
-    }
-
-    // 检查模型限制
-    if (models && models.length > 0) {
-      if (
-        !models.some((pattern: string) => {
-          // 支持通配符模式，例如 "anthropic/*"
-          if (pattern.endsWith('/*')) {
-            const prefix = pattern.substring(0, pattern.length - 2);
-            return modelId.startsWith(prefix);
-          }
-          return modelId.includes(pattern);
-        })
-      ) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.evaluateConditionGroup(rule.conditions, null, -1, providerName, modelId).applicable;
   }
 
   /**
    * 评估单个规则
    */
-  private evaluateRule(rule: ToolFilterRule, tool: any, toolIndex: number): { matched: boolean; reason?: string } {
-    // 检查条件格式
-    if (!Array.isArray(rule.conditions) && typeof rule.conditions === 'object') {
-      // 条件对象格式
-      const conditions = rule.conditions as { providers?: string[]; models?: string[]; toolPattern?: string };
-
-      // 检查工具名称是否匹配模式
-      if (conditions.toolPattern) {
-        const toolName = tool.function?.name || '';
-        const regex = new RegExp(conditions.toolPattern);
-        if (!regex.test(toolName)) {
-          return { matched: false, reason: `工具名称不匹配模式: ${conditions.toolPattern}` };
-        }
-      }
-
-      // 条件已经通过providerName和modelId在isRuleApplicable中检查过了
-      return { matched: true };
-    } else {
-      // 条件数组格式
-      // 检查所有条件（AND逻辑）
-      for (const condition of rule.conditions as ToolFilterCondition[]) {
-        const conditionResult = this.evaluateCondition(condition, tool, toolIndex);
-        if (!conditionResult.matched) {
-          return { matched: false, reason: conditionResult.reason };
-        }
-      }
-      return { matched: true };
-    }
+  private evaluateRule(
+    rule: ToolFilterRule,
+    tool: any,
+    toolIndex: number,
+    providerName: string,
+    modelId: string
+  ): { matched: boolean; reason?: string } {
+    return this.evaluateConditionGroup(rule.conditions, tool, toolIndex, providerName, modelId);
   }
 
   /**
-   * 评估单个条件
+   * 评估条件组
    */
-  private evaluateCondition(
+  private evaluateConditionGroup(
+    conditionGroup: ToolFilterConditionGroup,
+    tool: any | null,
+    toolIndex: number,
+    providerName: string,
+    modelId: string
+  ): { matched: boolean; applicable: boolean; reason?: string } {
+    const operator = conditionGroup.operator || 'AND';
+
+    // 评估直接条件
+    const directResults: boolean[] = [];
+
+    // 评估提供商条件
+    if (conditionGroup.providers && conditionGroup.providers.length > 0) {
+      const providerMatch = conditionGroup.providers.includes(providerName);
+      directResults.push(providerMatch);
+      if (!providerMatch && operator === 'AND') {
+        return { matched: false, applicable: false, reason: `提供商 ${providerName} 不在允许列表中` };
+      }
+    }
+
+    // 评估模型条件
+    if (conditionGroup.models && conditionGroup.models.length > 0) {
+      const modelMatch = conditionGroup.models.some((pattern: string) => {
+        // 支持通配符模式，例如 "anthropic/*"
+        if (pattern.endsWith('/*')) {
+          const prefix = pattern.substring(0, pattern.length - 2);
+          return modelId.startsWith(prefix);
+        }
+        return modelId.includes(pattern);
+      });
+      directResults.push(modelMatch);
+      if (!modelMatch && operator === 'AND') {
+        return { matched: false, applicable: false, reason: `模型 ${modelId} 不匹配任何模式` };
+      }
+    }
+
+    // 如果没有工具上下文，只能评估提供商和模型条件
+    if (tool === null) {
+      if (directResults.length === 0) {
+        return { matched: true, applicable: true }; // 没有限制条件，适用于所有
+      }
+      const applicable = operator === 'OR' ? directResults.some(r => r) : directResults.every(r => r);
+      return { matched: applicable, applicable };
+    }
+
+    // 评估工具模式条件
+    if (conditionGroup.toolPattern) {
+      const toolName = tool.function?.name || '';
+      const regex = new RegExp(conditionGroup.toolPattern);
+      const patternMatch = regex.test(toolName);
+      directResults.push(patternMatch);
+      if (!patternMatch && operator === 'AND') {
+        return {
+          matched: false,
+          applicable: true,
+          reason: `工具名称 ${toolName} 不匹配模式: ${conditionGroup.toolPattern}`,
+        };
+      }
+    }
+
+    // 评估字段条件
+    if (conditionGroup.field && conditionGroup.fieldOperator) {
+      const fieldResult = this.evaluateFieldCondition(
+        {
+          field: conditionGroup.field,
+          operator: conditionGroup.fieldOperator,
+          value: conditionGroup.fieldValue,
+          regex: conditionGroup.regex,
+        },
+        tool,
+        toolIndex
+      );
+      directResults.push(fieldResult.matched);
+      if (!fieldResult.matched && operator === 'AND') {
+        return { matched: false, applicable: true, reason: fieldResult.reason };
+      }
+    }
+
+    // 评估子条件组
+    const subResults: boolean[] = [];
+    if (conditionGroup.conditions && conditionGroup.conditions.length > 0) {
+      for (const subCondition of conditionGroup.conditions) {
+        let subResult: { matched: boolean; applicable: boolean; reason?: string };
+
+        if ('field' in subCondition) {
+          // 这是一个字段条件
+          const fieldResult = this.evaluateFieldCondition(subCondition as ToolFilterCondition, tool, toolIndex);
+          subResult = { matched: fieldResult.matched, applicable: true, reason: fieldResult.reason };
+        } else {
+          // 这是一个条件组
+          subResult = this.evaluateConditionGroup(
+            subCondition as ToolFilterConditionGroup,
+            tool,
+            toolIndex,
+            providerName,
+            modelId
+          );
+        }
+
+        subResults.push(subResult.matched);
+        if (!subResult.matched && operator === 'AND') {
+          return { matched: false, applicable: subResult.applicable, reason: subResult.reason };
+        }
+      }
+    }
+
+    // 合并所有结果
+    const allResults = [...directResults, ...subResults];
+
+    if (allResults.length === 0) {
+      return { matched: true, applicable: true }; // 没有条件，默认匹配
+    }
+
+    let finalResult: boolean;
+    switch (operator) {
+      case 'OR':
+        finalResult = allResults.some(r => r);
+        break;
+      case 'NOT':
+        finalResult = !allResults.every(r => r);
+        break;
+      case 'AND':
+      default:
+        finalResult = allResults.every(r => r);
+        break;
+    }
+
+    return { matched: finalResult, applicable: true };
+  }
+
+  /**
+   * 评估字段条件
+   */
+  private evaluateFieldCondition(
     condition: ToolFilterCondition,
     tool: any,
     toolIndex: number
@@ -443,6 +530,56 @@ export class ToolFilterService {
           return { matched: !fieldValue.includes(condition.value) };
         }
         return { matched: true }; // 如果不是字符串或数组，认为不包含
+
+      case 'matches':
+        if (typeof fieldValue === 'string') {
+          const regex = new RegExp(condition.regex || condition.value);
+          return { matched: regex.test(fieldValue) };
+        }
+        return { matched: false, reason: '字段类型不支持 matches 操作' };
+
+      case 'not_matches':
+        if (typeof fieldValue === 'string') {
+          const regex = new RegExp(condition.regex || condition.value);
+          return { matched: !regex.test(fieldValue) };
+        }
+        return { matched: true }; // 如果不是字符串，认为不匹配
+
+      case 'greater_than':
+        if (typeof fieldValue === 'number' && typeof condition.value === 'number') {
+          return { matched: fieldValue > condition.value };
+        }
+        return { matched: false, reason: '字段类型不支持 greater_than 操作' };
+
+      case 'less_than':
+        if (typeof fieldValue === 'number' && typeof condition.value === 'number') {
+          return { matched: fieldValue < condition.value };
+        }
+        return { matched: false, reason: '字段类型不支持 less_than 操作' };
+
+      case 'greater_than_or_equal':
+        if (typeof fieldValue === 'number' && typeof condition.value === 'number') {
+          return { matched: fieldValue >= condition.value };
+        }
+        return { matched: false, reason: '字段类型不支持 greater_than_or_equal 操作' };
+
+      case 'less_than_or_equal':
+        if (typeof fieldValue === 'number' && typeof condition.value === 'number') {
+          return { matched: fieldValue <= condition.value };
+        }
+        return { matched: false, reason: '字段类型不支持 less_than_or_equal 操作' };
+
+      case 'in':
+        if (Array.isArray(condition.value)) {
+          return { matched: condition.value.includes(fieldValue) };
+        }
+        return { matched: false, reason: 'in 操作符需要数组类型的 value' };
+
+      case 'not_in':
+        if (Array.isArray(condition.value)) {
+          return { matched: !condition.value.includes(fieldValue) };
+        }
+        return { matched: true }; // 如果value不是数组，认为不在列表中
 
       default:
         return { matched: false, reason: `未知的操作符: ${condition.operator}` };

@@ -7,14 +7,14 @@
       "name": "complete_missing_parameters",
       "description": "当工具的 function.parameters 不存在时，补全为空参数对象 (仅适用于 OpenRouter 的 Anthropic 模型)",
       "enabled": true,
-      "providers": ["openrouter"],
-      "models": ["anthropic/*"],
-      "conditions": [
-        {
-          "field": "function.parameters",
-          "operator": "not_exists"
-        }
-      ],
+      "type": "transform",
+      "conditions": {
+        "operator": "AND",
+        "providers": ["openrouter"],
+        "models": ["anthropic/*"],
+        "field": "function.parameters",
+        "fieldOperator": "not_exists"
+      },
       "actions": {
         "type": "transform",
         "transform": "complete_parameters"

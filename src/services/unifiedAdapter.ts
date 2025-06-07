@@ -114,6 +114,9 @@ export class UnifiedAdapterService {
       const startTime = Date.now();
       let modelConfig: ModelConfig | null = null;
 
+      // 在任何处理之前，保存原始请求的深拷贝
+      const originalRequest = JSON.parse(JSON.stringify(request));
+
       try {
         // 获取模型配置
         modelConfig = await this.modelDiscovery.getModelConfig(request.model);
@@ -127,9 +130,9 @@ export class UnifiedAdapterService {
         // 准备OpenAI请求参数
         const openaiRequest = await this.prepareOpenAIRequest(request, modelConfig);
 
-        // 记录详细请求日志（如果启用）
+        // 记录详细请求日志（如果启用），使用真正的原始请求
         if (chatLogger.isEnabled()) {
-          await chatLogger.logRequestStart(requestId, request, openaiRequest, modelConfig);
+          await chatLogger.logRequestStart(requestId, originalRequest, openaiRequest, modelConfig);
         }
 
         if (request.stream) {

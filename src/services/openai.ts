@@ -46,24 +46,11 @@ export class OpenAICompatService {
       }
 
       // 构建 OpenAI SDK 兼容的请求参数
-      const chatRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
+      const chatRequest = {
         ...request,
         model: request.model,
-        messages: request.messages as any, // 使用类型断言处理复杂的消息类型
-        ...(request.temperature !== undefined && { temperature: request.temperature }),
-        ...(request.max_tokens !== undefined && { max_tokens: request.max_tokens }),
-        ...(request.top_p !== undefined && { top_p: request.top_p }),
-        ...(request.frequency_penalty !== undefined && { frequency_penalty: request.frequency_penalty }),
-        ...(request.presence_penalty !== undefined && { presence_penalty: request.presence_penalty }),
-        ...(request.stop !== undefined && { stop: request.stop }),
-        ...(request.user !== undefined && { user: request.user }),
-        ...(request.functions !== undefined && { functions: request.functions as any }),
-        ...(request.function_call !== undefined && { function_call: request.function_call as any }),
-        ...(request.tools !== undefined && { tools: request.tools as any }),
-        ...(request.tool_choice !== undefined && { tool_choice: request.tool_choice as any }),
-        ...(request.reasoning !== undefined && { reasoning: request.reasoning as any }),
         stream: request.stream || false,
-      };
+      } as OpenAI.Chat.Completions.ChatCompletionCreateParams;
 
       // 通过统一适配器处理请求，直接返回结果
       return await this.unifiedAdapter.chat(chatRequest);

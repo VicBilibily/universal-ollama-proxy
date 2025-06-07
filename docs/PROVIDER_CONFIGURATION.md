@@ -365,8 +365,10 @@ services:
 
 1. 确认环境变量名称拼写正确
 2. 重启应用以加载新的环境变量
-3. 使用 `echo $ENV_VAR` (Linux/macOS) 或 `echo %ENV_VAR%`
-   (Windows) 验证环境变量值
+3. 运行配置检查验证环境变量
+   ```bash
+   npm run check
+   ```
 
 #### 3. 提供商初始化失败
 
@@ -381,23 +383,26 @@ services:
 
 ### 日志检查
 
-查看应用日志以获取详细的错误信息：
+运行系统检查查看详细的错误信息：
 
 ```bash
-# 查看最新日志
-tail -f logs/app.log
+# 运行完整系统诊断
+npm run check
 
-# 查看特定提供商的日志
-grep "provider_name" logs/app.log
+# 启用详细调试日志
+LOG_LEVEL=debug npm run dev
 ```
 
 ### 配置验证
 
-可以使用以下方法验证配置文件格式：
+运行配置验证命令验证配置文件格式：
 
 ```bash
-# 验证JSON格式
-node -e "console.log(JSON.parse(require('fs').readFileSync('config/unified-providers.json', 'utf8')))"
+# 运行完整配置验证
+npm run check
+
+# 验证配置文件格式
+npm run check
 ```
 
 ## 配置更新与热重载
@@ -494,7 +499,7 @@ chown app:app config/unified-providers.json
 ## 相关文档
 
 - [提供商启用/禁用功能详细说明](./PROVIDER_ENABLED_TOGGLE.md)
-- [工具过滤配置指南](./TOOL_FILTER_GUIDE.md)
+- [工具修复配置指南](./TOOL_REPAIR_GUIDE.md)
 - [环境设置指南](./ENVIRONMENT_SETUP.md)
 - [配置热重载说明](./CONFIG_HOT_RELOAD.md)
 

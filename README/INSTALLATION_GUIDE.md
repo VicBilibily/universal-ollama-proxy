@@ -83,7 +83,9 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 
 #### 4️⃣ 验证运行
 
-服务启动后访问：
+服务启动后，可以通过以下方式验证：
+
+**验证服务运行状态：**
 
 - **健康检查**: http://localhost:11434
 - **模型列表**: http://localhost:11434/api/tags
@@ -166,7 +168,16 @@ npm start
 
 ### 🔍 验证安装
 
-服务启动后，访问以下端点验证：
+服务启动后，可以通过以下方式验证：
+
+**方式一：使用内置检查命令**
+
+```bash
+# 运行服务状态检查
+npm run check
+```
+
+**方式二：直接访问服务端点**
 
 - **健康检查**: http://localhost:11434
 - **模型列表**: http://localhost:11434/api/tags
@@ -256,23 +267,6 @@ chmod +x universal-ollama-proxy-*
 # Windows 可能被安全软件拦截，请添加信任
 ```
 
-### 端口占用问题
-
-**问题**: 默认端口 11434 被占用
-
-**解决方案**:
-
-```bash
-# 检查端口占用
-# Windows
-netstat -ano | findstr :11434
-# Linux/macOS
-lsof -i :11434
-
-# 修改 .env 文件中的端口配置
-PORT=12345
-```
-
 ---
 
 ## 📚 相关文档
@@ -281,6 +275,4 @@ PORT=12345
 - [详细特性说明](./FEATURES.md)
 - [支持的模型](./SUPPORTED_MODELS.md)
 - [配置参数详解](./CONFIGURATION.md)
-- [API 接口文档](./API_REFERENCE.md)
 - [开发指南](./DEVELOPMENT.md)
-- [故障排除](./TROUBLESHOOTING.md)

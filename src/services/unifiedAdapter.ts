@@ -1,13 +1,12 @@
 import { OpenAI } from 'openai';
 import { ModelConfig } from '../types';
-import { ToolFilterConfig } from '../types/toolFilter';
 import { UnifiedAdapterConfig, UnifiedProvider } from '../types/unifiedAdapter';
 import { logger, OllamaError } from '../utils';
 import { chatLogger } from '../utils/chatLogger';
 import { processMessages } from '../utils/messageProcessor';
 import { RequestQueue } from '../utils/requestQueue';
 import { ModelDiscoveryService } from './modelDiscovery';
-import { ToolFilterService } from './toolFilter';
+import { ToolRepairService } from './toolRepair';
 
 /**
  * 统一适配器服务类
@@ -18,31 +17,15 @@ export class UnifiedAdapterService {
   private modelDiscovery: ModelDiscoveryService;
   private config: UnifiedAdapterConfig;
   private requestQueue: RequestQueue;
-  private toolFilterService: ToolFilterService;
+  private toolRepairService: ToolRepairService;
 
-  constructor(
-    modelDiscovery: ModelDiscoveryService,
-    config: UnifiedAdapterConfig,
-    toolFilterConfig?: ToolFilterConfig
-  ) {
+  constructor(modelDiscovery: ModelDiscoveryService, config: UnifiedAdapterConfig) {
     this.modelDiscovery = modelDiscovery;
     this.config = config;
     this.requestQueue = new RequestQueue();
 
-    // 初始化工具过滤服务
-    const defaultToolFilterConfig: ToolFilterConfig = {
-      enabled: true,
-      globalIgnore: false,
-      rules: [],
-      defaultAction: 'allow',
-      logLevel: 'warn',
-      performance: {
-        enableCache: true,
-        cacheExpiration: 300,
-        maxCacheEntries: 1000,
-      },
-    };
-    this.toolFilterService = new ToolFilterService(toolFilterConfig || defaultToolFilterConfig);
+    // 初始化工具修复服务（使用内部硬编码配置）
+    this.toolRepairService = new ToolRepairService();
 
     this.initializeProviders();
   }
@@ -326,63 +309,63 @@ export class UnifiedAdapterService {
       processedMessages = processMessages(request.messages as any);
     }
 
-    // 过滤工具
-    let filteredTools = request.tools;
+    // 修复工具
+    let repairedTools = request.tools;
     if (request.tools && request.tools.length > 0) {
       const providerName = this.extractProviderFromModel(request.model);
 
       try {
-        // 尝试使用工具过滤服务
-        const filterResult = await this.toolFilterService.filterTools(request.tools, modelConfig, providerName);
+        // 尝试使用工具修复服务
+        const repairResult = await this.toolRepairService.repairTools(request.tools, modelConfig, providerName);
 
-        // 记录过滤结果
-        if (filterResult.warnings.length > 0) {
-          logger.warn('工具过滤警告', {
+        // 记录修复结果
+        if (repairResult.warnings.length > 0) {
+          logger.warn('工具修复警告', {
             model: request.model,
-            warnings: filterResult.warnings,
-            triggeredRules: filterResult.triggeredRules.map(r => r.name),
+            warnings: repairResult.warnings,
+            triggeredRules: repairResult.triggeredRules,
           });
         }
 
-        if (filterResult.errors.length > 0) {
-          logger.error('工具过滤错误', {
+        if (repairResult.errors.length > 0) {
+          logger.error('工具修复错误', {
             model: request.model,
-            errors: filterResult.errors,
-            triggeredRules: filterResult.triggeredRules.map(r => r.name),
+            errors: repairResult.errors,
+            triggeredRules: repairResult.triggeredRules,
           });
         }
 
-        if (filterResult.removedTools.length > 0) {
+        if (repairResult.removedTools.length > 0) {
           logger.info('已移除的工具', {
             model: request.model,
-            removedCount: filterResult.removedTools.length,
-            removedTools: filterResult.removedTools.map(t => t.function?.name || 'unnamed'),
+            removedCount: repairResult.removedTools.length,
+            removedTools: repairResult.removedTools.map((t: any) => t.function?.name || 'unnamed'),
           });
         }
 
         // 如果不允许使用工具，抛出错误
-        if (!filterResult.allowed) {
-          throw new OllamaError(`工具过滤失败: ${filterResult.errors.join(', ')}`, 400);
+        if (!repairResult.allowed) {
+          throw new OllamaError(`工具修复失败: ${repairResult.errors.join(', ')}`, 400);
         }
 
-        filteredTools = filterResult.filteredTools.length > 0 ? filterResult.filteredTools : undefined;
+        repairedTools = repairResult.repairedTools.length > 0 ? repairResult.repairedTools : undefined;
       } catch (error) {
-        // 如果工具过滤服务出错，回退到使用原始工具
-        logger.warn('工具过滤服务出错，使用原始工具', {
+        // 如果工具修复服务出错，回退到使用原始工具
+        logger.warn('工具修复服务出错，使用原始工具', {
           model: request.model,
           error: error instanceof Error ? error.message : String(error),
           toolCount: request.tools.length,
         });
-        filteredTools = request.tools.length > 0 ? request.tools : undefined;
+        repairedTools = request.tools.length > 0 ? request.tools : undefined;
       }
     }
 
     // 记录最终的工具格式以便调试
-    if (filteredTools && filteredTools.length > 0) {
+    if (repairedTools && repairedTools.length > 0) {
       logger.debug('最终发送给 OpenAI API 的工具格式', {
         model: request.model,
-        toolsCount: filteredTools.length,
-        tools: filteredTools.map(tool => ({
+        toolsCount: repairedTools.length,
+        tools: repairedTools.map(tool => ({
           type: tool.type,
           functionName: tool.function?.name,
           hasParameters: !!tool.function?.parameters,
@@ -411,7 +394,7 @@ export class UnifiedAdapterService {
       ...request,
       model: this.getProviderModelName(request.model, modelConfig),
       messages: processedMessages,
-      tools: filteredTools,
+      tools: repairedTools,
       temperature: request.temperature || 0.7,
       max_tokens: finalMaxTokens,
       top_p: request.top_p || 0.9,
@@ -469,8 +452,8 @@ export class UnifiedAdapterService {
       }
     }
 
-    // 如果工具被完全过滤掉，也需要移除 tool_choice
-    if (!filteredTools || filteredTools.length === 0) {
+    // 如果工具被完全修复掉，也需要移除 tool_choice
+    if (!repairedTools || repairedTools.length === 0) {
       delete openaiRequest.tool_choice;
     }
 
@@ -549,34 +532,5 @@ export class UnifiedAdapterService {
    */
   public isProviderAvailable(providerName: string): boolean {
     return this.providers.has(providerName);
-  }
-
-  /**
-   * 更新工具过滤配置
-   */
-  public updateToolFilterConfig(newConfig: ToolFilterConfig): void {
-    this.toolFilterService.updateConfig(newConfig);
-    logger.info('工具过滤配置已更新');
-  }
-
-  /**
-   * 获取工具过滤配置
-   */
-  public getToolFilterConfig(): ToolFilterConfig {
-    return this.toolFilterService.getConfig();
-  }
-
-  /**
-   * 清除工具过滤缓存
-   */
-  public clearToolFilterCache(): void {
-    this.toolFilterService.clearCache();
-  }
-
-  /**
-   * 获取工具过滤缓存统计
-   */
-  public getToolFilterCacheStats(): { size: number; maxSize: number } {
-    return this.toolFilterService.getCacheStats();
   }
 }

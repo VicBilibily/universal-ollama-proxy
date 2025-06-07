@@ -141,15 +141,20 @@ npm run check
 
 ### 运行时验证
 
-启动服务后，检查 API 端点：
+启动服务后，使用内置命令验证：
 
 ```bash
-# 检查可用模型（包括 OpenRouter 模型）
-curl http://localhost:11434/api/tags
+# 方式一：使用内置检查命令
+npm run check
 
-# 检查服务状态
-curl http://localhost:11434/
+# 方式二：验证服务状态
+npm run check
 ```
+
+或者直接访问服务端点：
+
+- **服务状态**: http://localhost:11434/
+- **模型列表**: http://localhost:11434/api/tags
 
 如果配置正确，您应该能看到来自所有配置提供商的模型列表。
 

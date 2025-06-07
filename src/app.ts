@@ -108,22 +108,8 @@ class App {
       this.modelDiscoveryService = new ModelDiscoveryService();
       await this.modelDiscoveryService.initialize();
 
-      // 加载工具过滤配置
-      const { ToolFilterConfigLoader } = await import('./utils/toolFilterConfig');
-      const toolFilterLoader = ToolFilterConfigLoader.getInstance();
-      const toolFilterConfig = await toolFilterLoader.loadConfig();
-      logger.info('工具过滤配置加载完成', {
-        enabled: toolFilterConfig.enabled,
-        rulesCount: toolFilterConfig.rules.length,
-        globalIgnore: toolFilterConfig.globalIgnore,
-      });
-
-      // 初始化统一适配器
-      this.unifiedAdapterService = new UnifiedAdapterService(
-        this.modelDiscoveryService,
-        unifiedConfig,
-        toolFilterConfig
-      );
+      // 初始化统一适配器（工具修复使用内部硬编码配置）
+      this.unifiedAdapterService = new UnifiedAdapterService(this.modelDiscoveryService, unifiedConfig);
 
       // 更新模型发现服务的可用提供商列表
       const availableProviders = this.unifiedAdapterService.getActiveProviders();

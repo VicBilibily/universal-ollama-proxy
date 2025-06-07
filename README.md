@@ -18,7 +18,7 @@ Copilot Chat 的 Ollama 接入优化**。
 - 🔄 **配置管理** - 热重载配置文件，动态加载提供商，环境变量安全管理
 - 📊 **监控日志** - 详细请求/响应日志，性能监控，错误追踪
 - 🛠️ **消息处理** - 自定义过滤规则，格式转换，GitHub Copilot Chat 完美兼容
-- 🛡️ **工具过滤** - 安全防护，规则引擎，格式转换，性能优化
+- 🛡️ **工具修复** - 自动修复工具格式，Anthropic/Claude兼容性，性能优化
 - 🌍 **多平台** - 所有主流平台预编译二进制，无依赖运行，自动构建发布
 
 📖 **[详细特性说明 →](./README/FEATURES.md)**
@@ -93,10 +93,6 @@ CHAT_LOGS=false
 
 - `POST /v1/chat/completions` - 聊天完成接口（流式/非流式）
 
-**模型调用格式**：`provider:model`，如 `volcengine:doubao-1.5-pro-32k-250115`
-
-📖 **[完整API接口文档 →](./README/API_REFERENCE.md)**
-
 ## 🛠️ 开发与部署
 
 ### 开发命令
@@ -127,21 +123,16 @@ npm run quick:build      # 交互式快速构建
 | 📥 [安装指南](./README/INSTALLATION_GUIDE.md)           | 详细安装和部署说明         |
 | ⚙️ [配置参数](./README/CONFIGURATION.md)                | 完整配置参数详解           |
 | 🏗️ [开发指南](./README/DEVELOPMENT.md)                  | 项目架构和开发说明         |
-| 📡 [API接口](./README/API_REFERENCE.md)                 | API接口详细文档            |
-| 🔧 [故障排除](./README/TROUBLESHOOTING.md)              | 常见问题解决方案           |
 | 🔧 [提供商配置](./docs/PROVIDER_CONFIGURATION.md)       | API密钥配置指南            |
 | 📋 [模型配置规范](./docs/MODEL_CONFIG_SPECIFICATION.md) | 模型配置文件格式           |
 | 🔄 [配置热重载](./docs/CONFIG_HOT_RELOAD.md)            | 配置热重载功能说明         |
 | 💬 [消息处理规则](./docs/MESSAGE_PROCESSING_RULES.md)   | 消息处理规则配置           |
-| 🛡️ [工具过滤指南](./docs/TOOL_FILTER_GUIDE.md)          | 工具过滤功能说明           |
+| 🛡️ [工具修复指南](./docs/TOOL_REPAIR_GUIDE.md)          | 工具修复功能说明           |
 | 🚀 [自动发布指南](./docs/AUTO_RELEASE_GUIDE.md)         | CI/CD 自动化发布流程       |
 
 ## 🔧 故障排除
 
-遇到问题？查看 **[故障排除指南](./README/TROUBLESHOOTING.md)**
-获取常见问题的解决方案。
-
-或者：
+遇到问题时：
 
 1. 运行 `npm run check` 验证配置
 2. 设置 `LOG_LEVEL=debug` 查看详细日志
@@ -160,8 +151,6 @@ npm run quick:build      # 交互式快速构建
 ## 📄 许可证
 
 本项目采用 [MIT 许可证](LICENSE) 开源。
-
----
 
 ---
 

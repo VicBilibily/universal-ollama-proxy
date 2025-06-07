@@ -66,29 +66,19 @@ CHAT_LOGS_DIR=logs/chat
 - ✅ **性能指标**: 响应时间、token 使用量、数据大小
 - ✅ **元数据**: 时间戳、客户端信息等
 
-#### 🔧 日志管理命令
+#### 🔧 日志管理
 
-```bash
-# Windows PowerShell
-# 查看今天的请求日志
-Get-ChildItem "logs\chat\20250605*.json" | Sort-Object Name
+日志文件存储位置：
 
-# 查看特定时间段的请求
-Get-ChildItem "logs\chat\202506051030*.json" | Sort-Object Name
+- **日志目录**: `logs/chat/`
+- **文件命名格式**: `{时间戳}_{随机ID}.json`
+- **示例文件名**: `20250607103015123_abc123def.json`
 
-# 统计日志文件数量
-(Get-ChildItem "logs\chat\*.json").Count
+查看日志文件：
 
-# Linux/macOS
-# 查看今天的请求日志
-ls logs/chat/20250605*.json | sort
-
-# 查看特定时间段的请求
-ls logs/chat/202506051030*.json | sort
-
-# 统计日志文件数量
-ls logs/chat/*.json | wc -l
-```
+- **Windows**: 打开文件资源管理器，导航至项目目录下的 `logs\chat\` 文件夹
+- **Linux/macOS**: 使用文件管理器导航至项目目录下的 `logs/chat/` 文件夹
+- **所有平台**: 可使用任何文本编辑器打开 `.json` 文件查看详细内容
 
 ## 📁 配置文件结构
 
@@ -102,8 +92,7 @@ config/
 ├── tencentds-models.json       # 腾讯云DeepSeek模型配置
 ├── deepseek-models.json        # DeepSeek官方模型配置
 ├── openrouter-models.json      # OpenRouter模型配置
-├── message-processing-rules.json # 消息处理规则
-└── tool-filter-rules.json      # 工具过滤规则
+└── message-processing-rules.json # 消息处理规则
 ```
 
 ### 🔄 配置热重载
@@ -117,23 +106,20 @@ config/
 
 ## 🌍 环境变量占位符
 
-配置文件中支持环境变量占位符，格式：`${ENV_VAR}` 或 `${ENV_VAR:default_value}`
+配置文件中支持环境变量占位符，格式：`${ENV_VAR}`
 
 ### 示例用法
 
 ```json
 {
   "apiKey": "${VOLCENGINE_API_KEY}",
-  "baseUrl": "${CUSTOM_BASE_URL:https://ark.cn-beijing.volces.com}",
-  "timeout": "${REQUEST_TIMEOUT:30000}"
+  "baseUrl": "${CUSTOM_BASE_URL}"
 }
 ```
 
 ### 支持的占位符格式
 
 - `${VAR}` - 直接替换为环境变量值
-- `${VAR:default}` - 如果环境变量不存在，使用默认值
-- `${VAR:}` - 如果环境变量不存在，使用空字符串
 
 ## 🛡️ 安全配置建议
 
@@ -149,14 +135,13 @@ VOLCENGINE_API_KEY=your_real_api_key_here
 
 ### 权限配置
 
-```bash
-# 设置配置文件权限（Linux/macOS）
-chmod 600 .env
-chmod 644 config/*.json
+```env
+# 确保 .env 文件安全
+# Windows: 右键 .env 文件 → 属性 → 安全，设置仅当前用户可读
+# Linux/macOS: chmod 600 .env
 
-# 确保日志目录权限
-chmod 755 logs/
-chmod 644 logs/chat/*
+# 确保配置文件可读
+# 配置文件应设置为只读权限，避免意外修改
 ```
 
 ### 生产环境配置
@@ -194,36 +179,13 @@ CHAT_LOGS_DIR=logs/chat  # 使用专门的日志目录
 
 ## 🔧 配置验证
 
-### 验证命令
+### 配置检查方法
 
-```bash
-# 验证所有配置
-npm run check
-
-# 仅验证环境变量
-node -e "require('dotenv').config(); console.log('Environment variables loaded successfully');"
-
-# 仅验证配置文件
-node -e "console.log('Config files:', require('fs').readdirSync('config/'));"
-```
+- 启动服务后查看控制台输出，检查是否有配置错误提示
+- 检查日志文件 `logs/app.log` 中的配置加载信息
+- 确认所有必需的环境变量都已正确设置
 
 ### 常见配置错误
-
-#### JSON 格式错误
-
-```json
-// ❌ 错误：最后一项后有逗号
-{
-  "key1": "value1",
-  "key2": "value2",
-}
-
-// ✅ 正确
-{
-  "key1": "value1",
-  "key2": "value2"
-}
-```
 
 #### 环境变量未定义
 
@@ -243,6 +205,4 @@ VOLCENGINE_API_KEY=your_actual_api_key_here
 - [详细特性说明](./FEATURES.md)
 - [支持的模型](./SUPPORTED_MODELS.md)
 - [安装指南](./INSTALLATION_GUIDE.md)
-- [API 接口文档](./API_REFERENCE.md)
 - [开发指南](./DEVELOPMENT.md)
-- [故障排除](./TROUBLESHOOTING.md)

@@ -9,7 +9,7 @@ Release 即可自动构建和发布多平台程序包**。
 
 1. **进入 GitHub 仓库**
 
-   - 访问 [GitHub 仓库](https://github.com/VicBilibily/universal-ollama-proxy)
+   - 访问您的 GitHub 仓库页面
    - 点击右侧的 "Releases" 链接
 
 2. **创建新 Release**
@@ -73,8 +73,7 @@ Release 即可自动构建和发布多平台程序包**。
 
 ### 查看构建进度
 
-1. 创建 Release 后，进入
-   [Actions 页面](https://github.com/VicBilibily/universal-ollama-proxy/actions)
+1. 创建 Release 后，进入在 GitHub 仓库的 Actions 页面查看构建状态。
 2. 查看 "Release Build and Deploy" 工作流运行状态
 3. 点击运行详情查看实时日志
 
@@ -156,8 +155,7 @@ npm run monitor:actions --local
 
 用户下载流程：
 
-1. 访问
-   [Releases 页面](https://github.com/VicBilibily/universal-ollama-proxy/releases)
+1. 访问在 GitHub 仓库的 Releases 页面查看所有已发布的版本。
 2. 选择最新版本
 3. 根据操作系统下载对应文件：
    - Windows: `.zip` 文件

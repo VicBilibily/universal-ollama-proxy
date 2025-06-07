@@ -1,4 +1,3 @@
-import fs from 'fs';
 import * as fsPromises from 'fs/promises';
 import path from 'path';
 import { configManager } from '../config';
@@ -94,9 +93,6 @@ export class ConfigReloader {
         case 'unified-providers':
           this.handleUnifiedProvidersConfigChange();
           break;
-        case 'tool-filter-rules':
-          this.handleToolFilterConfigChange();
-          break;
         case 'message-processing-rules':
           this.handleMessageProcessingRulesChange();
           break;
@@ -126,9 +122,6 @@ export class ConfigReloader {
       switch (fileName) {
         case 'unified-providers':
           logger.warn('统一提供商配置文件已删除，需要手动重启服务以加载默认配置');
-          break;
-        case 'tool-filter-rules':
-          logger.info('工具过滤配置文件已删除，将使用默认配置');
           break;
         case 'message-processing-rules':
           logger.info('消息处理规则配置文件已删除，将使用默认规则');
@@ -303,63 +296,6 @@ export class ConfigReloader {
       }
     } catch (error) {
       logger.error(`处理 ${providerName} 提供商模型配置变化失败:`, error);
-    }
-  }
-
-  /**
-   * 处理工具过滤配置变更
-   */
-  private async handleToolFilterConfigChange(): Promise<void> {
-    try {
-      logger.info('工具过滤配置已更改，重新加载工具过滤配置');
-
-      // 检查工具过滤配置文件是否存在
-      const configFilePath = path.join(process.cwd(), 'config', 'tool-filter-rules.json');
-      if (!fs.existsSync(configFilePath)) {
-        logger.info('工具过滤配置文件不存在，将使用默认配置');
-
-        // 如果需要，可以在此处加载默认配置
-        if (this.unifiedAdapterService) {
-          // 加载默认配置并应用
-          const { ToolFilterConfigLoader } = await import('../utils/toolFilterConfig');
-          const toolFilterLoader = ToolFilterConfigLoader.getInstance();
-          const defaultConfig = toolFilterLoader.getDefaultConfig();
-
-          // 更新统一适配器中的工具过滤配置
-          this.unifiedAdapterService.updateToolFilterConfig(defaultConfig);
-
-          logger.info('应用工具过滤默认配置成功', {
-            enabled: defaultConfig.enabled,
-            rulesCount: defaultConfig.rules.length,
-          });
-        }
-        return;
-      }
-
-      // 重新加载工具过滤配置
-      const { ToolFilterConfigLoader } = await import('../utils/toolFilterConfig');
-      const toolFilterLoader = ToolFilterConfigLoader.getInstance();
-      const newToolFilterConfig = await toolFilterLoader.reloadConfig();
-
-      // 更新统一适配器中的工具过滤配置
-      if (this.unifiedAdapterService) {
-        // 调用统一适配器服务的更新方法应用新配置
-        this.unifiedAdapterService.updateToolFilterConfig(newToolFilterConfig);
-
-        // 清除工具过滤缓存以确保新规则立即生效
-        this.unifiedAdapterService.clearToolFilterCache();
-
-        logger.info('工具过滤配置已重新加载并应用', {
-          enabled: newToolFilterConfig.enabled,
-          rulesCount: newToolFilterConfig.rules.length,
-          globalIgnore: newToolFilterConfig.globalIgnore,
-          cacheStats: this.unifiedAdapterService.getToolFilterCacheStats(),
-        });
-      } else {
-        logger.warn('统一适配器服务未初始化，无法更新工具过滤配置');
-      }
-    } catch (error) {
-      logger.error('处理工具过滤配置变化失败:', error);
     }
   }
 

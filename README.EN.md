@@ -19,12 +19,9 @@ optimized for GitHub Copilot Chat's Ollama integration**.
   complete TypeScript type safety
 - 🔄 **Configuration Management** - Hot-reload configuration files, dynamic
   provider loading, secure environment variable management
-- 📊 **Monitoring & Logging** - Detailed request/response logs, performance
-  monitoring, error tracking
-- 🛠️ **Message Processing** - Custom filtering rules, format conversion, perfect
-  GitHub Copilot Chat compatibility
-- 🛡️ **Tool Filtering** - Security protection, rule engine, format conversion,
-  performance optimization
+- 📊 **Monitoring & Logging** - Detailed request/response logs, error tracking
+- 🛡️ **Tool Repair** - Automatic tool format repair, Anthropic/Claude
+  compatibility
 - 🌍 **Multi-Platform** - Pre-compiled binaries for all major platforms,
   dependency-free execution, automated build & release
 
@@ -92,9 +89,6 @@ CHAT_LOGS=false
 - `POST /v1/chat/completions` - Chat completion interface
   (streaming/non-streaming)
 
-**Model Call Format**: `provider:model`, e.g.,
-`volcengine:doubao-1.5-pro-32k-250115`
-
 ## 🛠️ Development & Deployment
 
 ### Development Commands
@@ -116,11 +110,7 @@ npm run quick:build      # Interactive quick build
 
 ## 🔧 Troubleshooting
 
-Having issues? Check the
-**[Troubleshooting Guide](./README/TROUBLESHOOTING.md)** for common problem
-solutions.
-
-Or:
+Having issues:
 
 1. Run `npm run check` to verify configuration
 2. Set `LOG_LEVEL=debug` to view detailed logs

@@ -29,22 +29,21 @@ universal-ollama-proxy/
 │   │   ├── modelDiscovery.ts  # 模型发现服务
 │   │   ├── ollama.ts          # Ollama 服务
 │   │   ├── openai.ts          # OpenAI 兼容服务
-│   │   ├── toolFilter.ts      # 工具过滤服务
+│   │   ├── toolRepair.ts      # 工具修复服务
 │   │   └── unifiedAdapter.ts  # 统一适配器服务（核心）
 │   ├── 📁 types/              # TypeScript 类型定义
 │   │   ├── index.ts           # 类型导出
 │   │   ├── models.ts          # 模型相关类型
 │   │   ├── ollama.ts          # Ollama API 类型
 │   │   ├── openai.ts          # OpenAI API 类型
-│   │   ├── toolFilter.ts      # 工具过滤类型
+│   │   ├── toolRepair.ts      # 工具修复类型
 │   │   └── unifiedAdapter.ts  # 统一适配器类型
 │   └── 📁 utils/              # 工具函数
 │       ├── chatLogger.ts      # 聊天日志记录
 │       ├── index.ts           # 工具函数导出
 │       ├── jsonParser.ts      # JSON 解析工具
 │       ├── messageProcessor.ts  # 消息处理器
-│       ├── requestQueue.ts    # 请求队列管理
-│       └── toolFilterConfig.ts  # 工具过滤配置
+│       └── requestQueue.ts    # 请求队列管理
 ├── 📁 config/                 # 配置文件目录
 ├── 📁 docs/                   # 功能文档
 ├── 📁 README/                 # README相关文档
@@ -388,8 +387,9 @@ LOG_LEVEL=debug npm run dev
 # 启用聊天日志记录
 CHAT_LOGS=true npm run dev
 
-# 查看实时日志
-tail -f logs/chat/*.json
+# 查看日志文件
+# 使用 VS Code 或其他编辑器查看 logs/chat/ 目录下的日志文件
+code logs/chat/
 ```
 
 ### 🧪 测试工具
@@ -439,5 +439,3 @@ curl http://localhost:11434/
 - [支持的模型](./SUPPORTED_MODELS.md)
 - [安装指南](./INSTALLATION_GUIDE.md)
 - [配置参数详解](./CONFIGURATION.md)
-- [API 接口文档](./API_REFERENCE.md)
-- [故障排除](./TROUBLESHOOTING.md)

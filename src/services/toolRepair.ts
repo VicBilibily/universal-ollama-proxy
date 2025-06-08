@@ -15,10 +15,9 @@ export class ToolRepairService {
     const envLogLevel = process.env.LOG_LEVEL?.toLowerCase() || 'info';
     const validLogLevel = ['none', 'warn', 'info', 'debug'].includes(envLogLevel) ? envLogLevel : 'info';
 
-    logger.info('工具修复服务已初始化（简化版本，只包含 Anthropic/Claude 修复）', {
-      logLevel: validLogLevel,
-      enabled: true,
-    });
+    logger.info(
+      `工具修复服务已初始化（简化版本，只包含 Anthropic/Claude 修复），日志级别: ${validLogLevel}，启用状态: true`
+    );
   }
 
   /**
@@ -50,18 +49,20 @@ export class ToolRepairService {
     // 记录无效工具的错误信息
     for (const invalidTool of invalidTools) {
       const toolName = invalidTool.tool?.function?.name || `工具${invalidTool.index}`;
-      errors.push(`${toolName}: ${invalidTool.reason}`);
+      const reason = invalidTool.reason;
+      errors.push(`${toolName}: ${reason}`);
     }
 
     // 检查模型是否支持工具调用
     if (!modelConfig.capabilities.supports.tool_calls) {
-      logger.warn(`模型 ${modelConfig.name} 不支持工具调用，将移除所有工具`);
+      const modelName = modelConfig.name;
+      logger.warn(`模型 ${modelName} 不支持工具调用，将移除所有工具`);
       return {
         allowed: true,
         repairedTools: [],
         removedTools: [...tools],
         triggeredRules: ['模型不支持工具调用'],
-        warnings: [`模型 ${modelConfig.name} 不支持工具调用`],
+        warnings: [`模型 ${modelName} 不支持工具调用`],
         errors: [],
       };
     }
@@ -113,7 +114,8 @@ export class ToolRepairService {
       return { repairedTools: tools, appliedRepairs };
     }
 
-    logger.debug(`检测到 Anthropic/Claude 模型，应用特定修复: ${modelConfig.id}`);
+    const modelId = modelConfig.id;
+    logger.debug(`检测到 Anthropic/Claude 模型，应用特定修复: ${modelId}`);
 
     const repairedTools = tools.map((tool, index) => {
       const repairedTool = JSON.parse(JSON.stringify(tool)); // 深拷贝
@@ -167,7 +169,9 @@ export class ToolRepairService {
     });
 
     if (appliedRepairs.length > 0) {
-      logger.info(`为 Anthropic/Claude 模型应用了 ${appliedRepairs.length} 项修复: ${appliedRepairs.join(', ')}`);
+      const repairCount = appliedRepairs.length;
+      const repairsText = appliedRepairs.join(', ');
+      logger.info(`为 Anthropic/Claude 模型应用了 ${repairCount} 项修复: ${repairsText}`);
     }
 
     return { repairedTools, appliedRepairs };
@@ -188,13 +192,9 @@ export class ToolRepairService {
 
     const result = hasAnthropicInModel || isAnthropicProvider;
 
-    logger.debug(`Anthropic/Claude 模型检测`, {
-      modelId,
-      providerName,
-      hasAnthropicInModel,
-      isAnthropicProvider,
-      result,
-    });
+    logger.debug(
+      `Anthropic/Claude 模型检测，模型ID: ${modelId}，提供商: ${providerName}，模型包含Anthropic: ${hasAnthropicInModel}，是Anthropic提供商: ${isAnthropicProvider}，结果: ${result}`
+    );
 
     return result;
   }
@@ -231,7 +231,8 @@ export class ToolRepairService {
       if (!repairedTool.type || repairedTool.type !== 'function') {
         repairedTool.type = 'function';
         needsTypeRepairing = true;
-        validationWarnings.push(`工具 ${tool.function?.name || i}: 已自动添加/修正 type 字段为 "function"`);
+        const toolName = tool.function?.name || i;
+        validationWarnings.push(`工具 ${toolName}: 已自动添加/修正 type 字段为 "function"`);
       }
 
       // 检查 function 对象

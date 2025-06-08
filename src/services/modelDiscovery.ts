@@ -30,7 +30,8 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   async initialize(): Promise<void> {
     try {
       await this.loadAllProviderModels();
-      logger.info(`模型发现服务初始化完成，共加载 ${this.models.size} 个模型`);
+      const size = this.models.size;
+      logger.info(`模型发现服务初始化完成，共加载 ${size} 个模型`);
     } catch (error) {
       logger.error('模型发现服务初始化失败:', error);
       throw error;
@@ -66,7 +67,8 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       try {
         await this.loadProviderModels(provider);
       } catch (error) {
-        logger.warn(`加载 ${provider} 模型配置失败:`, error);
+        const providerName = provider;
+        logger.warn(`加载 ${providerName} 模型配置失败:`, error);
         // 继续加载其他提供商的模型
       }
     }
@@ -81,7 +83,8 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
     const configFile = path.join(this.configDir, `${provider}-models.json`);
 
     if (!fs.existsSync(configFile)) {
-      logger.warn(`配置文件不存在: ${configFile}`);
+      const filePath = configFile;
+      logger.warn(`配置文件不存在: ${filePath}`);
       return;
     }
 
@@ -106,9 +109,11 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
         }
       }
 
-      logger.info(`成功加载 ${provider} 提供商的 ${enabledCount} 个启用模型（总共 ${config.models.length} 个模型）`);
+      const totalCount = config.models.length;
+      logger.info(`成功加载 ${provider} 提供商的 ${enabledCount} 个启用模型（总共 ${totalCount} 个模型）`);
     } catch (error) {
-      logger.error(`解析 ${provider} 模型配置失败:`, error);
+      const providerName = provider;
+      logger.error(`解析 ${providerName} 模型配置失败:`, error);
       throw error;
     }
   }
@@ -141,7 +146,9 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
     if (this.availableProviders.size > 0) {
       const providerName = modelName.split(':')[0];
       if (!this.availableProviders.has(providerName)) {
-        logger.debug(`模型 ${modelName} 所属的提供商 ${providerName} 不可用`);
+        const model = modelName;
+        const provider = providerName;
+        logger.debug(`模型 ${model} 所属的提供商 ${provider} 不可用`);
         return null;
       }
     }
@@ -165,10 +172,10 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
   updateAvailableProviders(providers: string[]): void {
     this.availableProviders.clear();
     providers.forEach(provider => this.availableProviders.add(provider));
-    logger.info('已更新可用提供商列表', {
-      availableProviders: Array.from(this.availableProviders),
-      count: this.availableProviders.size,
-    });
+    const providerList = Array.from(this.availableProviders);
+    const count = this.availableProviders.size;
+    const providerListText = providerList.join(', ');
+    logger.info(`已更新可用提供商列表: ${providerListText}，数量: ${count}`);
   }
 
   /**
@@ -183,9 +190,11 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       // 重新加载该提供商的模型
       await this.loadProviderModels(providerName);
 
-      logger.info(`已重新加载 ${providerName} 提供商的模型配置`);
+      const provider = providerName;
+      logger.info(`已重新加载 ${provider} 提供商的模型配置`);
     } catch (error) {
-      logger.error(`重新加载 ${providerName} 提供商模型配置失败:`, error);
+      const provider = providerName;
+      logger.error(`重新加载 ${provider} 提供商模型配置失败:`, error);
       throw error;
     }
   }
@@ -269,14 +278,18 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       return;
     }
 
-    logger.info(`已注册的模型总览: ${totalProviders} 个提供商，共 ${totalModels} 个模型`);
+    const providerCount = totalProviders;
+    const modelCount = totalModels;
+    logger.info(`已注册的模型总览: ${providerCount} 个提供商，共 ${modelCount} 个模型`);
 
     // 按提供商名称排序输出
     const sortedProviders = Object.keys(modelsByProvider).sort();
 
     for (const provider of sortedProviders) {
       const providerInfo = modelsByProvider[provider];
-      logger.info(`[${provider}] ${providerInfo.count} 个模型:`);
+      const providerName = provider;
+      const count = providerInfo.count;
+      logger.info(`[${providerName}] ${count} 个模型:`);
 
       // 将模型分组输出，每行最多显示5个模型
       const modelsPerLine = 5;
@@ -289,7 +302,8 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
             return colonIndex !== -1 ? model.substring(colonIndex + 1) : model;
           })
           .join(', ');
-        logger.info(`  ${modelNames}`);
+        const names = modelNames;
+        logger.info(`  ${names}`);
       }
     }
   }
@@ -314,7 +328,9 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       for (const providerToRemove of providersToRemove) {
         const keysToDelete = Array.from(this.models.keys()).filter(key => key.startsWith(`${providerToRemove}:`));
         keysToDelete.forEach(key => this.models.delete(key));
-        logger.info(`已移除 ${providerToRemove} 提供商的 ${keysToDelete.length} 个模型`);
+        const provider = providerToRemove;
+        const count = keysToDelete.length;
+        logger.info(`已移除 ${provider} 提供商的 ${count} 个模型`);
       }
 
       // 重新加载所有当前供应商的模型（包括新增和已存在的）
@@ -327,7 +343,8 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
           // 重新加载该提供商的模型
           await this.loadProviderModels(provider);
         } catch (error) {
-          logger.warn(`重新加载 ${provider} 模型配置失败:`, error);
+          const providerName = provider;
+          logger.warn(`重新加载 ${providerName} 模型配置失败:`, error);
           // 继续处理其他提供商
         }
       }
@@ -335,12 +352,13 @@ export class ModelDiscoveryService implements IModelDiscoveryService {
       this.lastRefreshTime = new Date();
 
       const stats = this.getModelStats();
-      logger.info('模型发现服务与供应商配置同步完成', {
-        removedProviders: providersToRemove,
-        reloadedProviders: providersToReload,
-        totalModels: stats.totalModels,
-        activeProviders: stats.providerCount,
-      });
+      const removedProviders = providersToRemove.join(', ');
+      const reloadedProviders = providersToReload.join(', ');
+      const totalModels = stats.totalModels;
+      const providerCount = stats.providerCount;
+      logger.info(
+        `模型发现服务与供应商配置同步完成，删除的提供商: ${removedProviders}，重载的提供商: ${reloadedProviders}，总模型数: ${totalModels}，活跃提供商: ${providerCount}`
+      );
     } catch (error) {
       logger.error('同步模型发现服务与供应商配置失败:', error);
       throw error;

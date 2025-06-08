@@ -30,6 +30,7 @@ export function parseConfigFile(content: string, filePath: string): any {
   try {
     return parseJsonWithComments(content);
   } catch (error) {
-    throw new Error(`解析配置文件失败: ${filePath}, 错误: ${error instanceof Error ? error.message : String(error)}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`解析配置文件失败: ${filePath}, 错误: ${errorMessage}`);
   }
 }

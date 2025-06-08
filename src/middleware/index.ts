@@ -33,11 +33,12 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction): 
   const start = Date.now();
 
   // 记录请求开始（仅调试模式）
-  logger.debug(`开始处理请求: ${req.method} ${req.path}`, {
-    userAgent: req.get('user-agent'),
-    contentType: req.get('content-type'),
-    contentLength: req.get('content-length'),
-  });
+  const userAgent = req.get('user-agent');
+  const contentType = req.get('content-type');
+  const contentLength = req.get('content-length');
+  logger.debug(
+    `开始处理请求: ${req.method} ${req.path}，用户代理: ${userAgent}，内容类型: ${contentType}，内容长度: ${contentLength}`
+  );
 
   res.on('finish', () => {
     const duration = Date.now() - start;
@@ -65,10 +66,8 @@ export const validateRequestSize = (req: Request, res: Response, next: NextFunct
   const warnSize = 50 * 1024 * 1024; // 50MB警告阈值
 
   if (contentLength && parseInt(contentLength) > warnSize) {
-    logger.warn(`检测到大请求: ${(parseInt(contentLength) / 1024 / 1024).toFixed(2)}MB`, {
-      path: req.path,
-      method: req.method,
-    });
+    const sizeInMB = (parseInt(contentLength) / 1024 / 1024).toFixed(2);
+    logger.warn(`检测到大请求: ${sizeInMB}MB，路径: ${req.path}，方法: ${req.method}`);
   }
 
   next();

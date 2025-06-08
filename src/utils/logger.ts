@@ -1,6 +1,7 @@
 import { existsSync } from 'fs';
 import { mkdir, rename, stat, unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
+import { getLogTranslation, shouldShowTranslation } from './logTranslations';
 
 /**
  * 颜色常量
@@ -122,7 +123,8 @@ const rotateLogFile = async (): Promise<void> => {
     // 将当前日志文件重命名为 .1
     await rename(LOG_FILE, `${LOG_FILE}.1`);
 
-    console.log(`日志文件已轮转，大小: ${(fileStats.size / 1024 / 1024).toFixed(2)}MB`);
+    const fileSizeMB = (fileStats.size / 1024 / 1024).toFixed(2);
+    console.log(`日志文件已轮转，大小: ${fileSizeMB}MB`);
   } catch (error) {
     console.error('日志文件轮转失败:', error);
   }
@@ -165,44 +167,83 @@ const writeToFile = async (level: string, message: string, ...additionalData: an
 };
 
 /**
+ * 输出带有英文翻译的日志消息
+ */
+const logWithTranslation = (level: string, color: string, message: string, timestamp: string, ...args: any[]): void => {
+  // 处理额外参数：如果有对象参数，格式化显示
+  let additionalInfo = '';
+  if (args.length > 0) {
+    const formattedArgs = args
+      .map(arg => {
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg, null, 2);
+          } catch (e) {
+            return String(arg);
+          }
+        }
+        return String(arg);
+      })
+      .join(' ');
+    additionalInfo = ` ${formattedArgs}`;
+  }
+
+  // 输出中文日志（不包含对象信息）
+  console.log(`${colors.gray}${timestamp}${colors.reset} ${color}[${level}]${colors.reset} ${message}`);
+
+  // 如果消息包含中文，输出英文翻译
+  if (shouldShowTranslation(message)) {
+    const translation = getLogTranslation(message);
+    if (translation) {
+      // 计算对齐空格，使英文翻译与中文消息对齐
+      const prefixLength = timestamp.length + level.length + 4; // 时间戳 + [LEVEL] + 空格
+      const alignSpaces = ' '.repeat(prefixLength);
+      console.log(`${colors.gray}${alignSpaces}${translation}${colors.reset}`);
+    }
+  }
+
+  // 如果有对象信息，在翻译后显示
+  if (additionalInfo) {
+    console.log(additionalInfo.trim());
+  }
+};
+
+/**
  * 统一的日志工具
  */
 export const logger = {
   info: (message: string, ...args: any[]) => {
     if (!shouldLog('info')) return;
     const timestamp = formatTimestamp();
-    console.log(`${colors.gray}${timestamp}${colors.reset} ${colors.blue}[INFO]${colors.reset} ${message}`, ...args);
+    logWithTranslation('INFO', colors.blue, message, timestamp, ...args);
     writeToFile('INFO', message, ...args);
   },
 
-  error: (message: string, error?: any) => {
+  error: (message: string, ...args: any[]) => {
     if (!shouldLog('error')) return;
     const timestamp = formatTimestamp();
-    console.error(`${colors.gray}${timestamp}${colors.reset} ${colors.red}[ERROR]${colors.reset} ${message}`, error);
-    writeToFile('ERROR', message, error);
+    logWithTranslation('ERROR', colors.red, message, timestamp, ...args);
+    writeToFile('ERROR', message, ...args);
   },
 
   warn: (message: string, ...args: any[]) => {
     if (!shouldLog('warn')) return;
     const timestamp = formatTimestamp();
-    console.warn(`${colors.gray}${timestamp}${colors.reset} ${colors.yellow}[WARN]${colors.reset} ${message}`, ...args);
+    logWithTranslation('WARN', colors.yellow, message, timestamp, ...args);
     writeToFile('WARN', message, ...args);
   },
 
   debug: (message: string, ...args: any[]) => {
     if (!shouldLog('debug')) return;
     const timestamp = formatTimestamp();
-    console.debug(`${colors.gray}${timestamp}${colors.reset} ${colors.cyan}[DEBUG]${colors.reset} ${message}`, ...args);
+    logWithTranslation('DEBUG', colors.cyan, message, timestamp, ...args);
     writeToFile('DEBUG', message, ...args);
   },
 
   success: (message: string, ...args: any[]) => {
     if (!shouldLog('info')) return;
     const timestamp = formatTimestamp();
-    console.log(
-      `${colors.gray}${timestamp}${colors.reset} ${colors.green}[SUCCESS]${colors.reset} ${message}`,
-      ...args
-    );
+    logWithTranslation('SUCCESS', colors.green, message, timestamp, ...args);
     writeToFile('SUCCESS', message, ...args);
   },
 

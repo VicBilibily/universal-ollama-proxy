@@ -43,7 +43,10 @@ export class ConfigReloader {
 
     // 监听配置变化事件
     configHotReload.on('configChanged', (event: any) => {
-      logger.info(`配置文件已更新: ${event.filePath}`, { type: event.type, timestamp: event.timestamp });
+      const filePath = event.filePath;
+      const type = event.type;
+      const timestamp = event.timestamp;
+      logger.info(`配置文件已更新: ${filePath}，类型: ${type}，时间戳: ${timestamp}`);
 
       // 根据配置类型执行相应的重载逻辑
       if (event.type === 'config') {
@@ -53,7 +56,10 @@ export class ConfigReloader {
 
     // 监听配置管理器的配置更新事件
     configManager.on('configUpdated', ({ key, oldValue, newValue }: any) => {
-      logger.info(`配置项已更新: ${key}`, { oldValue, newValue });
+      const configKey = key;
+      const oldVal = JSON.stringify(oldValue);
+      const newVal = JSON.stringify(newValue);
+      logger.info(`配置项已更新: ${configKey}，旧值: ${oldVal}，新值: ${newVal}`);
       this.handleConfigUpdate(key, oldValue, newValue);
     });
 
@@ -64,7 +70,10 @@ export class ConfigReloader {
 
     // 监听配置文件删除事件
     configHotReload.on('configDeleted', (event: any) => {
-      logger.info(`配置文件已删除: ${event.filePath}`, { type: event.type, timestamp: event.timestamp });
+      const filePath = event.filePath;
+      const type = event.type;
+      const timestamp = event.timestamp;
+      logger.info(`配置文件已删除: ${filePath}，类型: ${type}，时间戳: ${timestamp}`);
 
       // 根据配置类型执行相应的删除处理逻辑
       if (event.type === 'delete') {
@@ -148,10 +157,13 @@ export class ConfigReloader {
       // 处理特定配置项的更新
       switch (key) {
         case 'port':
-          logger.warn('端口配置已更改，需要重启服务才能生效', { oldPort: oldValue, newPort: newValue });
+          logger.warn(`端口配置已更改，需要重启服务才能生效，旧端口: ${oldValue}，新端口: ${newValue}`);
           break;
         default:
-          logger.debug(`配置项 ${key} 已更新`, { oldValue, newValue });
+          const configKey = key;
+          const oldVal = JSON.stringify(oldValue);
+          const newVal = JSON.stringify(newValue);
+          logger.debug(`配置项 ${configKey} 已更新，旧值: ${oldVal}，新值: ${newVal}`);
       }
     } catch (error) {
       logger.error('处理配置更新失败:', error);
@@ -184,20 +196,26 @@ export class ConfigReloader {
           if (envValue && envValue.trim() !== '') {
             provider.apiKey = envValue;
             isProviderAvailable = true;
-            logger.info(`从环境变量 ${envVar} 获取 ${provider.displayName} 提供商的 API Key`);
+            const envVariable = envVar;
+            const displayName = provider.displayName;
+            logger.info(`从环境变量 ${envVariable} 获取 ${displayName} 提供商的 API Key`);
           } else {
-            logger.warn(`环境变量 ${envVar} 未设置，${provider.displayName} 提供商将不可用`);
+            const envVariable = envVar;
+            const displayName = provider.displayName;
+            logger.warn(`环境变量 ${envVariable} 未设置，${displayName} 提供商将不可用`);
             isProviderAvailable = false;
           }
         }
         // 情况2: 不以${开头且非空，表示配置中已有配置密钥
         else if (provider.apiKey && provider.apiKey.trim() !== '') {
-          logger.info(`使用配置文件中的配置密钥配置 ${provider.displayName} 提供商`);
+          const displayName = provider.displayName;
+          logger.info(`使用配置文件中的配置密钥配置 ${displayName} 提供商`);
           isProviderAvailable = true;
         }
         // 情况3: 为空，表示此供应商不需要认证
         else if (!provider.apiKey || provider.apiKey.trim() === '') {
-          logger.info(`${provider.displayName} 提供商不需要认证，使用空 API Key`);
+          const displayName = provider.displayName;
+          logger.info(`${displayName} 提供商不需要认证，使用空 API Key`);
           provider.apiKey = '';
           isProviderAvailable = true;
         }
@@ -211,7 +229,8 @@ export class ConfigReloader {
       // 更新配置，只包含可用的提供商
       unifiedConfig.providers = validProvidersForHotReload;
 
-      logger.info(`热重载过滤后可用的提供商: ${validProvidersForHotReload.map((p: any) => p.displayName).join(', ')}`);
+      const availableProviders = validProvidersForHotReload.map((p: any) => p.displayName).join(', ');
+      logger.info(`热重载过滤后可用的提供商: ${availableProviders}`);
 
       // 获取新配置中的供应商列表
       const configProviderNames = unifiedConfig.providers.map((provider: any) => provider.name);
@@ -231,7 +250,8 @@ export class ConfigReloader {
         const activeProviders = this.unifiedAdapterService.getActiveProviders();
         if (this.modelDiscoveryService) {
           this.modelDiscoveryService.updateAvailableProviders(activeProviders);
-          logger.info('已更新模型发现服务的可用提供商列表', { availableProviders: activeProviders });
+          const providerList = activeProviders.join(', ');
+          logger.info(`已更新模型发现服务的可用提供商列表: ${providerList}`);
         }
       }
 
@@ -239,12 +259,14 @@ export class ConfigReloader {
       const modelStats = this.modelDiscoveryService?.getModelStats();
       const activeProviders = this.unifiedAdapterService?.getActiveProviders();
 
-      logger.info('统一提供商配置变化处理完成', {
-        configProviders: configProviderNames.length,
-        activeProviders: activeProviders?.length || 0,
-        totalModels: modelStats?.totalModels || 0,
-        modelProviders: modelStats?.providerCount || 0,
-      });
+      const configProviderCount = configProviderNames.length;
+      const activeProviderCount = activeProviders?.length || 0;
+      const totalModels = modelStats?.totalModels || 0;
+      const modelProviderCount = modelStats?.providerCount || 0;
+
+      logger.info(
+        `统一提供商配置变化处理完成，配置提供商: ${configProviderCount}，活跃提供商: ${activeProviderCount}，总模型数: ${totalModels}，模型提供商: ${modelProviderCount}`
+      );
 
       // 输出按供应商分组的注册模型信息
       if (this.modelDiscoveryService) {
@@ -266,10 +288,8 @@ export class ConfigReloader {
       // 重新加载聊天日志配置
       if (chatLogger && typeof chatLogger.reloadConfig === 'function') {
         chatLogger.reloadConfig();
-        logger.info('聊天日志配置已重新加载', {
-          enabled: chatLogger.isEnabled(),
-          config: chatLogger.getConfig(),
-        });
+        const config = chatLogger.getConfig();
+        logger.info(`聊天日志配置已重新加载，启用状态: ${chatLogger.isEnabled()}，配置: ${JSON.stringify(config)}`);
       }
     } catch (error) {
       logger.error('处理消息处理规则变化失败:', error);

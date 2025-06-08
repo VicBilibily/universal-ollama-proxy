@@ -37,12 +37,12 @@ const loadProcessingConfig = (): MessageProcessingConfig => {
     const configPath = path.join(__dirname, '../../config/message-processing-rules.json');
     const configContent = fs.readFileSync(configPath, 'utf-8');
     processingConfig = parseConfigFile(configContent, configPath);
-    logger.debug('已加载消息处理规则配置', { rulesCount: processingConfig?.promptProcessingRules.rules.length });
+    const rulesLength = processingConfig?.promptProcessingRules.rules.length;
+    logger.debug(`已加载消息处理规则配置，规则数量: ${rulesLength}`);
     return processingConfig!;
   } catch (error) {
-    logger.warn('加载消息处理规则配置失败，使用默认配置', {
-      error: error instanceof Error ? error.message : String(error),
-    });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.warn(`加载消息处理规则配置失败，使用默认配置: ${errorMessage}`);
     // 返回默认配置
     processingConfig = {
       promptProcessingRules: {
@@ -94,10 +94,9 @@ export const processSystemPrompt = (text: string): string => {
   }
 
   if (hasChanges && config.processingOptions.logChanges) {
-    logger.debug('已修改系统提示词', {
-      originalLength: text.length,
-      processedLength: content.length,
-    });
+    const originalLength = text.length;
+    const processedLength = content.length;
+    logger.debug(`已修改系统提示词，原长度: ${originalLength}，处理后长度: ${processedLength}`);
   }
 
   return content;
@@ -115,10 +114,9 @@ export const removePromptTags = (text: string): string => {
 
   if (text.startsWith(promptStart) && text.endsWith(promptEnd)) {
     const strippedText = text.substring(promptStart.length, text.length - promptEnd.length);
-    logger.debug('已移除 prompt 标签', {
-      originalLength: text.length,
-      strippedLength: strippedText.length,
-    });
+    const originalLength = text.length;
+    const strippedLength = strippedText.length;
+    logger.debug(`已移除 prompt 标签，原长度: ${originalLength}，处理后长度: ${strippedLength}`);
     return strippedText;
   }
 

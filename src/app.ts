@@ -68,20 +68,24 @@ class App {
           if (envValue && envValue.trim() !== '') {
             provider.apiKey = envValue;
             isProviderAvailable = true;
-            logger.info(`从环境变量 ${envVar} 获取 ${provider.displayName} 提供商的 API Key`);
+            const displayName = provider.displayName;
+            logger.info(`从环境变量 ${envVar} 获取 ${displayName} 提供商的 API Key`);
           } else {
-            logger.warn(`环境变量 ${envVar} 未设置，${provider.displayName} 提供商将不可用`);
+            const displayName = provider.displayName;
+            logger.warn(`环境变量 ${envVar} 未设置，${displayName} 提供商将不可用`);
             isProviderAvailable = false;
           }
         }
         // 情况2: 不以${开头且非空，表示配置中已有配置密钥
         else if (provider.apiKey && provider.apiKey.trim() !== '') {
-          logger.info(`使用配置文件中的配置密钥配置 ${provider.displayName} 提供商`);
+          const displayName = provider.displayName;
+          logger.info(`使用配置文件中的配置密钥配置 ${displayName} 提供商`);
           isProviderAvailable = true;
         }
         // 情况3: 为空，表示此供应商不需要认证
         else if (!provider.apiKey || provider.apiKey.trim() === '') {
-          logger.info(`${provider.displayName} 提供商不需要认证，使用空 API Key`);
+          const displayName = provider.displayName;
+          logger.info(`${displayName} 提供商不需要认证，使用空 API Key`);
           provider.apiKey = '';
           isProviderAvailable = true;
         }
@@ -95,14 +99,15 @@ class App {
       // 更新配置，只包含可用的提供商
       unifiedConfig.providers = validProviders;
 
-      logger.info(`过滤后可用的提供商: ${validProviders.map(p => p.displayName).join(', ')}`);
+      const providersInfo = validProviders.map(p => p.displayName).join(', ');
+      logger.info(`过滤后可用的提供商: ${providersInfo}`);
 
       // 初始化日志配置
       chatLogger.reloadConfig();
-      logger.info('聊天日志已初始化', {
-        enabled: chatLogger.isEnabled(),
-        config: chatLogger.getConfig(),
-      });
+      const chatConfig = chatLogger.getConfig();
+      const enabledStatus = chatLogger.isEnabled();
+      const configInfo = JSON.stringify(chatConfig);
+      logger.info(`聊天日志已初始化，启用状态: ${enabledStatus}，配置: ${configInfo}`);
 
       // 初始化模型发现服务（统一实现，不依赖特定服务）
       this.modelDiscoveryService = new ModelDiscoveryService();
@@ -114,7 +119,8 @@ class App {
       // 更新模型发现服务的可用提供商列表
       const availableProviders = this.unifiedAdapterService.getActiveProviders();
       this.modelDiscoveryService.updateAvailableProviders(availableProviders);
-      logger.info('已更新模型发现服务的可用提供商列表', { availableProviders });
+      const providerNames = availableProviders.join(', ');
+      logger.info(`已更新模型发现服务的可用提供商列表: ${providerNames}`);
 
       logger.info('统一适配器服务初始化完成');
 
@@ -264,19 +270,43 @@ class App {
 
   public listen(): void {
     this.app.listen(config.port, async () => {
-      logger.success(`🚀 Ollama 兼容服务器启动成功，监听端口 ${config.port}`);
-      logger.info(`🔍 健康检查: http://localhost:${config.port}/`);
+      const port = config.port;
+      logger.success(`🚀 Ollama 兼容服务器启动成功，监听端口 ${port}`);
+      logger.info(`🔍 健康检查: http://localhost:${port}/`);
 
       try {
         const supportedModels = await this.modelDiscoveryService.getAvailableModels();
         const modelCount = supportedModels.length;
         logger.info(`🤖 已加载 ${modelCount} 个模型:`);
 
-        // 分批显示模型，避免单行过长
-        const modelsPerLine = 3;
-        for (let i = 0; i < supportedModels.length; i += modelsPerLine) {
-          const modelBatch = supportedModels.slice(i, i + modelsPerLine);
-          logger.info(`   ${modelBatch.join(', ')}`);
+        // 智能分批显示模型，基于行长度动态调整
+        const maxLineLength = 80; // 最大行长度
+        const indent = '   '; // 缩进
+
+        let currentLine: string[] = [];
+        let currentLength = indent.length;
+
+        for (let i = 0; i < supportedModels.length; i++) {
+          const model = supportedModels[i];
+          const separator = currentLine.length > 0 ? ', ' : '';
+          const additionalLength = separator.length + model.length;
+
+          // 检查添加当前模型是否会超过行长度限制
+          if (currentLength + additionalLength > maxLineLength && currentLine.length > 0) {
+            // 输出当前行并开始新行
+            logger.info(`${indent}${currentLine.join(', ')}`);
+            currentLine = [model];
+            currentLength = indent.length + model.length;
+          } else {
+            // 添加到当前行
+            currentLine.push(model);
+            currentLength += additionalLength;
+          }
+        }
+
+        // 输出最后一行（如果有内容）
+        if (currentLine.length > 0) {
+          logger.info(`${indent}${currentLine.join(', ')}`);
         }
       } catch (error) {
         logger.warn('无法获取模型列表:', error);

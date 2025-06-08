@@ -48,7 +48,8 @@ export class UnifiedAdapterService {
       try {
         // 如果提供商的 enabled 字段明确设置为 false，则跳过初始化
         if (provider.enabled === false) {
-          logger.info(`跳过初始化 ${provider.displayName} 提供商，因为它被禁用了`);
+          const displayName = provider.displayName;
+          logger.info(`跳过初始化 ${displayName} 提供商，因为它被禁用了`);
           continue;
         }
 
@@ -61,15 +62,15 @@ export class UnifiedAdapterService {
         });
 
         this.providers.set(provider.name, client);
-        logger.debug(`初始化${provider.displayName}提供商成功`, {
-          provider: provider.name,
-          baseURL: provider.baseURL,
-        });
+        const displayName = provider.displayName;
+        const providerName = provider.name;
+        const baseURL = provider.baseURL;
+        logger.debug(`初始化${displayName}提供商成功，提供商: ${providerName}，baseURL: ${baseURL}`);
       } catch (error) {
-        logger.error(`初始化${provider.displayName}提供商失败`, {
-          provider: provider.name,
-          error,
-        });
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const displayName = provider.displayName;
+        const providerName = provider.name;
+        logger.error(`初始化${displayName}提供商失败，提供商: ${providerName}，错误: ${errorMessage}`);
       }
     }
   }
@@ -104,7 +105,8 @@ export class UnifiedAdapterService {
         // 获取模型配置
         modelConfig = await this.modelDiscovery.getModelConfig(request.model);
         if (!modelConfig) {
-          throw new OllamaError(`不支持的模型: ${request.model}`, 400);
+          const model = request.model;
+          throw new OllamaError(`不支持的模型: ${model}`, 400);
         }
 
         // 获取对应的OpenAI客户端
@@ -131,7 +133,9 @@ export class UnifiedAdapterService {
           await chatLogger.logRequestComplete(requestId, null, responseTime, !!request.stream, undefined, error, null);
         }
 
-        logger.error('统一聊天请求失败', { requestId, model: request.model, error });
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const model = request.model;
+        logger.error(`统一聊天请求失败，requestId: ${requestId}，model: ${model}，错误: ${errorMessage}`);
         if (error instanceof OllamaError) {
           throw error;
         }
@@ -215,13 +219,12 @@ export class UnifiedAdapterService {
           await chatLogger.logRequestComplete(requestId, null, responseTime, true, undefined, error, rawErrorResponse);
         }
 
-        logger.error('流式聊天处理失败', {
-          requestId,
-          provider: extractProviderFromModel(request.model),
-          model: modelConfig.name,
-          error,
-          rawErrorResponse,
-        });
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const provider = extractProviderFromModel(request.model);
+        const modelName = modelConfig.name;
+        logger.error(
+          `流式聊天处理失败，requestId: ${requestId}，provider: ${provider}，model: ${modelName}，错误: ${errorMessage}`
+        );
         throw new OllamaError(`流式聊天失败: ${error}`, 500);
       }
     })();
@@ -285,13 +288,12 @@ export class UnifiedAdapterService {
         await chatLogger.logRequestComplete(requestId, null, responseTime, false, undefined, error, rawErrorResponse);
       }
 
-      logger.error('非流式聊天处理失败', {
-        requestId,
-        provider: this.extractProviderFromModel(request.model),
-        model: modelConfig.name,
-        error,
-        rawErrorResponse,
-      });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const provider = this.extractProviderFromModel(request.model);
+      const modelName = modelConfig.name;
+      logger.error(
+        `非流式聊天处理失败，requestId: ${requestId}，provider: ${provider}，model: ${modelName}，错误: ${errorMessage}`
+      );
       throw new OllamaError(`聊天请求失败: ${error}`, 500);
     }
   }
@@ -320,58 +322,57 @@ export class UnifiedAdapterService {
 
         // 记录修复结果
         if (repairResult.warnings.length > 0) {
-          logger.warn('工具修复警告', {
-            model: request.model,
-            warnings: repairResult.warnings,
-            triggeredRules: repairResult.triggeredRules,
-          });
+          const warningsText = repairResult.warnings.join(', ');
+          const rulesText = repairResult.triggeredRules.join(', ');
+          const model = request.model;
+          logger.warn(`工具修复警告，model: ${model}，警告: ${warningsText}，触发规则: ${rulesText}`);
         }
 
         if (repairResult.errors.length > 0) {
-          logger.error('工具修复错误', {
-            model: request.model,
-            errors: repairResult.errors,
-            triggeredRules: repairResult.triggeredRules,
-          });
+          const errorsText = repairResult.errors.join(', ');
+          const rulesText = repairResult.triggeredRules.join(', ');
+          const model = request.model;
+          logger.error(`工具修复错误，model: ${model}，错误: ${errorsText}，触发规则: ${rulesText}`);
         }
 
         if (repairResult.removedTools.length > 0) {
-          logger.info('已移除的工具', {
-            model: request.model,
-            removedCount: repairResult.removedTools.length,
-            removedTools: repairResult.removedTools.map((t: any) => t.function?.name || 'unnamed'),
-          });
+          const removedToolsText = repairResult.removedTools.map((t: any) => t.function?.name || 'unnamed').join(', ');
+          const model = request.model;
+          const removedCount = repairResult.removedTools.length;
+          logger.info(`已移除的工具，model: ${model}，移除数量: ${removedCount}，移除工具: ${removedToolsText}`);
         }
 
         // 如果不允许使用工具，抛出错误
         if (!repairResult.allowed) {
-          throw new OllamaError(`工具修复失败: ${repairResult.errors.join(', ')}`, 400);
+          const errorsText = repairResult.errors.join(', ');
+          throw new OllamaError(`工具修复失败: ${errorsText}`, 400);
         }
 
         repairedTools = repairResult.repairedTools.length > 0 ? repairResult.repairedTools : undefined;
       } catch (error) {
         // 如果工具修复服务出错，回退到使用原始工具
-        logger.warn('工具修复服务出错，使用原始工具', {
-          model: request.model,
-          error: error instanceof Error ? error.message : String(error),
-          toolCount: request.tools.length,
-        });
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const model = request.model;
+        const toolsCount = request.tools.length;
+        logger.warn(`工具修复服务出错，使用原始工具，模型: ${model}，错误: ${errorMessage}，工具数量: ${toolsCount}`);
         repairedTools = request.tools.length > 0 ? request.tools : undefined;
       }
     }
 
     // 记录最终的工具格式以便调试
     if (repairedTools && repairedTools.length > 0) {
-      logger.debug('最终发送给 OpenAI API 的工具格式', {
-        model: request.model,
-        toolsCount: repairedTools.length,
-        tools: repairedTools.map(tool => ({
-          type: tool.type,
-          functionName: tool.function?.name,
-          hasParameters: !!tool.function?.parameters,
-          hasRequired: Array.isArray(tool.function?.parameters?.required),
-        })),
-      });
+      const toolsInfo = repairedTools.map(tool => ({
+        type: tool.type,
+        functionName: tool.function?.name,
+        hasParameters: !!tool.function?.parameters,
+        hasRequired: Array.isArray(tool.function?.parameters?.required),
+      }));
+      const model = request.model;
+      const toolsCount = repairedTools.length;
+      const toolsInfoJson = JSON.stringify(toolsInfo);
+      logger.debug(
+        `最终发送给 OpenAI API 的工具格式，模型: ${model}，工具数量: ${toolsCount}，工具信息: ${toolsInfoJson}`
+      );
     }
 
     // 先确定 max_tokens 的值
@@ -431,24 +432,19 @@ export class UnifiedAdapterService {
           max_tokens: finalReasoningMaxTokens,
         };
 
-        logger.debug('为思考模型添加或修正 reasoning 参数', {
-          model: request.model,
-          original_max_tokens: request.max_tokens,
-          adjusted_max_tokens: finalMaxTokens,
-          reasoning_max_tokens: (openaiRequest as any).reasoning.max_tokens,
-          reasoning_ratio: `${(((openaiRequest as any).reasoning.max_tokens / finalMaxTokens) * 100).toFixed(1)}%`,
-          frontend_provided: !!existingReasoning,
-          is_claude_thinking: isClaudeThinking,
-          context_window: modelConfig.capabilities.limits.max_context_window_tokens,
-        });
+        const reasoningMaxTokens = (openaiRequest as any).reasoning.max_tokens;
+        const reasoningRatio = `${((reasoningMaxTokens / finalMaxTokens) * 100).toFixed(1)}%`;
+        const model = request.model;
+        const originalMaxTokens = request.max_tokens;
+        const contextWindowTokens = modelConfig.capabilities.limits.max_context_window_tokens;
+        logger.debug(
+          `为思考模型添加或修正 reasoning 参数，模型: ${model}，原始最大tokens: ${originalMaxTokens}，调整后最大tokens: ${finalMaxTokens}，reasoning最大tokens: ${reasoningMaxTokens}，reasoning比例: ${reasoningRatio}，前端提供: ${!!existingReasoning}，是Claude思考: ${isClaudeThinking}，上下文窗口: ${contextWindowTokens}`
+        );
       } else {
-        logger.warn('无法为思考模型添加 reasoning 参数，可用 tokens 不足', {
-          model: request.model,
-          minReasoningTokens: minReasoningTokens,
-          calculatedMaxTokens: maxReasoningTokens,
-          configured_reasoning_tokens: reasoningTokens,
-          totalAvailableTokens: totalAvailableTokens,
-        });
+        const model = request.model;
+        logger.warn(
+          `无法为思考模型添加 reasoning 参数，可用 tokens 不足，模型: ${model}，最小reasoning tokens: ${minReasoningTokens}，计算的最大tokens: ${maxReasoningTokens}，配置的reasoning tokens: ${reasoningTokens}，总可用tokens: ${totalAvailableTokens}`
+        );
       }
     }
 
@@ -503,10 +499,10 @@ export class UnifiedAdapterService {
       // 重新初始化提供商
       this.initializeProviders();
 
-      logger.info('统一适配器配置更新成功', {
-        providersCount: this.config.providers.length,
-        activeProviders: Array.from(this.providers.keys()),
-      });
+      const activeProviders = Array.from(this.providers.keys());
+      const providersCount = this.config.providers.length;
+      const activeProvidersText = activeProviders.join(', ');
+      logger.info(`统一适配器配置更新成功，提供商数量: ${providersCount}，活跃提供商: ${activeProvidersText}`);
     } catch (error) {
       logger.error('更新统一适配器配置失败:', error);
       throw error;

@@ -296,7 +296,8 @@ class ChatLogger {
    */
   private async writeCompleteLog(logEntry: ChatRequestLog): Promise<void> {
     try {
-      const logFileName = `${logEntry.requestId}.json`;
+      const requestId = logEntry.requestId;
+      const logFileName = `${requestId}.json`;
       const logFilePath = join(this.config.logDir, logFileName);
 
       // 构造完整的日志对象，突出显示 provider、originalRequest 和 openaiRequest
@@ -365,10 +366,9 @@ class ChatLogger {
    */
   reloadConfig(): void {
     this.loadConfig();
-    logger.info('聊天日志配置已重新加载', {
-      enabled: this.config.enabled,
-      logDir: this.config.logDir,
-    });
+    const enabledStatus = this.config.enabled;
+    const logDir = this.config.logDir;
+    logger.info(`聊天日志配置已重新加载，启用状态: ${enabledStatus}，日志目录: ${logDir}`);
   }
 
   /**

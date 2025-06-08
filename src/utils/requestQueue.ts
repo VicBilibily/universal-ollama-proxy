@@ -32,7 +32,9 @@ export class RequestQueue {
   async add<T>(fn: () => Promise<T>, options?: { timeout?: number; priority?: number }): Promise<T> {
     // 内网环境下放宽队列限制
     if (this.queue.length >= this.queueLimit) {
-      logger.warn(`请求队列已满: ${this.queue.length}/${this.queueLimit}，请求可能被延迟`);
+      const queueLength = this.queue.length;
+      const queueLimit = this.queueLimit;
+      logger.warn(`请求队列已满: ${queueLength}/${queueLimit}，请求可能被延迟`);
       // 不直接拒绝，而是继续排队（内网环境相对可控）
     }
 
@@ -57,7 +59,8 @@ export class RequestQueue {
       this.stats.total++;
       this.stats.queued = this.queue.length;
 
-      logger.debug(`请求 ${id} 加入队列，当前队列长度: ${this.queue.length}`);
+      const queueLength = this.queue.length;
+      logger.debug(`请求 ${id} 加入队列，当前队列长度: ${queueLength}`);
       this.process();
     });
   }
@@ -77,6 +80,7 @@ export class RequestQueue {
 
   private async executeItem(item: QueueItem): Promise<void> {
     const startTime = Date.now();
+    const itemId = item.id;
     let timeoutId: NodeJS.Timeout | undefined;
 
     try {
@@ -84,11 +88,13 @@ export class RequestQueue {
       if (item.timeout) {
         timeoutId = setTimeout(() => {
           this.stats.timeout++;
-          item.reject(new Error(`请求 ${item.id} 超时 (${item.timeout}ms)`));
+          const timeout = item.timeout;
+          item.reject(new Error(`请求 ${itemId} 超时 (${timeout}ms)`));
         }, item.timeout);
       }
 
-      logger.debug(`开始执行请求 ${item.id}，等待时间: ${startTime - item.timestamp}ms`);
+      const waitTime = startTime - item.timestamp;
+      logger.debug(`开始执行请求 ${itemId}，等待时间: ${waitTime}ms`);
 
       const result = await item.fn();
 
@@ -98,7 +104,7 @@ export class RequestQueue {
 
       this.stats.completed++;
       const duration = Date.now() - startTime;
-      logger.debug(`请求 ${item.id} 完成，执行时间: ${duration}ms`);
+      logger.debug(`请求 ${itemId} 完成，执行时间: ${duration}ms`);
 
       item.resolve(result);
     } catch (error) {
@@ -107,7 +113,8 @@ export class RequestQueue {
       }
 
       this.stats.failed++;
-      logger.error(`请求 ${item.id} 失败:`, error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`请求 ${itemId} 失败: ${errorMessage}`);
       item.reject(error);
     }
   }

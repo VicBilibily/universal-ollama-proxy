@@ -1,52 +1,62 @@
-# 🚀 AI 模型统一代理 - Ollama 兼容接口
+# Universal Ollama Proxy
 
 [![CI](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml)
 [![Release](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/VicBilibily/universal-ollama-proxy)](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**基于 OpenAI
-SDK 的统一适配器架构**，将多个 AI 服务提供商统一为 Ollama 兼容接口，**专为 GitHub
-Copilot Chat 的 Ollama 接入优化**。
+一个专为 GitHub Copilot
+Chat 的 Ollama 接入而设计的代理服务。将多个AI服务提供商的API转换为Ollama兼容格式，让你可以在 GitHub
+Copilot Chat 中使用不同的AI模型。基于TypeScript和OpenAI SDK构建。
 
-> **🎯 设计目的**：本项目专为兼容 GitHub Copilot
-> Chat 的 Ollama 接入而设计，提供其调用所使用到的兼容接口。
+## ✨ 功能特点
 
-## ✨ 核心特性
+- 🔗 **GitHub Copilot Chat 集成** - 专为 GitHub Copilot
+  Chat 的 Ollama 接入设计和优化
+- 🔄 **API转换** - 将不同AI提供商的API统一转换为Ollama兼容格式
+- 🌐 **多提供商支持** - 集成火山方舟、阿里云百炼、DeepSeek、腾讯云、OpenRouter等
+- 🔥 **配置热重载** - 支持JSON配置文件的实时重载，无需重启服务
+- 🛠️
+  **工具兼容性** - 包含工具修复服务，确保Anthropic/Claude模型的工具调用正常工作
+- 📝 **请求日志** - 详细的请求和响应日志记录，便于调试和监控
+- 💻 **多平台支持** - 提供预编译的二进制文件，支持Windows、macOS、Linux
 
-- 🏗️ **统一架构** - 基于 OpenAI SDK 的统一适配器服务，完整的 TypeScript 类型安全
-- 🔄 **配置管理** - 热重载配置文件，动态加载提供商，环境变量安全管理
-- 📊 **监控日志** - 详细请求/响应日志，性能监控，错误追踪
-- 🛠️ **消息处理** - 自定义过滤规则，格式转换，GitHub Copilot Chat 完美兼容
-- 🛡️ **工具修复** - 自动修复工具格式，Anthropic/Claude兼容性，性能优化
-- 🌍 **多平台** - 所有主流平台预编译二进制，无依赖运行，自动构建发布
+## 🎯 使用场景
 
-📖 **[详细特性说明 →](./README/FEATURES.md)**
+本项目主要解决 GitHub Copilot
+Chat 只支持 Ollama 本地模型的限制，通过代理服务让你可以：
 
-## 🎯 支持的 AI 提供商
+- 在 GitHub Copilot Chat 中使用国内AI服务（火山方舟、阿里云百炼等）
+- 访问 OpenRouter 聚合的各种国外模型（GPT-4、Claude、Gemini等）
+- 无需修改 GitHub Copilot Chat 配置，只需将 Ollama 服务地址指向本代理
 
-| 提供商                 | 模型数量 | 特色功能                       |
-| ---------------------- | -------- | ------------------------------ |
-| 🔥 **火山方舟引擎**    | 12+      | 豆包大模型、深度思考、视觉理解 |
-| 🚀 **阿里云百炼**      | 8+       | 通义千问系列、视觉理解         |
-| 🔥 **腾讯云 DeepSeek** | 5+       | DeepSeek R1、V3、Prover        |
-| 🎯 **DeepSeek 官方**   | 2+       | 聊天模型、推理模型             |
-| 🌐 **OpenRouter**      | 15+      | GPT-4o、Claude、Gemini 聚合    |
+## 🚀 支持的AI提供商
 
-📋 **[完整模型列表 →](./README/SUPPORTED_MODELS.md)**
+目前支持以下AI服务提供商：
 
-## 📥 快速开始
+| 提供商         | 配置标识     | 说明                     |
+| -------------- | ------------ | ------------------------ |
+| 火山方舟引擎   | `volcengine` | 字节跳动的AI服务平台     |
+| 阿里云百炼     | `dashscope`  | 阿里云的AI模型服务       |
+| DeepSeek官方   | `deepseek`   | DeepSeek官方API          |
+| 腾讯云DeepSeek | `tencentds`  | 腾讯云托管的DeepSeek服务 |
+| OpenRouter     | `openrouter` | 多模型聚合服务           |
 
-### 🎯 方式一：预编译版本（推荐）
+每个提供商需要在配置文件中设置相应的API密钥和端点信息。
+
+## 📦 快速开始
+
+### 使用预编译版本（推荐）
 
 1. 从
    [Releases](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
    下载对应平台的压缩包
-2. 解压并配置 `.env` 文件（至少配置一个 API Key）
-3. 运行可执行文件
-4. 访问 http://localhost:11434 验证服务
+2. 解压文件
+3. 复制 `.env.example` 为 `.env` 并配置API密钥
+4. 运行可执行文件
+5. 在 GitHub Copilot Chat 中将 Ollama 服务地址设置为 `http://localhost:11434`
 
-### 🛠️ 方式二：源码安装
+### 从源码运行
 
 ```bash
 git clone https://github.com/VicBilibily/universal-ollama-proxy.git
@@ -56,11 +66,21 @@ cp .env.example .env  # 编辑配置 API Keys
 npm run dev
 ```
 
-📖 **[详细安装指南 →](./README/INSTALLATION_GUIDE.md)**
+```bash
+git clone https://github.com/VicBilibily/universal-ollama-proxy.git
+cd universal-ollama-proxy
+npm install
+cp .env.example .env
+# 编辑 .env 文件，配置API密钥
+npm run dev
+# 在 GitHub Copilot Chat 中设置 Ollama 地址为 http://localhost:11434
+```
 
-## ⚙️ 基础配置
+## ⚙️ 配置说明
 
-在 `.env` 文件中配置至少一个 AI 提供商的 API Key：
+### 环境变量配置
+
+在 `.env` 文件中配置服务端口和API密钥：
 
 ```env
 # 服务配置
@@ -73,25 +93,32 @@ TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 
-# 日志配置
+# 可选配置
 LOG_LEVEL=info
 CHAT_LOGS=false
 ```
 
-🔧 **[完整配置参数说明 →](./README/CONFIGURATION.md)**
+### 提供商配置
 
-## 📡 API 接口
+服务启动时会自动加载 `config/unified-providers.json`
+中的提供商配置。支持配置文件的热重载，修改配置后无需重启服务。
 
-### Ollama 兼容接口
+## 📡 API接口
 
-- `GET /` - 健康检查和服务状态
-- `GET /api/version` - 获取服务版本信息
-- `GET /api/tags` - 获取可用模型列表
-- `POST /api/show` - 显示特定模型信息
+本服务提供完整的Ollama兼容API，专门为GitHub Copilot Chat设计：
 
-### OpenAI 兼容接口
+### 主要接口
 
-- `POST /v1/chat/completions` - 聊天完成接口（流式/非流式）
+- `GET /` - 健康检查
+- `GET /api/version` - 服务版本信息
+- `GET /api/tags` - 获取可用模型列表（GitHub Copilot Chat 用于发现模型）
+- `POST /api/show` - 显示模型详细信息
+- `POST /v1/chat/completions` - OpenAI兼容的聊天接口（支持流式和非流式响应）
+
+### GitHub Copilot Chat 集成
+
+将本服务的地址（默认 `http://localhost:11434`）配置为 GitHub Copilot
+Chat 的 Ollama 服务地址即可使用。
 
 ## 🛠️ 开发与部署
 

@@ -1,66 +1,91 @@
-# 🚀 Universal AI Model Proxy - Ollama Compatible Interface
+# Universal Ollama Proxy
 
 [![CI](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/ci.yml)
 [![Release](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml/badge.svg)](https://github.com/VicBilibily/universal-ollama-proxy/actions/workflows/release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/VicBilibily/universal-ollama-proxy)](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Unified adapter architecture based on OpenAI SDK** that consolidates multiple
-AI service providers into an Ollama-compatible interface, **specifically
-optimized for GitHub Copilot Chat's Ollama integration**.
+A proxy service specifically designed for GitHub Copilot Chat's Ollama
+integration. Converts multiple AI service provider APIs to Ollama-compatible
+format, enabling you to use different AI models within GitHub Copilot Chat.
+Built with TypeScript and OpenAI SDK.
 
-> **🎯 Design Purpose**: This project is designed specifically for GitHub
-> Copilot Chat's Ollama integration, providing the compatible interfaces that it
-> requires.
+## ✨ Features
 
-## ✨ Core Features
+- 🔗 **GitHub Copilot Chat Integration** - Specifically designed and optimized
+  for GitHub Copilot Chat's Ollama integration
+- 🔄 **API Conversion** - Converts different AI provider APIs to
+  Ollama-compatible format
+- 🌐 **Multi-Provider Support** - Integrates VolcEngine, Alibaba Cloud
+  DashScope, DeepSeek, Tencent Cloud, OpenRouter, and more
+- 🔥 **Configuration Hot Reload** - Supports real-time JSON configuration file
+  reloading without service restart
+- 🛠️ **Tool Compatibility** - Includes tool repair service ensuring proper tool
+  calls for Anthropic/Claude models
+- 📝 **Request Logging** - Detailed request and response logging for debugging
+  and monitoring
+- 💻 **Multi-Platform Support** - Provides pre-compiled binaries for Windows,
+  macOS, and Linux
 
-- 🏗️ **Unified Architecture** - OpenAI SDK-based unified adapter service with
-  complete TypeScript type safety
-- 🔄 **Configuration Management** - Hot-reload configuration files, dynamic
-  provider loading, secure environment variable management
-- 📊 **Monitoring & Logging** - Detailed request/response logs, error tracking
-- 🛡️ **Tool Repair** - Automatic tool format repair, Anthropic/Claude
-  compatibility
-- 🌍 **Multi-Platform** - Pre-compiled binaries for all major platforms,
-  dependency-free execution, automated build & release
+## 🎯 Use Cases
 
-## 🎯 Supported AI Providers
+This project primarily solves GitHub Copilot Chat's limitation of only
+supporting local Ollama models. Through this proxy service, you can:
 
-| Provider                     | Models | Key Features                       |
-| ---------------------------- | ------ | ---------------------------------- |
-| 🔥 **VolcEngine**            | 12+    | Doubao LLM, Deep Thinking, Vision  |
-| 🚀 **Alibaba Cloud (China)** | 8+     | Qwen Series, Vision Understanding  |
-| 🔥 **Tencent DeepSeek**      | 5+     | DeepSeek R1, V3, Prover            |
-| 🎯 **DeepSeek Official**     | 2+     | Chat Models, Reasoning Models      |
-| 🌐 **OpenRouter**            | 15+    | GPT-4o, Claude, Gemini Aggregation |
+- Use Chinese AI services (VolcEngine, Alibaba Cloud DashScope, etc.) in GitHub
+  Copilot Chat
+- Access various international models aggregated by OpenRouter (GPT-4, Claude,
+  Gemini, etc.)
+- No need to modify GitHub Copilot Chat configuration - simply point the Ollama
+  service address to this proxy
 
-## 📥 Quick Start
+## 🚀 Supported AI Providers
 
-### 🎯 Method 1: Pre-compiled Binaries (Recommended)
+Currently supports the following AI service providers:
 
-1. Download the appropriate platform package from
+| Provider                | Config ID    | Description                           |
+| ----------------------- | ------------ | ------------------------------------- |
+| VolcEngine              | `volcengine` | ByteDance's AI service platform       |
+| Alibaba Cloud DashScope | `dashscope`  | Alibaba Cloud's AI model service      |
+| DeepSeek Official       | `deepseek`   | DeepSeek official API                 |
+| Tencent Cloud DeepSeek  | `tencentds`  | Tencent Cloud hosted DeepSeek service |
+| OpenRouter              | `openrouter` | Multi-model aggregation service       |
+
+Each provider requires setting corresponding API keys and endpoint information
+in the configuration file.
+
+## 📦 Quick Start
+
+### Using Pre-compiled Binaries (Recommended)
+
+1. Download the corresponding platform package from
    [Releases](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
-2. Extract and configure the `.env` file (at least one API Key required)
-3. Run the executable file
-4. Visit http://localhost:11434 to verify the service
+2. Extract the files
+3. Copy `.env.example` to `.env` and configure API keys
+4. Run the executable file
+5. Set the Ollama service address in GitHub Copilot Chat to
+   `http://localhost:11434`
 
-### 🛠️ Method 2: Source Installation
+### Running from Source
 
 ```bash
 git clone https://github.com/VicBilibily/universal-ollama-proxy.git
 cd universal-ollama-proxy
 npm install
-cp .env.example .env  # Edit to configure API Keys
+cp .env.example .env
+# Edit .env file to configure API keys
 npm run dev
+# Set Ollama address in GitHub Copilot Chat to http://localhost:11434
 ```
 
-## ⚙️ Basic Configuration
+## ⚙️ Configuration
 
-Configure at least one AI provider's API Key in the `.env` file:
+### Environment Variables
+
+Configure service port and API keys in the `.env` file:
 
 ```env
-# Service Configuration
+# Service configuration
 PORT=11434
 
 # AI Provider API Keys (at least one required)
@@ -70,37 +95,49 @@ TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 
-# Logging Configuration
+# Optional configuration
 LOG_LEVEL=info
 CHAT_LOGS=false
 ```
 
-## 📡 API Interfaces
+### Provider Configuration
 
-### Ollama Compatible Interface
+The service automatically loads provider configurations from
+`config/unified-providers.json` on startup. Supports configuration file hot
+reloading - no service restart required when modifying configurations.
 
-- `GET /` - Health check and service status
-- `GET /api/version` - Get service version information
-- `GET /api/tags` - Get available model list
-- `POST /api/show` - Show specific model information
+## 📡 API Endpoints
 
-### OpenAI Compatible Interface
+This service provides complete Ollama-compatible APIs, specifically designed for
+GitHub Copilot Chat:
 
-- `POST /v1/chat/completions` - Chat completion interface
-  (streaming/non-streaming)
+### Main Endpoints
 
-## 🛠️ Development & Deployment
+- `GET /` - Health check
+- `GET /api/version` - Service version information
+- `GET /api/tags` - Get available model list (used by GitHub Copilot Chat for
+  model discovery)
+- `POST /api/show` - Show model details
+- `POST /v1/chat/completions` - OpenAI-compatible chat interface (supports
+  streaming and non-streaming responses)
 
-### Development Commands
+### GitHub Copilot Chat Integration
+
+Configure this service's address (default `http://localhost:11434`) as the
+Ollama service address in GitHub Copilot Chat to start using it.
+
+## 🛠️ Development
+
+### Local Development
 
 ```bash
 npm run dev          # Development mode (hot reload)
 npm run build        # Build project
+npm run start        # Start production version
 npm run format       # Code formatting
-npm run check        # Verify configuration and environment
 ```
 
-### Build & Release
+### Build Release
 
 ```bash
 npm run build:binaries    # Build binaries for all platforms
@@ -108,17 +145,32 @@ npm run release          # Complete release process
 npm run quick:build      # Interactive quick build
 ```
 
+## 📚 Documentation
+
+| Document                                                           | Description                                |
+| ------------------------------------------------------------------ | ------------------------------------------ |
+| [Features](./README/FEATURES.md)                                   | Detailed feature descriptions              |
+| [Supported Models](./README/SUPPORTED_MODELS.md)                   | Complete AI provider and model list        |
+| [Installation Guide](./README/INSTALLATION_GUIDE.md)               | Detailed installation and deployment guide |
+| [Configuration](./README/CONFIGURATION.md)                         | Complete configuration parameter reference |
+| [Development Guide](./README/DEVELOPMENT.md)                       | Project architecture and development guide |
+| [Provider Configuration](./docs/PROVIDER_CONFIGURATION.md)         | API key configuration guide                |
+| [Model Config Specification](./docs/MODEL_CONFIG_SPECIFICATION.md) | Model configuration file format            |
+| [Config Hot Reload](./docs/CONFIG_HOT_RELOAD.md)                   | Configuration hot reload functionality     |
+| [Message Processing Rules](./docs/MESSAGE_PROCESSING_RULES.md)     | Message processing rule configuration      |
+| [Tool Repair Guide](./docs/TOOL_REPAIR_GUIDE.md)                   | Tool repair functionality guide            |
+| [Auto Release Guide](./docs/AUTO_RELEASE_GUIDE.md)                 | CI/CD automated release process            |
+
 ## 🔧 Troubleshooting
 
-Having issues:
+When encountering issues:
 
 1. Run `npm run check` to verify configuration
 2. Set `LOG_LEVEL=debug` to view detailed logs
-3. Go to
+3. Report issues at
    [GitHub Issues](https://github.com/VicBilibily/universal-ollama-proxy/issues)
-   to report problems
 
-## 🚀 Automated Release
+## Automated Release
 
 This project supports automated GitHub Release builds:
 
@@ -126,9 +178,9 @@ This project supports automated GitHub Release builds:
 2. Wait 3-5 minutes
 3. All platform packages are automatically generated 🎉
 
-## 📄 License
+## License
 
-This project is open-sourced under the [MIT License](LICENSE).
+This project is open source under the [MIT License](LICENSE).
 
 ---
 

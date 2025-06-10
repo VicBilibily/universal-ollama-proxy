@@ -111,6 +111,7 @@ class ChatLogger {
 
   /**
    * 从模型ID中提取提供商信息
+   * 用于从完整的模型标识符（格式：provider:modelName）中提取 provider 部分
    */
   private extractProviderFromModelId(modelId: string): string {
     if (modelId.includes(':')) {
@@ -169,7 +170,7 @@ class ChatLogger {
       requestId,
       timestamp: startTime,
       model: openaiRequest.model, // 使用 OpenAI 请求中的模型名称
-      provider: this.extractProviderFromModelId(modelConfig.id),
+      provider: this.extractProviderFromModelId(originalRequest.model), // 从原始请求的模型名称中提取 provider
       originalRequest: JSON.parse(JSON.stringify(originalRequest)), // 深拷贝原始请求
       openaiRequest: JSON.parse(JSON.stringify(openaiRequest)), // 深拷贝 OpenAI 请求
       metadata: {

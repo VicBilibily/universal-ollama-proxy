@@ -169,7 +169,7 @@ export class UnifiedAdapterService {
 
         for await (const chunk of stream) {
           chunkCount++;
-          allChunks.push(chunk); // 收集原始响应块
+          allChunks.push(chunk);
 
           // 记录流式响应块到详细日志
           if (chatLogger.isEnabled()) {
@@ -448,6 +448,11 @@ export class UnifiedAdapterService {
       }
     }
 
+    // 为有thinking_type配置的模型处理thinking策略
+    if (modelConfig.capabilities?.limits?.thinking_type) {
+      this.handleThinkingStrategy(openaiRequest, modelConfig, request);
+    }
+
     // 如果工具被完全修复掉，也需要移除 tool_choice
     if (!repairedTools || repairedTools.length === 0) {
       delete openaiRequest.tool_choice;
@@ -528,5 +533,62 @@ export class UnifiedAdapterService {
    */
   public isProviderAvailable(providerName: string): boolean {
     return this.providers.has(providerName);
+  }
+
+  /**
+   * 处理支持thinking策略的模型配置
+   */
+  private handleThinkingStrategy(
+    openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams,
+    modelConfig: ModelConfig,
+    originalRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams
+  ): void {
+    try {
+      // 从模型配置中获取thinking_type设置
+      const limits = modelConfig.capabilities.limits as any;
+      const thinkingType = limits?.thinking_type;
+
+      if (!thinkingType) {
+        logger.debug(`模型 ${modelConfig.id} 未配置 thinking_type，跳过处理`);
+        return;
+      }
+
+      logger.debug(`模型 ${modelConfig.id} 的 thinking_type 配置: ${thinkingType}`); // 使用类型断言处理自定义参数，类似其他地方的做法
+      const openaiRequestAny = openaiRequest as any;
+      const originalRequestAny = originalRequest as any;
+
+      // 根据thinking_type配置设置相应参数，使用豆包官方API格式 thinking: { type: "value" }
+      switch (thinkingType) {
+        case 'enabled':
+          // 强制开启思考模式
+          openaiRequestAny.thinking = { type: 'enabled' };
+          logger.debug(`为模型 ${modelConfig.id} 启用思考模式`);
+          break;
+
+        case 'disabled':
+          // 强制关闭思考模式
+          openaiRequestAny.thinking = { type: 'disabled' };
+          logger.debug(`为模型 ${modelConfig.id} 禁用思考模式`);
+          break;
+
+        case 'auto':
+          // 让模型自主判断是否使用思考模式
+          openaiRequestAny.thinking = { type: 'auto' };
+          logger.debug(`为模型 ${modelConfig.id} 设置自动思考模式`);
+          break;
+
+        default:
+          logger.warn(`模型 ${modelConfig.id} 的 thinking_type 配置未知: ${thinkingType}`);
+          break;
+      }
+
+      // 如果原始请求中有thinking相关参数，优先使用原始请求的设置
+      if (originalRequestAny.thinking) {
+        openaiRequestAny.thinking = originalRequestAny.thinking;
+        logger.debug(`使用原始请求中的 thinking 设置:`, originalRequestAny.thinking);
+      }
+    } catch (error) {
+      logger.error(`处理模型 ${modelConfig.id} 的 thinking 策略时出错:`, error);
+    }
   }
 }

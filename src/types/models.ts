@@ -34,6 +34,7 @@ export interface ModelLimits {
   max_output_tokens: number;
   max_prompt_tokens: number;
   reasoning_tokens?: number; // 思考模式专用
+  thinking_type?: 'enabled' | 'disabled' | 'auto'; // 豆包思维链策略配置
   vision?: VisionLimits;
 }
 

@@ -47,6 +47,8 @@ Copilot 的模型列表标准，以确保配置的一致性和可扩展性。
       "max_context_window_tokens": number,    // 最大上下文窗口
       "max_output_tokens": number,            // 最大输出token数
       "max_prompt_tokens": number,            // 最大提示token数
+      "reasoning_tokens": number,             // 推理思考token数限制（可选，用于支持thinking的模型）
+      "thinking_type": "enabled|disabled|auto", // 思考模式配置（可选，火山引擎专用）
       "vision": {                             // 视觉能力限制（可选）
         "max_images": number,
         "max_image_size": number,

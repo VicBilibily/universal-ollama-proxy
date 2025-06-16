@@ -15,6 +15,7 @@
           "max_output_tokens": 16000,
           "max_prompt_tokens": 224000,
           "reasoning_tokens": 32000,
+          "thinking_type": "disabled", // 深度思考模式配置。支持 enabled（开启）、disabled（关闭）、auto（模型自主判断）三种模式
           "vision": {
             "max_images": 10,
             "max_image_size": 20971520,
@@ -34,8 +35,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
+          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
+          "parallel_tool_calls": false,
           "structured_outputs": true,
           "vision": true,
           "thinking": true
@@ -78,8 +79,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
+          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
+          "parallel_tool_calls": false,
           "structured_outputs": true,
           "vision": true,
           "thinking": true
@@ -103,6 +104,7 @@
           "max_output_tokens": 16000,
           "max_prompt_tokens": 224000,
           "reasoning_tokens": 32000,
+          "thinking_type": "disabled", // 深度思考开关配置。支持 enabled（开启）、disabled（关闭）两种模式
           "vision": {
             "max_images": 10,
             "max_image_size": 20971520,
@@ -122,8 +124,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
+          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
+          "parallel_tool_calls": false,
           "structured_outputs": true,
           "vision": true,
           "thinking": true

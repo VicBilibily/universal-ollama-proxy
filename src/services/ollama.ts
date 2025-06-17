@@ -68,10 +68,17 @@ export class OllamaService {
       }
 
       // 构建模型能力列表
-      const capabilities = ['chat', 'completion', 'tools'];
+      const capabilities = ['chat', 'completion'];
 
-      // 检查模型是否支持视觉功能
+      // 检查模型配置的各种能力支持
       if (modelConfig.capabilities) {
+        // 检查模型是否支持工具调用
+        const hasToolSupport = modelConfig.capabilities.supports.tool_calls || false;
+        if (hasToolSupport) {
+          capabilities.push('tools');
+        }
+
+        // 检查模型是否支持视觉功能
         const hasVisionSupport = modelConfig.capabilities.supports.vision || false;
         if (hasVisionSupport) {
           capabilities.push('vision');

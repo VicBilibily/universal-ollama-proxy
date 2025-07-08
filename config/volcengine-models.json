@@ -35,8 +35,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
-          "parallel_tool_calls": false,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
           "structured_outputs": true,
           "vision": true,
           "thinking": true
@@ -79,8 +79,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
-          "parallel_tool_calls": false,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
           "structured_outputs": true,
           "vision": true,
           "thinking": true
@@ -124,8 +124,8 @@
         "object": "model_capabilities",
         "supports": {
           "streaming": true,
-          "tool_calls": false, // doubao-seed 暂未支持 OpenAI 的 tool_calls 功能，实际使用中可能会有兼容性问题
-          "parallel_tool_calls": false,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
           "structured_outputs": true,
           "vision": true,
           "thinking": true

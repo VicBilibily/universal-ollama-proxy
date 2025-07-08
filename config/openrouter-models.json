@@ -1,6 +1,10 @@
 {
   "models": [
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-3.5-turbo",
         "limits": {
@@ -17,6 +21,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-3.5-turbo",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT 3.5 Turbo",
       "object": "model",
@@ -25,6 +31,10 @@
       "version": "gpt-3.5-turbo-0613"
     },
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-3.5-turbo",
         "limits": {
@@ -41,6 +51,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-3.5-turbo-0613",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT 3.5 Turbo",
       "object": "model",
@@ -49,6 +61,10 @@
       "version": "gpt-3.5-turbo-0613"
     },
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-4o-mini",
         "limits": {
@@ -66,6 +82,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-4o-mini",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT-4o mini",
       "object": "model",
@@ -74,6 +92,10 @@
       "version": "gpt-4o-mini-2024-07-18"
     },
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-4o-mini",
         "limits": {
@@ -91,6 +113,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-4o-mini-2024-07-18",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT-4o mini",
       "object": "model",
@@ -99,6 +123,10 @@
       "version": "gpt-4o-mini-2024-07-18"
     },
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-4",
         "limits": {
@@ -115,6 +143,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-4",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT 4",
       "object": "model",
@@ -123,6 +153,10 @@
       "version": "gpt-4-0613"
     },
     {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
       "capabilities": {
         "family": "gpt-4o",
         "limits": {
@@ -151,6 +185,8 @@
         "type": "chat"
       },
       "id": "openai/gpt-4o-2024-05-13",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
       "model_picker_enabled": false,
       "name": "GPT-4o",
       "object": "model",
@@ -159,405 +195,10 @@
       "version": "gpt-4o-2024-05-13"
     },
     {
-      "capabilities": {
-        "family": "gpt-4o",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 64000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
       },
-      "id": "openai/gpt-4o",
-      "model_picker_enabled": true,
-      "name": "GPT-4o",
-      "object": "model",
-      "preview": false,
-      "vendor": "Azure OpenAI",
-      "version": "gpt-4o-2024-11-20"
-    },
-    {
-      "capabilities": {
-        "family": "gpt-4o",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 64000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4o-2024-11-20",
-      "model_picker_enabled": false,
-      "name": "GPT-4o",
-      "object": "model",
-      "preview": false,
-      "vendor": "Azure OpenAI",
-      "version": "gpt-4o-2024-11-20"
-    },
-    {
-      "capabilities": {
-        "family": "gpt-4o",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 64000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4o-search-preview",
-      "model_picker_enabled": false,
-      "name": "GPT-4o",
-      "object": "model",
-      "preview": false,
-      "vendor": "Azure OpenAI",
-      "version": "gpt-4o-2024-05-13"
-    },
-    {
-      "capabilities": {
-        "family": "gpt-4o",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 64000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/gpt-4o-2024-08-06",
-      "model_picker_enabled": false,
-      "name": "GPT-4o",
-      "object": "model",
-      "preview": false,
-      "vendor": "Azure OpenAI",
-      "version": "gpt-4o-2024-08-06"
-    },
-    {
-      "capabilities": {
-        "family": "o1-ga",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_prompt_tokens": 16384
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "structured_outputs": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o1",
-      "model_picker_enabled": true,
-      "name": "o1 (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "Azure OpenAI",
-      "version": "o1-2024-12-17"
-    },
-    {
-      "capabilities": {
-        "family": "o3-mini",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_output_tokens": 100000,
-          "max_prompt_tokens": 64000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "structured_outputs": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o3-mini",
-      "model_picker_enabled": true,
-      "name": "o3-mini",
-      "object": "model",
-      "preview": false,
-      "vendor": "Azure OpenAI",
-      "version": "o3-mini-2025-01-31"
-    },
-    {
-      "capabilities": {
-        "family": "claude-3.5-sonnet",
-        "limits": {
-          "max_context_window_tokens": 90000,
-          "max_output_tokens": 8192,
-          "max_prompt_tokens": 90000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "anthropic/claude-3.5-sonnet",
-      "model_picker_enabled": true,
-      "name": "Claude 3.5 Sonnet",
-      "object": "model",
-      "preview": false,
-      "vendor": "Anthropic",
-      "version": "claude-3.5-sonnet"
-    },
-    {
-      "capabilities": {
-        "family": "claude-3.7-sonnet",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "anthropic/claude-3.7-sonnet",
-      "model_picker_enabled": true,
-      "name": "Claude 3.7 Sonnet",
-      "object": "model",
-      "preview": false,
-      "vendor": "Anthropic",
-      "version": "claude-3.7-sonnet"
-    },
-    {
-      "capabilities": {
-        "family": "claude-3.7-sonnet-thought",
-        "limits": {
-          "max_context_window_tokens": 200000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 90000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
-          },
-          "reasoning_tokens": 4096
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "streaming": true,
-          "vision": true,
-          "thinking": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "anthropic/claude-3.7-sonnet:thinking",
-      "model_picker_enabled": true,
-      "name": "Claude 3.7 Sonnet Thinking",
-      "object": "model",
-      "preview": false,
-      "vendor": "Anthropic",
-      "version": "claude-3.7-sonnet-thought"
-    },
-    {
-      "capabilities": {
-        "family": "claude-sonnet-4",
-        "limits": {
-          "max_context_window_tokens": 80000,
-          "max_output_tokens": 16000,
-          "max_prompt_tokens": 80000
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "anthropic/claude-sonnet-4",
-      "model_picker_enabled": true,
-      "name": "Claude Sonnet 4",
-      "object": "model",
-      "preview": true,
-      "vendor": "Anthropic",
-      "version": "claude-sonnet-4"
-    },
-    {
-      "capabilities": {
-        "family": "gemini-2.0-flash",
-        "limits": {
-          "max_context_window_tokens": 1000000,
-          "max_output_tokens": 8192,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/heic",
-              "image/heif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "google/gemini-2.0-flash-001",
-      "model_picker_enabled": true,
-      "name": "Gemini 2.0 Flash",
-      "object": "model",
-      "preview": false,
-      "vendor": "Google",
-      "version": "gemini-2.0-flash-001"
-    },
-    {
-      "capabilities": {
-        "family": "gemini-2.5-pro",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 64000,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/heic",
-              "image/heif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "google/gemini-2.5-pro-preview-05-06",
-      "model_picker_enabled": false,
-      "name": "Gemini 2.5 Pro (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "Google",
-      "version": "gemini-2.5-pro-preview-05-06"
-    },
-    {
-      "capabilities": {
-        "family": "o4-mini",
-        "limits": {
-          "max_context_window_tokens": 128000,
-          "max_output_tokens": 16384,
-          "max_prompt_tokens": 128000,
-          "vision": {
-            "max_prompt_image_size": 3145728,
-            "max_prompt_images": 1,
-            "supported_media_types": [
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-            ]
-          }
-        },
-        "object": "model_capabilities",
-        "supports": {
-          "parallel_tool_calls": true,
-          "streaming": true,
-          "structured_outputs": true,
-          "tool_calls": true,
-          "vision": true
-        },
-        "tokenizer": "o200k_base",
-        "type": "chat"
-      },
-      "id": "openai/o4-mini",
-      "model_picker_enabled": true,
-      "name": "o4-mini (Preview)",
-      "object": "model",
-      "preview": true,
-      "vendor": "Azure OpenAI",
-      "version": "o4-mini-2025-04-16"
-    },
-    {
       "capabilities": {
         "family": "gpt-4.1",
         "limits": {
@@ -587,12 +228,526 @@
         "type": "chat"
       },
       "id": "openai/gpt-4.1",
+      "is_chat_default": true,
+      "is_chat_fallback": true,
       "model_picker_enabled": true,
       "name": "GPT-4.1",
       "object": "model",
       "preview": false,
       "vendor": "Azure OpenAI",
       "version": "gpt-4.1-2025-04-14"
+    },
+    {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
+      "capabilities": {
+        "family": "gpt-4o",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 64000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/gpt-4o",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "GPT-4o",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-11-20"
+    },
+    {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
+      "capabilities": {
+        "family": "gpt-4o",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 64000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/gpt-4o-2024-11-20",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": false,
+      "name": "GPT-4o",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-11-20"
+    },
+    {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
+      "capabilities": {
+        "family": "gpt-4o",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 64000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/gpt-4o-search-preview",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": false,
+      "name": "GPT-4o",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-05-13"
+    },
+    {
+      "billing": {
+        "is_premium": false,
+        "multiplier": 0
+      },
+      "capabilities": {
+        "family": "gpt-4o",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 64000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/gpt-4o-2024-08-06",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": false,
+      "name": "GPT-4o",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "gpt-4o-2024-08-06"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 0.33
+      },
+      "capabilities": {
+        "family": "o3-mini",
+        "limits": {
+          "max_context_window_tokens": 200000,
+          "max_output_tokens": 100000,
+          "max_prompt_tokens": 64000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "structured_outputs": true,
+          "tool_calls": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/o3-mini",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "o3-mini",
+      "object": "model",
+      "preview": false,
+      "vendor": "Azure OpenAI",
+      "version": "o3-mini-2025-01-31"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 1
+      },
+      "capabilities": {
+        "family": "claude-3.5-sonnet",
+        "limits": {
+          "max_context_window_tokens": 90000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 90000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "anthropic/claude-3.5-sonnet",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Claude Sonnet 3.5",
+      "object": "model",
+      "preview": false,
+      "vendor": "Anthropic",
+      "version": "claude-3.5-sonnet"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 1,
+        "restricted_to": ["pro", "pro_plus", "business", "enterprise"]
+      },
+      "capabilities": {
+        "family": "claude-3.7-sonnet",
+        "limits": {
+          "max_context_window_tokens": 200000,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 128000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "anthropic/claude-3.7-sonnet",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Claude Sonnet 3.7",
+      "object": "model",
+      "preview": false,
+      "vendor": "Anthropic",
+      "version": "claude-3.7-sonnet"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 1.25,
+        "restricted_to": ["pro", "pro_plus", "business", "enterprise"]
+      },
+      "capabilities": {
+        "family": "claude-3.7-sonnet-thought",
+        "limits": {
+          "max_context_window_tokens": 200000,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 90000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
+          },
+          "reasoning_tokens": 4096
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "vision": true,
+          "thinking": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "anthropic/claude-3.7-sonnet:thinking",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Claude Sonnet 3.7 Thinking",
+      "object": "model",
+      "preview": false,
+      "vendor": "Anthropic",
+      "version": "claude-3.7-sonnet-thought"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 1,
+        "restricted_to": ["pro", "pro_plus", "business", "enterprise"]
+      },
+      "capabilities": {
+        "family": "claude-sonnet-4",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16000,
+          "max_prompt_tokens": 128000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 5,
+            "supported_media_types": ["image/jpeg", "image/png", "image/webp"]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "anthropic/claude-sonnet-4",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Claude Sonnet 4",
+      "object": "model",
+      "preview": false,
+      "vendor": "Anthropic",
+      "version": "claude-sonnet-4"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 0.25
+      },
+      "capabilities": {
+        "family": "gemini-2.0-flash",
+        "limits": {
+          "max_context_window_tokens": 1000000,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 128000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/heic",
+              "image/heif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "google/gemini-2.0-flash-001",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Gemini 2.0 Flash",
+      "object": "model",
+      "preview": false,
+      "vendor": "Google",
+      "version": "gemini-2.0-flash-001"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 1,
+        "restricted_to": ["pro", "pro_plus", "business", "enterprise"]
+      },
+      "capabilities": {
+        "family": "gemini-2.5-pro",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 64000,
+          "max_prompt_tokens": 128000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/heic",
+              "image/heif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "google/gemini-2.5-pro",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "Gemini 2.5 Pro (Preview)",
+      "object": "model",
+      "preview": true,
+      "vendor": "Google",
+      "version": "gemini-2.5-pro"
+    },
+    {
+      "billing": {
+        "is_premium": true,
+        "multiplier": 0.33
+      },
+      "capabilities": {
+        "family": "o4-mini",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 128000,
+          "vision": {
+            "max_prompt_image_size": 3145728,
+            "max_prompt_images": 1,
+            "supported_media_types": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          }
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "parallel_tool_calls": true,
+          "streaming": true,
+          "structured_outputs": true,
+          "tool_calls": true,
+          "vision": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      },
+      "id": "openai/o4-mini",
+      "is_chat_default": false,
+      "is_chat_fallback": false,
+      "model_picker_enabled": true,
+      "name": "o4-mini (Preview)",
+      "object": "model",
+      "preview": true,
+      "vendor": "Azure OpenAI",
+      "version": "o4-mini-2025-04-16"
+    },
+    {
+      "id": "x-ai/grok-3-mini",
+      "name": "xAI: Grok 3 Mini",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "3",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "x-ai/grok-3",
+      "name": "xAI: Grok 3",
+      "object": "model",
+      "vendor": "x-ai",
+      "version": "3",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Grok",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32000
+        }
+      }
     },
     {
       "id": "x-ai/grok-3-mini-beta",
@@ -730,33 +885,6 @@
       }
     },
     {
-      "id": "x-ai/grok-beta",
-      "name": "xAI: Grok Beta",
-      "object": "model",
-      "vendor": "x-ai",
-      "version": "beta",
-      "preview": true,
-      "model_picker_enabled": false,
-      "capabilities": {
-        "family": "Grok",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
-          "structured_outputs": true,
-          "vision": false
-        },
-        "limits": {
-          "max_context_window_tokens": 131072,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
       "id": "deepseek/deepseek-r1-distill-qwen-7b",
       "name": "DeepSeek: R1 Distill Qwen 7B",
       "object": "model",
@@ -836,8 +964,8 @@
           "thinking": true
         },
         "limits": {
-          "max_context_window_tokens": 131072,
-          "max_output_tokens": 131072,
+          "max_context_window_tokens": 32000,
+          "max_output_tokens": 4096,
           "max_prompt_tokens": 32000,
           "reasoning_tokens": 4096
         }
@@ -1003,9 +1131,9 @@
         "type": "chat",
         "supports": {
           "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true,
           "vision": false,
           "thinking": true
         },
@@ -1134,33 +1262,6 @@
       }
     },
     {
-      "id": "qwen/qwen2.5-vl-3b-instruct:free",
-      "name": "Qwen: Qwen2.5 VL 3B Instruct (free)",
-      "object": "model",
-      "vendor": "qwen",
-      "version": "5",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": true
-        },
-        "limits": {
-          "max_context_window_tokens": 64000,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
       "id": "qwen/qwen2.5-vl-32b-instruct:free",
       "name": "Qwen: Qwen2.5 VL 32B Instruct (free)",
       "object": "model",
@@ -1236,8 +1337,8 @@
           "thinking": true
         },
         "limits": {
-          "max_context_window_tokens": 40000,
-          "max_output_tokens": 40000,
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 4096,
           "max_prompt_tokens": 32000,
           "reasoning_tokens": 4096
         }
@@ -1491,35 +1592,6 @@
       }
     },
     {
-      "id": "deepseek/deepseek-r1-distill-qwen-32b:free",
-      "name": "DeepSeek: R1 Distill Qwen 32B (free)",
-      "object": "model",
-      "vendor": "deepseek",
-      "version": "32b",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false,
-          "thinking": true
-        },
-        "limits": {
-          "max_context_window_tokens": 16000,
-          "max_output_tokens": 16000,
-          "max_prompt_tokens": 32000,
-          "reasoning_tokens": 4096
-        }
-      }
-    },
-    {
       "id": "deepseek/deepseek-r1-distill-qwen-32b",
       "name": "DeepSeek: R1 Distill Qwen 32B",
       "object": "model",
@@ -1717,33 +1789,6 @@
       }
     },
     {
-      "id": "eva-unit-01/eva-qwen-2.5-32b",
-      "name": "EVA Qwen2.5 32B",
-      "object": "model",
-      "vendor": "eva-unit-01",
-      "version": "2.5",
-      "preview": false,
-      "model_picker_enabled": false,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false
-        },
-        "limits": {
-          "max_context_window_tokens": 16384,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
       "id": "anthracite-org/magnum-v4-72b",
       "name": "Magnum v4 72B",
       "object": "model",
@@ -1771,33 +1816,6 @@
       }
     },
     {
-      "id": "qwen/qwen-2.5-7b-instruct:free",
-      "name": "Qwen2.5 7B Instruct (free)",
-      "object": "model",
-      "vendor": "qwen",
-      "version": "2.5",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false
-        },
-        "limits": {
-          "max_context_window_tokens": 32768,
-          "max_output_tokens": 32768,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
       "id": "qwen/qwen-2.5-7b-instruct",
       "name": "Qwen2.5 7B Instruct",
       "object": "model",
@@ -1815,6 +1833,33 @@
           "tool_calls": false,
           "parallel_tool_calls": false,
           "structured_outputs": true,
+          "vision": false
+        },
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 16384,
+          "max_prompt_tokens": 32000
+        }
+      }
+    },
+    {
+      "id": "anthracite-org/magnum-v2-72b",
+      "name": "Magnum v2 72B",
+      "object": "model",
+      "vendor": "anthracite-org",
+      "version": "v2",
+      "preview": false,
+      "model_picker_enabled": false,
+      "capabilities": {
+        "family": "Qwen",
+        "object": "model_capabilities",
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "supports": {
+          "streaming": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
+          "structured_outputs": false,
           "vision": false
         },
         "limits": {
@@ -1841,34 +1886,7 @@
           "streaming": true,
           "tool_calls": false,
           "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false
-        },
-        "limits": {
-          "max_context_window_tokens": 32768,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
-      "id": "anthracite-org/magnum-v2-72b",
-      "name": "Magnum v2 72B",
-      "object": "model",
-      "vendor": "anthracite-org",
-      "version": "v2",
-      "preview": false,
-      "model_picker_enabled": false,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
+          "structured_outputs": true,
           "vision": false
         },
         "limits": {
@@ -1928,33 +1946,6 @@
         "limits": {
           "max_context_window_tokens": 32768,
           "max_output_tokens": 16384,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
-      "id": "qwen/qwen-2.5-vl-7b-instruct:free",
-      "name": "Qwen: Qwen2.5-VL 7B Instruct (free)",
-      "object": "model",
-      "vendor": "qwen",
-      "version": "2.5",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "Qwen",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": true
-        },
-        "limits": {
-          "max_context_window_tokens": 32768,
-          "max_output_tokens": 32768,
           "max_prompt_tokens": 32000
         }
       }
@@ -2099,33 +2090,6 @@
       }
     },
     {
-      "id": "deepseek/deepseek-prover-v2:free",
-      "name": "DeepSeek: DeepSeek Prover V2 (free)",
-      "object": "model",
-      "vendor": "deepseek",
-      "version": "v2",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "DeepSeek",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false
-        },
-        "limits": {
-          "max_context_window_tokens": 163840,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
       "id": "deepseek/deepseek-prover-v2",
       "name": "DeepSeek: DeepSeek Prover V2",
       "object": "model",
@@ -2252,14 +2216,14 @@
         "type": "chat",
         "supports": {
           "streaming": true,
-          "tool_calls": true,
-          "parallel_tool_calls": true,
+          "tool_calls": false,
+          "parallel_tool_calls": false,
           "structured_outputs": false,
           "vision": false
         },
         "limits": {
-          "max_context_window_tokens": 163840,
-          "max_output_tokens": 4096,
+          "max_context_window_tokens": 16384,
+          "max_output_tokens": 16384,
           "max_prompt_tokens": 32000
         }
       }
@@ -2288,35 +2252,6 @@
           "max_context_window_tokens": 163840,
           "max_output_tokens": 4096,
           "max_prompt_tokens": 32000
-        }
-      }
-    },
-    {
-      "id": "deepseek/deepseek-r1-zero:free",
-      "name": "DeepSeek: DeepSeek R1 Zero (free)",
-      "object": "model",
-      "vendor": "deepseek",
-      "version": "1.0",
-      "preview": false,
-      "model_picker_enabled": true,
-      "capabilities": {
-        "family": "Other",
-        "object": "model_capabilities",
-        "tokenizer": "o200k_base",
-        "type": "chat",
-        "supports": {
-          "streaming": true,
-          "tool_calls": false,
-          "parallel_tool_calls": false,
-          "structured_outputs": false,
-          "vision": false,
-          "thinking": true
-        },
-        "limits": {
-          "max_context_window_tokens": 163840,
-          "max_output_tokens": 4096,
-          "max_prompt_tokens": 32000,
-          "reasoning_tokens": 4096
         }
       }
     },
@@ -2552,11 +2487,11 @@
   "object": "list",
   "meta": {
     "version": "1.0.0",
-    "lastUpdated": "2025-06-06",
+    "lastUpdated": "2025-07-08",
     "source": "https://openrouter.ai/api/v1",
     "description": "OpenRouter 模型配置文件 - 基于 GitHub Copilot 官方支持模型动态生成，并包含额外的Grok、Qwen、DeepSeek系列模型",
     "originalSource": "scripts/models/GitHub.json",
-    "mappingCount": 90,
+    "mappingCount": 83,
     "supportedFeatures": {
       "categories": ["chat"],
       "capabilities": [

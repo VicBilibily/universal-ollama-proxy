@@ -49,7 +49,7 @@ Currently supports the following AI service providers:
 | Alibaba Cloud DashScope | `dashscope`  | Alibaba Cloud's AI model service      |
 | DeepSeek Official       | `deepseek`   | DeepSeek official API                 |
 | Tencent Cloud DeepSeek  | `tencentds`  | Tencent Cloud hosted DeepSeek service |
-| OpenRouter              | `openrouter` | Multi-model aggregation service       |
+| OpenRouter              | `openrouter` | Multi-model aggregation platform      |
 
 Each provider requires setting corresponding API keys and endpoint information
 in the configuration file.

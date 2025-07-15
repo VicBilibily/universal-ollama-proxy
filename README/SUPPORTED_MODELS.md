@@ -10,7 +10,7 @@
 | 🚀 阿里云百炼      | 8+       | ✅       | ✅       | ❌       | [阿里云控制台](https://dashscope.console.aliyun.com/) |
 | 🔥 腾讯云 DeepSeek | 5+       | ✅       | ❌       | ✅       | [腾讯云控制台](https://console.cloud.tencent.com/)    |
 | 🎯 DeepSeek 官方   | 2+       | ✅       | ❌       | ✅       | [DeepSeek平台](https://platform.deepseek.com/)        |
-| 🌐 OpenRouter      | 15+      | ✅       | ✅       | ✅       | [OpenRouter平台](https://openrouter.ai/)              |
+| 🌐 OpenRouter      | 225+     | ✅       | ✅       | ✅       | [OpenRouter平台](https://openrouter.ai/)              |
 
 **模型调用格式**：`provider:model`，例如：`volcengine:doubao-1.5-pro-32k-250115`
 
@@ -119,16 +119,18 @@
 
 **多模型聚合服务平台，提供统一接口访问各大 AI 模型**
 
+通过 OpenRouter 平台，可以访问来自全球主要AI厂商的225+个模型，覆盖从免费到顶级的各个层次。
+
 ### 🤖 OpenAI 模型系列
 
-| 模型名称    | 模型 ID                                | 特性                  | 上下文长度 |
-| ----------- | -------------------------------------- | --------------------- | ---------- |
-| GPT-4o      | `openrouter:openai/gpt-4o-2024-11-20`  | 🤖 最新 GPT-4o 模型   | 128K       |
-| GPT-4o-mini | `openrouter:openai/gpt-4o-mini`        | ⚡ 轻量级 GPT-4o 模型 | 128K       |
-| o1 Preview  | `openrouter:openai/o1-2024-12-17`      | 🧠 高级推理专用模型   | 200K       |
-| o3-mini     | `openrouter:openai/o3-mini-2025-01-31` | ⚡ 轻量级推理模型     | 128K       |
-| o4-mini     | `openrouter:openai/o4-mini`            | ⚡ 最新轻量级模型     | 128K       |
-| GPT-4.1     | `openrouter:openai/gpt-4.1`            | 🤖 GPT-4 增强版       | 128K       |
+| 模型名称        | 模型 ID                               | 特性                  | 上下文长度 |
+| --------------- | ------------------------------------- | --------------------- | ---------- |
+| GPT-4o          | `openrouter:openai/gpt-4o-2024-11-20` | 🤖 最新 GPT-4o 模型   | 128K       |
+| GPT-4o-mini     | `openrouter:openai/gpt-4o-mini`       | ⚡ 轻量级 GPT-4o 模型 | 128K       |
+| o3 Preview      | `openrouter:openai/o3`                | 🧠 最新推理专用模型   | 200K       |
+| o3-mini         | `openrouter:openai/o3-mini`           | ⚡ 轻量级推理模型     | 128K       |
+| o4-mini Preview | `openrouter:openai/o4-mini`           | ⚡ 最新轻量级模型     | 128K       |
+| GPT-4.1         | `openrouter:openai/gpt-4.1`           | 🤖 GPT-4 增强版       | 128K       |
 
 ### 🎭 Anthropic 模型系列
 
@@ -138,21 +140,102 @@
 | Claude 3.7 Sonnet          | `openrouter:anthropic/claude-3.7-sonnet`          | 🎭 增强版 Sonnet        | 200K       |
 | Claude 3.7 Sonnet:thinking | `openrouter:anthropic/claude-3.7-sonnet:thinking` | 🧠✨ 思考推理功能增强版 | 200K       |
 | Claude Sonnet 4            | `openrouter:anthropic/claude-sonnet-4`            | 🎭 第四代 Claude        | 80K        |
+| Claude Opus 4              | `openrouter:anthropic/claude-opus-4`              | 🎭 最强版本 Claude      | 80K        |
 
 ### 🧑‍💻 Google 模型系列
 
-| 模型名称               | 模型 ID                                          | 特性                    | 上下文长度 |
-| ---------------------- | ------------------------------------------------ | ----------------------- | ---------- |
-| Gemini 2.0 Flash       | `openrouter:google/gemini-2.0-flash-001`         | ⚡ 快速多模态模型       | 1M         |
-| Gemini 2.5 Pro Preview | `openrouter:google/gemini-2.5-pro-preview-05-06` | 🧑‍💻 高级实验性多模态模型 | 128K       |
+| 模型名称                  | 模型 ID                                               | 特性                | 上下文长度 |
+| ------------------------- | ----------------------------------------------------- | ------------------- | ---------- |
+| Gemini 2.0 Flash          | `openrouter:google/gemini-2.0-flash-001`              | ⚡ 快速多模态模型   | 1M         |
+| Gemini 2.5 Pro            | `openrouter:google/gemini-2.5-pro`                    | 🧑‍💻 高级多模态模型   | 128K       |
+| Gemini 2.5 Flash Preview  | `openrouter:google/gemini-2.5-flash-preview`          | ⚡ 预览版快速模型   | 1M         |
+| Gemini 2.5 Flash Thinking | `openrouter:google/gemini-2.5-flash-preview:thinking` | 🧠⚡ 思考版快速模型 | 1M         |
+| Gemma 3 27B               | `openrouter:google/gemma-3-27b-it`                    | � 开源大模型        | 128K       |
+| Gemma 3 12B (free)        | `openrouter:google/gemma-3-12b-it:free`               | 🆓 免费开源模型     | 128K       |
 
-### 🚀 其他模型系列
+### ⚡ Mistral 模型系列
 
-OpenRouter 平台还提供以下模型系列:
+| 模型名称                  | 模型 ID                                                    | 特性              | 上下文长度 |
+| ------------------------- | ---------------------------------------------------------- | ----------------- | ---------- |
+| Mistral Large 2411        | `openrouter:mistralai/mistral-large-2411`                  | ⚡ 最新大型模型   | 128K       |
+| Mistral Small 3.2 (free)  | `openrouter:mistralai/mistral-small-3.2-24b-instruct:free` | 🆓 免费中型模型   | 128K       |
+| Magistral Medium Thinking | `openrouter:mistralai/magistral-medium-2506:thinking`      | 🧠 思考版中型模型 | 128K       |
+| Devstral Medium           | `openrouter:mistralai/devstral-medium`                     | 💻 代码专用模型   | 128K       |
+| Codestral 2501            | `openrouter:mistralai/codestral-2501`                      | 💻 最新代码生成   | 128K       |
+| Pixtral Large 2411        | `openrouter:mistralai/pixtral-large-2411`                  | 👁️ 多模态大模型   | 128K       |
 
-- **xAI Grok 系列**: 包含 Grok 3 和 Grok 2 等系列模型，支持不同复杂度的推理任务
-- **DeepSeek 系列**: 提供推理增强型 AI 模型，专注于深度思考和推理能力
-- **Qwen 系列**: 提供多种免费可用的中文优化模型，适合多种应用场景
+### 🚀 xAI Grok 模型系列
+
+| 模型名称      | 模型 ID                              | 特性              | 上下文长度 |
+| ------------- | ------------------------------------ | ----------------- | ---------- |
+| Grok 4        | `openrouter:x-ai/grok-4`             | 🚀 最新 Grok 模型 | 128K       |
+| Grok 3        | `openrouter:x-ai/grok-3`             | 🚀 第三代模型     | 128K       |
+| Grok 3 Mini   | `openrouter:x-ai/grok-3-mini`        | ⚡ 轻量级版本     | 128K       |
+| Grok 2 Vision | `openrouter:x-ai/grok-2-vision-1212` | 👁️ 视觉理解版本   | 128K       |
+
+### 🔥 DeepSeek 模型系列
+
+| 模型名称                       | 模型 ID                                                 | 特性                | 上下文长度 |
+| ------------------------------ | ------------------------------------------------------- | ------------------- | ---------- |
+| DeepSeek R1 (free)             | `openrouter:deepseek/deepseek-r1:free`                  | 🧠🆓 免费推理模型   | 128K       |
+| DeepSeek R1                    | `openrouter:deepseek/deepseek-r1`                       | 🧠 强化学习推理     | 128K       |
+| DeepSeek V3 (free)             | `openrouter:deepseek/deepseek-chat:free`                | 🆓 免费对话模型     | 128K       |
+| DeepSeek V3                    | `openrouter:deepseek/deepseek-chat`                     | 📝 第三代对话模型   | 128K       |
+| DeepSeek R1 Distill 14B (free) | `openrouter:deepseek/deepseek-r1-distill-qwen-14b:free` | 🧠🆓 蒸馏版推理模型 | 128K       |
+
+### 📚 Qwen 模型系列
+
+| 模型名称          | 模型 ID                                   | 特性              | 上下文长度 |
+| ----------------- | ----------------------------------------- | ----------------- | ---------- |
+| Qwen3 235B (free) | `openrouter:qwen/qwen3-235b-a22b:free`    | 🆓 超大免费模型   | 128K       |
+| Qwen3 32B (free)  | `openrouter:qwen/qwen3-32b:free`          | 🆓 免费大模型     | 128K       |
+| QwQ 32B (free)    | `openrouter:qwen/qwq-32b:free`            | 🧠🆓 免费推理模型 | 128K       |
+| Qwen2.5 VL 72B    | `openrouter:qwen/qwen2.5-vl-72b-instruct` | 👁️ 多模态理解模型 | 128K       |
+| Qwen-Max          | `openrouter:qwen/qwen-max`                | 📚 最强性能模型   | 128K       |
+
+### 🌙 Moonshot 模型系列
+
+| 模型名称                    | 模型 ID                                           | 特性                  | 上下文长度 |
+| --------------------------- | ------------------------------------------------- | --------------------- | ---------- |
+| Kimi K2 (free)              | `openrouter:moonshotai/kimi-k2:free`              | 🆓 免费长文本模型     | 1M         |
+| Kimi K2                     | `openrouter:moonshotai/kimi-k2`                   | 🌙 高性能长文本       | 1M         |
+| Kimi VL A3B Thinking (free) | `openrouter:moonshotai/kimi-vl-a3b-thinking:free` | 🧠👁️🆓 免费多模态思考 | 128K       |
+
+### 🏢 腾讯 Hunyuan 模型系列
+
+| 模型名称                     | 模型 ID                                         | 特性            | 上下文长度 |
+| ---------------------------- | ----------------------------------------------- | --------------- | ---------- |
+| Hunyuan A13B Instruct (free) | `openrouter:tencent/hunyuan-a13b-instruct:free` | 🆓 免费中文优化 | 128K       |
+
+### 🔤 百度 ERNIE 模型系列
+
+| 模型名称            | 模型 ID                                | 特性            | 上下文长度 |
+| ------------------- | -------------------------------------- | --------------- | ---------- |
+| ERNIE 4.5 300B A47B | `openrouter:baidu/ernie-4.5-300b-a47b` | 🔤 超大中文模型 | 128K       |
+
+### 🎓 THUDM GLM 模型系列
+
+| 模型名称             | 模型 ID                                 | 特性                | 上下文长度 |
+| -------------------- | --------------------------------------- | ------------------- | ---------- |
+| GLM Z1 32B (free)    | `openrouter:thudm/glm-z1-32b:free`      | 🆓 免费智谱模型     | 128K       |
+| GLM 4 32B (free)     | `openrouter:thudm/glm-4-32b:free`       | 🆓 免费第四代模型   | 128K       |
+| GLM 4.1V 9B Thinking | `openrouter:thudm/glm-4.1v-9b-thinking` | 🧠👁️ 多模态思考模型 | 128K       |
+
+### 🎯 模型选择建议
+
+#### 🆓 免费模型推荐
+
+- **日常对话**: `deepseek/deepseek-chat:free`, `qwen/qwen3-32b:free`
+- **推理思考**: `deepseek/deepseek-r1:free`, `qwen/qwq-32b:free`
+- **多模态**: `moonshotai/kimi-vl-a3b-thinking:free`
+- **长文本**: `moonshotai/kimi-k2:free`
+
+#### 💎 付费模型推荐
+
+- **最强性能**: `openai/gpt-4o`, `anthropic/claude-sonnet-4`
+- **代码生成**: `mistralai/codestral-2501`, `mistralai/devstral-medium`
+- **思考推理**: `anthropic/claude-3.7-sonnet:thinking`, `openai/o3`
+- **视觉理解**: `google/gemini-2.0-flash-001`, `mistralai/pixtral-large-2411`
 
 ---
 
@@ -208,16 +291,41 @@ OpenRouter 平台还提供以下模型系列:
 
 - **首选**：`volcengine:doubao-1.5-pro-32k-250115`
 - **备选**：`dashscope:qwen-max`、`deepseek:deepseek-chat`
+- **OpenRouter免费选择**：`openrouter:deepseek/deepseek-chat:free`、`openrouter:qwen/qwen3-32b:free`
 
 #### API 开发集成
 
 - **稳定版**：带 `stable` 或不带 `latest` 后缀的模型
 - **最新功能**：带 `latest` 后缀的模型
+- **免费开发**：OpenRouter 免费模型系列
 
 #### 批量处理场景
 
 - **推荐**：DeepSeek 系列、阿里云 Turbo 系列
 - **原因**：并发性能好，成本控制佳
+- **免费选择**：OpenRouter 的免费 DeepSeek/Qwen 系列
+
+#### 🆕 2025年更新亮点
+
+##### 🧠 思考推理模型
+
+- **Anthropic**: Claude 3.7 Sonnet:thinking - 支持复杂推理链
+- **Google**: Gemini 2.5 Flash:thinking - 快速思考模型
+- **Mistral**: Magistral Medium:thinking - 多语言思考支持
+- **Moonshot**: Kimi VL A3B:thinking - 多模态思考能力
+
+##### 🆓 免费模型大幅增加
+
+- **DeepSeek**: R1 推理模型免费版本
+- **Qwen**: 3系列大部分模型提供免费版本
+- **Google**: Gemma 3 系列完全开源免费
+- **Mistral**: Small 系列提供免费版本
+
+##### 💻 代码专用模型
+
+- **Mistral**: Devstral/Codestral 系列 - 专业代码生成
+- **Qwen**: Coder 系列 - 中文代码优化
+- **DeepSeek**: Prover 数学证明专用
 
 ---
 

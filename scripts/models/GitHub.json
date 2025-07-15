@@ -674,7 +674,7 @@
                     "max_prompt_tokens": 128000,
                     "vision": {
                         "max_prompt_image_size": 3145728,
-                        "max_prompt_images": 1,
+                        "max_prompt_images": 5,
                         "supported_media_types": [
                             "image/jpeg",
                             "image/png",
@@ -809,6 +809,53 @@
         {
             "billing": {
                 "is_premium": true,
+                "multiplier": 10,
+                "restricted_to": [
+                    "pro_plus",
+                    "enterprise"
+                ]
+            },
+            "capabilities": {
+                "family": "claude-opus-4",
+                "limits": {
+                    "max_context_window_tokens": 80000,
+                    "max_output_tokens": 16000,
+                    "max_prompt_tokens": 80000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "streaming": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "claude-opus-4",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": true,
+            "name": "Claude Opus 4",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest Claude Opus 4 model from Anthropic. [Learn more about how GitHub Copilot serves Claude Opus 4](https://docs.github.com/en/copilot/using-github-copilot/ai-models/using-claude-sonnet-in-github-copilot)."
+            },
+            "preview": false,
+            "vendor": "Anthropic",
+            "version": "claude-opus-4"
+        },
+        {
+            "billing": {
+                "is_premium": true,
                 "multiplier": 0.25
             },
             "capabilities": {
@@ -905,6 +952,104 @@
             "preview": true,
             "vendor": "Google",
             "version": "gemini-2.5-pro"
+        },
+        {
+            "billing": {
+                "is_premium": true,
+                "multiplier": 1,
+                "restricted_to": [
+                    "pro_plus",
+                    "enterprise"
+                ]
+            },
+            "capabilities": {
+                "family": "o3",
+                "limits": {
+                    "max_context_window_tokens": 128000,
+                    "max_output_tokens": 16384,
+                    "max_prompt_tokens": 128000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "streaming": true,
+                    "structured_outputs": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "o3",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": true,
+            "name": "o3 (Preview)",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest o3 model from OpenAI. [Learn more about how GitHub Copilot serves o3](https://docs.github.com/en/copilot/using-github-copilot/ai-models/using-openai-o3-in-github-copilot)."
+            },
+            "preview": true,
+            "vendor": "Azure OpenAI",
+            "version": "o3-2025-04-16"
+        },
+        {
+            "billing": {
+                "is_premium": true,
+                "multiplier": 1,
+                "restricted_to": [
+                    "pro_plus",
+                    "enterprise"
+                ]
+            },
+            "capabilities": {
+                "family": "o3",
+                "limits": {
+                    "max_context_window_tokens": 128000,
+                    "max_output_tokens": 16384,
+                    "max_prompt_tokens": 128000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "streaming": true,
+                    "structured_outputs": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "o3-2025-04-16",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": false,
+            "name": "o3 (Preview)",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest o3 model from OpenAI. [Learn more about how GitHub Copilot serves o3](https://docs.github.com/en/copilot/using-github-copilot/ai-models/using-openai-o3-in-github-copilot)."
+            },
+            "preview": true,
+            "vendor": "OpenAI",
+            "version": "o3-2025-04-16"
         },
         {
             "billing": {

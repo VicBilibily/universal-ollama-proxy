@@ -506,6 +506,18 @@ function convertGitHubToOpenRouterConfig(gitHubModel, openRouterModel) {
   // 仅替换ID为OpenRouter模型ID
   config.id = openRouterModel.slug;
 
+  // 检查是否为免费模型并启用 - 优先检查 :free 结尾
+  const modelVariantSlug = openRouterModel.endpoint?.model_variant_slug || openRouterModel.slug;
+  const isEndpointFree = openRouterModel.endpoint?.is_free === true;
+  const isVariantFree = modelVariantSlug.includes(':free');
+  const isNameFree = openRouterModel.name?.toLowerCase().includes('(free)');
+  const isFreeModel = isEndpointFree || isVariantFree || isNameFree;
+
+  if (isFreeModel) {
+    config.model_picker_enabled = true;
+    console.log(`   💰 检测到免费模型: ${openRouterModel.name || openRouterModel.slug} - 已默认启用`);
+  }
+
   // 检测并配置思考模型
   if (isThinkingModel(openRouterModel)) {
     console.log(`   🧠 检测到思考模型: ${openRouterModel.name || openRouterModel.slug}`);
@@ -704,7 +716,7 @@ function getSelectionReason(selectedMatch, allMatches) {
 
 /**
  * 获取额外的模型系列
- * 添加Grok、Qwen、Qwen3和DeepSeek系列模型
+ * 添加Grok、Qwen、Qwen3、DeepSeek、Moonshot、Tencent、Baidu系列模型
  * 包含所有变体（无论后缀是什么，如:free、:thinking等）
  */
 function getAdditionalModelSeries(openRouterModels) {
@@ -732,6 +744,48 @@ function getAdditionalModelSeries(openRouterModels) {
       groups: ['DeepSeek'], // 注意：DeepSeek模型的group可能是其他值如Qwen、Llama3等
       slugPatterns: [/^deepseek\//i, /deepseek/i],
       namePatterns: [/deepseek/i],
+    },
+    {
+      name: 'Moonshot',
+      authors: ['moonshot'],
+      groups: ['Moonshot'],
+      slugPatterns: [/^moonshot\//i, /moonshot/i],
+      namePatterns: [/moonshot/i, /kimi/i],
+    },
+    {
+      name: 'Tencent',
+      authors: ['tencent'],
+      groups: ['Tencent'],
+      slugPatterns: [/^tencent\//i, /tencent/i, /hunyuan/i],
+      namePatterns: [/tencent/i, /hunyuan/i],
+    },
+    {
+      name: 'Baidu',
+      authors: ['baidu'],
+      groups: ['Baidu'],
+      slugPatterns: [/^baidu\//i, /baidu/i, /ernie/i],
+      namePatterns: [/baidu/i, /ernie/i, /文心/i],
+    },
+    {
+      name: 'Mistral',
+      authors: ['mistralai'],
+      groups: ['Mistral'],
+      slugPatterns: [/^mistralai\//i, /mistral/i],
+      namePatterns: [/mistral/i, /magistral/i, /devstral/i],
+    },
+    {
+      name: 'Google',
+      authors: ['google'],
+      groups: ['Gemini', 'Other'],
+      slugPatterns: [/^google\//i, /gemini/i, /gemma/i],
+      namePatterns: [/google/i, /gemini/i, /gemma/i, /bard/i],
+    },
+    {
+      name: 'THUDM',
+      authors: ['thudm'],
+      groups: ['THUDM'],
+      slugPatterns: [/^thudm\//i, /thudm/i, /zhipuai/i, /glm/i],
+      namePatterns: [/thudm/i, /zhipuai/i, /glm/i, /智谱/i, /chatglm/i],
     },
   ];
 
@@ -1036,14 +1090,25 @@ function main() {
         lastUpdated: new Date().toISOString().split('T')[0], // YYYY-MM-DD 格式
         source: 'https://openrouter.ai/api/v1',
         description:
-          'OpenRouter 模型配置文件 - 基于 GitHub Copilot 官方支持模型动态生成，并包含额外的Grok、Qwen、DeepSeek系列模型',
+          'OpenRouter 模型配置文件 - 基于 GitHub Copilot 官方支持模型动态生成，并包含额外的Grok、Qwen、DeepSeek、Moonshot、Tencent、Baidu、Mistral、Google、THUDM系列模型',
         originalSource: 'scripts/models/GitHub.json',
         mappingCount: finalConfigs.length,
         supportedFeatures: {
           categories: ['chat'],
           capabilities: ['tool_calls', 'streaming', 'structured_outputs', 'vision', 'parallel_tool_calls', 'thinking'],
         },
-        additionalSeries: ['Grok', 'Qwen', 'Qwen3', 'DeepSeek'],
+        additionalSeries: [
+          'Grok',
+          'Qwen',
+          'Qwen3',
+          'DeepSeek',
+          'Moonshot',
+          'Tencent',
+          'Baidu',
+          'Mistral',
+          'Google',
+          'THUDM',
+        ],
       },
     };
 
@@ -1157,7 +1222,7 @@ function main() {
 
     console.log('\n🎉 配置生成完成！');
     console.log('🔧 新增功能:');
-    console.log('   • 支持Grok、Qwen、Qwen3、DeepSeek系列模型');
+    console.log('   • 支持Grok、Qwen、Qwen3、DeepSeek、Moonshot、Tencent、Baidu、Mistral、Google、THUDM系列模型');
     console.log('   • 自动检测和配置思考模型');
     console.log('   • 完整的功能特性检测和配置');
   } catch (error) {

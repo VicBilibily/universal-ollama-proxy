@@ -40,7 +40,7 @@ Chat 只支持 Ollama 本地模型的限制，通过代理服务让你可以：
 | 阿里云百炼     | `dashscope`  | 阿里云的AI模型服务       |
 | DeepSeek官方   | `deepseek`   | DeepSeek官方API          |
 | 腾讯云DeepSeek | `tencentds`  | 腾讯云托管的DeepSeek服务 |
-| OpenRouter     | `openrouter` | 多模型聚合服务           |
+| OpenRouter     | `openrouter` | 多模型聚合服务平台       |
 
 每个提供商需要在配置文件中设置相应的API密钥和端点信息。
 
@@ -143,19 +143,20 @@ npm run quick:build      # 交互式快速构建
 
 ## 📚 文档索引
 
-| 文档                                                    | 说明                       |
-| ------------------------------------------------------- | -------------------------- |
-| 📖 [特性详解](./README/FEATURES.md)                     | 详细特性说明和功能介绍     |
-| 🎯 [支持模型](./README/SUPPORTED_MODELS.md)             | 完整的 AI 提供商和模型列表 |
-| 📥 [安装指南](./README/INSTALLATION_GUIDE.md)           | 详细安装和部署说明         |
-| ⚙️ [配置参数](./README/CONFIGURATION.md)                | 完整配置参数详解           |
-| 🏗️ [开发指南](./README/DEVELOPMENT.md)                  | 项目架构和开发说明         |
-| 🔧 [提供商配置](./docs/PROVIDER_CONFIGURATION.md)       | API密钥配置指南            |
-| 📋 [模型配置规范](./docs/MODEL_CONFIG_SPECIFICATION.md) | 模型配置文件格式           |
-| 🔄 [配置热重载](./docs/CONFIG_HOT_RELOAD.md)            | 配置热重载功能说明         |
-| 💬 [消息处理规则](./docs/MESSAGE_PROCESSING_RULES.md)   | 消息处理规则配置           |
-| 🛡️ [工具修复指南](./docs/TOOL_REPAIR_GUIDE.md)          | 工具修复功能说明           |
-| 🚀 [自动发布指南](./docs/AUTO_RELEASE_GUIDE.md)         | CI/CD 自动化发布流程       |
+| 文档                                                           | 说明                       |
+| -------------------------------------------------------------- | -------------------------- |
+| 📖 [特性详解](./README/FEATURES.md)                            | 详细特性说明和功能介绍     |
+| 🎯 [支持模型](./README/SUPPORTED_MODELS.md)                    | 完整的 AI 提供商和模型列表 |
+| 📥 [安装指南](./README/INSTALLATION_GUIDE.md)                  | 详细安装和部署说明         |
+| ⚙️ [配置参数](./README/CONFIGURATION.md)                       | 完整配置参数详解           |
+| 🏗️ [开发指南](./README/DEVELOPMENT.md)                         | 项目架构和开发说明         |
+| 🔧 [提供商配置](./docs/PROVIDER_CONFIGURATION.md)              | API密钥配置指南            |
+| 📋 [模型配置规范](./docs/MODEL_CONFIG_SPECIFICATION.md)        | 模型配置文件格式           |
+| 🤖 [OpenRouter模型生成](./docs/OPENROUTER_MODEL_GENERATION.md) | OpenRouter模型自动生成指南 |
+| 🔄 [配置热重载](./docs/CONFIG_HOT_RELOAD.md)                   | 配置热重载功能说明         |
+| 💬 [消息处理规则](./docs/MESSAGE_PROCESSING_RULES.md)          | 消息处理规则配置           |
+| 🛡️ [工具修复指南](./docs/TOOL_REPAIR_GUIDE.md)                 | 工具修复功能说明           |
+| 🚀 [自动发布指南](./docs/AUTO_RELEASE_GUIDE.md)                | CI/CD 自动化发布流程       |
 
 ## 🔧 故障排除
 

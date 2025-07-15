@@ -1,0 +1,66 @@
+{
+  "models": [
+    {
+      "id": "kimi-latest",
+      "name": "Kimi Latest (Vision)",
+      "object": "model",
+      "vendor": "Moonshot AI",
+      "version": "kimi-latest",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "moonshot",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 65536
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": false,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "kimi-k2-0711-preview",
+      "name": "Kimi K2 (Preview)",
+      "object": "model",
+      "vendor": "Moonshot AI",
+      "version": "kimi-k2-0711-preview",
+      "preview": true,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "moonshot",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 65536
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    }
+  ],
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-07-15",
+    "description": "Moonshot AI模型配置文件",
+    "source": "https://platform.moonshot.cn/docs"
+  }
+}

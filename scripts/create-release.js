@@ -149,6 +149,8 @@ function createReadme(targetDir, platform, arch, binaryName) {
       { name: 'DASHSCOPE_API_KEY', displayName: '阿里云百炼' },
       { name: 'DEEPSEEK_API_KEY', displayName: 'DeepSeek官方' },
       { name: 'TENCENTDS_API_KEY', displayName: '腾讯云DeepSeek' },
+      { name: 'MOONSHOT_API_KEY', displayName: 'Moonshot AI' },
+      { name: 'OPENROUTER_API_KEY', displayName: 'OpenRouter' },
     ];
   }
 
@@ -187,7 +189,8 @@ Universal Ollama Proxy 是一个通用的AI服务代理，支持多个主流AI�
 - ☁️ **阿里云DashScope** (通义千问)
 - 🧠 **深度求索** (DeepSeek)
 - 🐧 **腾讯云** (TencentDS)
-- 🔗 **统一适配器** (支持更多提供商)
+- 🌙 **Moonshot AI** (Kimi大模型)
+- 🔗 **OpenRouter** (多模型聚合)
 
 ## 使用说明
 

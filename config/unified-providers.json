@@ -47,6 +47,17 @@
       }
     },
     {
+      // Moonshot AI配置 - Kimi大模型
+      "name": "moonshot",
+      "displayName": "Moonshot AI",
+      "enabled": true,
+      "baseURL": "https://api.moonshot.cn/v1",
+      "apiKey": "${MOONSHOT_API_KEY}",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
       // OpenRouter AI模型聚合服务配置
       "name": "openrouter",
       "displayName": "OpenRouter",

@@ -154,8 +154,6 @@ export class UnifiedAdapterService {
     requestId: string,
     startTime: number
   ): Promise<AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
-    const extractProviderFromModel = this.extractProviderFromModel.bind(this);
-
     return (async function* () {
       try {
         const stream = await client.chat.completions.create({
@@ -220,7 +218,7 @@ export class UnifiedAdapterService {
         }
 
         const errorMessage = error instanceof Error ? error.message : String(error);
-        const provider = extractProviderFromModel(request.model);
+        const provider = modelConfig.vendor;
         const modelName = modelConfig.name;
         logger.error(
           `流式聊天处理失败，requestId: ${requestId}，provider: ${provider}，model: ${modelName}，错误: ${errorMessage}`
@@ -289,7 +287,7 @@ export class UnifiedAdapterService {
       }
 
       const errorMessage = error instanceof Error ? error.message : String(error);
-      const provider = this.extractProviderFromModel(request.model);
+      const provider = modelConfig.vendor;
       const modelName = modelConfig.name;
       logger.error(
         `非流式聊天处理失败，requestId: ${requestId}，provider: ${provider}，model: ${modelName}，错误: ${errorMessage}`
@@ -314,7 +312,7 @@ export class UnifiedAdapterService {
     // 修复工具
     let repairedTools = request.tools;
     if (request.tools && request.tools.length > 0) {
-      const providerName = this.extractProviderFromModel(request.model);
+      const providerName = modelConfig.vendor;
 
       try {
         // 尝试使用工具修复服务

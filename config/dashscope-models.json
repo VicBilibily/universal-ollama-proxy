@@ -389,23 +389,52 @@
         "tokenizer": "cl100k_base",
         "type": "chat"
       }
+    },
+    {
+      "id": "qwen3-coder-plus",
+      "name": "通义千问3 Coder Plus (稳定版)",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-coder-plus",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3-coder-plus",
+        "limits": {
+          "max_context_window_tokens": 1048576,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 1000000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
     }
   ],
   "object": "list",
   "meta": {
-    "version": "2.0.0",
-    "lastUpdated": "2025-06-04",
+    "version": "2.1.0",
+    "lastUpdated": "2025-07-24",
     "source": "https://dashscope.aliyuncs.com/api/v1",
-    "description": "阿里云百炼通义千问模型配置文件，仅包含文本生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
+    "description": "阿里云百炼通义千问模型配置文件，包含文本生成、视觉理解和代码生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
     "officialDoc": "https://help.aliyun.com/zh/model-studio/models",
     "supportedFeatures": {
-      "categories": ["text", "vision"],
+      "categories": ["text", "vision", "code"],
       "capabilities": [
         "tool_calls",
         "vision",
         "thinking",
         "streaming",
-        "structured_outputs"
+        "structured_outputs",
+        "code_generation"
       ]
     }
   }

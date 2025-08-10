@@ -64,9 +64,26 @@ TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 # DeepSeek官方 API Key
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 
+# Moonshot AI API Key
+MOONSHOT_API_KEY=your_moonshot_api_key_here
+
 # OpenRouter API Key
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# 魔搭社区 API Key
+MODELSCOPE_API_KEY=your_modelscope_api_key_here
 ```
+
+**⚠️ 魔搭社区特殊要求**：
+
+使用魔搭社区API前，需要先在 [ModelScope官网](https://modelscope.cn/)
+完成以下步骤：
+
+1. 注册魔搭社区账号
+2. **绑定阿里云账号**（必需步骤）
+3. 在个人设置中获取API Token
+
+> 未绑定阿里云账号将导致401认证错误
 
 #### 3️⃣ 启动服务
 
@@ -147,13 +164,19 @@ VOLCENGINE_API_KEY=your_volcengine_api_key_here
 DASHSCOPE_API_KEY=your_dashscope_api_key_here
 TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
+MOONSHOT_API_KEY=your_moonshot_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+MODELSCOPE_API_KEY=your_modelscope_api_key_here
 
 # 可选配置
 LOG_LEVEL=info
 CHAT_LOGS=false
 CHAT_LOGS_DIR=logs/chat
 ```
+
+**⚠️ 魔搭社区API使用注意事项**：
+
+使用`MODELSCOPE_API_KEY`前必须完成阿里云账号绑定，详见[提供商配置指南](../docs/PROVIDER_CONFIGURATION.md#7-魔搭社区-modelscope)。
 
 #### 4️⃣ 启动服务
 

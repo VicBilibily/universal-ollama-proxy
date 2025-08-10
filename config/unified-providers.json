@@ -67,6 +67,17 @@
       "headers": {
         "Content-Type": "application/json"
       }
+    },
+    {
+      // 魔搭社区配置 - 阿里云开源模型社区
+      "name": "modelscope",
+      "displayName": "魔搭社区",
+      "enabled": true,
+      "baseURL": "https://api-inference.modelscope.cn/v1",
+      "apiKey": "${MODELSCOPE_API_KEY}",
+      "headers": {
+        "Content-Type": "application/json"
+      }
     }
   ],
   "meta": {

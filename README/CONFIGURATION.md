@@ -21,7 +21,9 @@ Proxy 的所有配置参数，包括环境变量、AI 提供商配置和日志�
 | `DASHSCOPE_API_KEY`  | 阿里云百炼     | ⚠️   | [阿里云控制台](https://dashscope.console.aliyun.com/) |
 | `TENCENTDS_API_KEY`  | 腾讯云DeepSeek | ⚠️   | [腾讯云控制台](https://console.cloud.tencent.com/)    |
 | `DEEPSEEK_API_KEY`   | DeepSeek官方   | ⚠️   | [DeepSeek平台](https://platform.deepseek.com/)        |
+| `MOONSHOT_API_KEY`   | Moonshot AI    | ⚠️   | [Moonshot平台](https://platform.moonshot.cn/)         |
 | `OPENROUTER_API_KEY` | OpenRouter     | ⚠️   | [OpenRouter平台](https://openrouter.ai/)              |
+| `MODELSCOPE_API_KEY` | 魔搭社区       | ⚠️   | [魔搭社区](https://www.modelscope.cn/)                |
 
 > **⚠️ 重要**: 至少需要配置一个提供商的 API Key，系统会自动过滤不可用的提供商
 
@@ -91,7 +93,9 @@ config/
 ├── dashscope-models.json       # 阿里云百炼模型配置
 ├── tencentds-models.json       # 腾讯云DeepSeek模型配置
 ├── deepseek-models.json        # DeepSeek官方模型配置
+├── moonshot-models.json        # Moonshot AI模型配置
 ├── openrouter-models.json      # OpenRouter模型配置
+├── modelscope-models.json      # 魔搭社区模型配置
 └── message-processing-rules.json # 消息处理规则
 ```
 

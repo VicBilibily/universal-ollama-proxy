@@ -41,7 +41,9 @@ jobs:
           echo "DASHSCOPE_API_KEY=ci_test_key" >> .env
           echo "TENCENTDS_API_KEY=ci_test_key" >> .env
           echo "DEEPSEEK_API_KEY=ci_test_key" >> .env
+          echo "MOONSHOT_API_KEY=ci_test_key" >> .env
           echo "OPENROUTER_API_KEY=ci_test_key" >> .env
+          echo "MODELSCOPE_API_KEY=ci_test_key" >> .env
 
       - name: 验证构建
         run: npm run check

@@ -49,7 +49,9 @@ Currently supports the following AI service providers:
 | Alibaba Cloud DashScope | `dashscope`  | Alibaba Cloud's AI model service      |
 | DeepSeek Official       | `deepseek`   | DeepSeek official API                 |
 | Tencent Cloud DeepSeek  | `tencentds`  | Tencent Cloud hosted DeepSeek service |
+| Moonshot AI             | `moonshot`   | Kimi AI service platform              |
 | OpenRouter              | `openrouter` | Multi-model aggregation platform      |
+| ModelScope              | `modelscope` | Alibaba Cloud open source community   |
 
 Each provider requires setting corresponding API keys and endpoint information
 in the configuration file.
@@ -94,6 +96,7 @@ DASHSCOPE_API_KEY=your_dashscope_api_key_here
 TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+MODELSCOPE_API_KEY=your_modelscope_api_key_here
 
 # Optional configuration
 LOG_LEVEL=info

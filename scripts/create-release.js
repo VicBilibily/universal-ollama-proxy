@@ -145,12 +145,13 @@ function createReadme(targetDir, platform, arch, binaryName) {
     log.warn(`  ⚠️ 无法读取统一配置文件: ${error.message}`);
     // 回退到默认的供应商列表
     providerEnvVars = [
-      { name: 'VOLCENGINE_API_KEY', displayName: '火山方舟引擎' },
-      { name: 'DASHSCOPE_API_KEY', displayName: '阿里云百炼' },
-      { name: 'DEEPSEEK_API_KEY', displayName: 'DeepSeek官方' },
-      { name: 'TENCENTDS_API_KEY', displayName: '腾讯云DeepSeek' },
-      { name: 'MOONSHOT_API_KEY', displayName: 'Moonshot AI' },
-      { name: 'OPENROUTER_API_KEY', displayName: 'OpenRouter' },
+      { name: 'VOLCENGINE_API_KEY', displayName: '火山方舟引擎', type: 'env' },
+      { name: 'DASHSCOPE_API_KEY', displayName: '阿里云百炼', type: 'env' },
+      { name: 'DEEPSEEK_API_KEY', displayName: 'DeepSeek官方', type: 'env' },
+      { name: 'TENCENTDS_API_KEY', displayName: '腾讯云DeepSeek', type: 'env' },
+      { name: 'MOONSHOT_API_KEY', displayName: 'Moonshot AI', type: 'env' },
+      { name: 'OPENROUTER_API_KEY', displayName: 'OpenRouter', type: 'env' },
+      { name: 'MODELSCOPE_API_KEY', displayName: '魔搭社区', type: 'env' },
     ];
   }
 
@@ -191,6 +192,7 @@ Universal Ollama Proxy 是一个通用的AI服务代理，支持多个主流AI�
 - 🐧 **腾讯云** (TencentDS)
 - 🌙 **Moonshot AI** (Kimi大模型)
 - 🔗 **OpenRouter** (多模型聚合)
+- 🏮 **魔搭社区** (ModelScope) - 需绑定阿里云账号
 
 ## 使用说明
 

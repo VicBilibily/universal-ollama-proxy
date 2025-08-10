@@ -131,7 +131,16 @@ function verifyPackage(packagePath) {
       } catch (error) {
         log.warn(`    ⚠️ 无法读取统一配置文件: ${error.message}`);
         // 回退到硬编码的环境变量列表
-        requiredEnvVars = ['PORT', 'VOLCENGINE_API_KEY', 'DASHSCOPE_API_KEY', 'DEEPSEEK_API_KEY', 'TENCENTDS_API_KEY'];
+        requiredEnvVars = [
+          'PORT',
+          'VOLCENGINE_API_KEY',
+          'DASHSCOPE_API_KEY',
+          'DEEPSEEK_API_KEY',
+          'TENCENTDS_API_KEY',
+          'MOONSHOT_API_KEY',
+          'OPENROUTER_API_KEY',
+          'MODELSCOPE_API_KEY',
+        ];
       }
 
       for (const envVar of requiredEnvVars) {

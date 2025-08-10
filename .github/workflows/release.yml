@@ -52,6 +52,7 @@ jobs:
           cp .env.example .env
           echo "VOLCENGINE_API_KEY=ci_test_key" >> .env
           echo "DASHSCOPE_API_KEY=ci_test_key" >> .env
+          echo "MODELSCOPE_API_KEY=ci_test_key" >> .env
 
       - name: 获取版本号
         id: get_version
@@ -231,10 +232,11 @@ jobs:
 
           ## ✨ 主要特性
 
-          - 🔌 **多供应商支持** - 火山方舟引擎、阿里云百炼、DeepSeek、腾讯云、OpenRouter
+          - 🔌 **多供应商支持** - 火山方舟引擎、阿里云百炼、DeepSeek、腾讯云、Moonshot AI、OpenRouter、魔搭社区
           - 🔄 **统一接口** - 标准 OpenAI 格式，`provider:model` 命名规范
           - 🔧 **跨平台** - 支持 Windows/Linux/macOS, x64/ARM64 架构
           - 🛠️ **工具集成** - 为 GitHub Copilot Chat 优化的接口
+          - 🏮 **新增魔搭社区** - 支持阿里云开源模型社区，包含 Qwen3 系列模型
 
           ## 📥 下载与安装
 
@@ -251,8 +253,18 @@ jobs:
 
           1. 下载并解压
           2. 复制 `.env.example` 为 `.env` 并添加您的 API Keys
-          3. 运行可执行文件，服务默认监听 http://localhost:11434
-          4. 在 GitHub Copilot Chat 中使用 `provider:model` 格式访问模型
+          3. **魔搭社区特别提示**：使用前需在 [ModelScope官网](https://modelscope.cn/) 绑定阿里云账号
+          4. 运行可执行文件，服务默认监听 http://localhost:11434
+          5. 在 GitHub Copilot Chat 中通过"管理模型"配置 Ollama 增加访问模型
+
+          ### 🏮 支持的提供商
+          - **火山方舟引擎** (`volcengine:`) - 豆包大模型
+          - **阿里云百炼** (`dashscope:`) - 通义千问
+          - **DeepSeek** (`deepseek:`) - DeepSeek 官方
+          - **腾讯云** (`tencentds:`) - 腾讯云托管 DeepSeek
+          - **Moonshot AI** (`moonshot:`) - Kimi 大模型
+          - **OpenRouter** (`openrouter:`) - 多模型聚合平台
+          - **魔搭社区** (`modelscope:`) - Qwen3 系列模型 ⚠️ 需绑定阿里云账号
 
           ## 📚 相关链接
 

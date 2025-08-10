@@ -451,6 +451,9 @@ export class UnifiedAdapterService {
       this.handleThinkingStrategy(openaiRequest, modelConfig, request);
     }
 
+    // 为ModelScope模型处理enable_thinking参数
+    this.handleModelScopeThinkingParameter(openaiRequest, modelConfig, request);
+
     // 如果工具被完全修复掉，也需要移除 tool_choice
     if (!repairedTools || repairedTools.length === 0) {
       delete openaiRequest.tool_choice;
@@ -587,6 +590,56 @@ export class UnifiedAdapterService {
       }
     } catch (error) {
       logger.error(`处理模型 ${modelConfig.id} 的 thinking 策略时出错:`, error);
+    }
+  }
+
+  /**
+   * 处理ModelScope模型的enable_thinking参数
+   */
+  private handleModelScopeThinkingParameter(
+    openaiRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams,
+    modelConfig: ModelConfig,
+    originalRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams
+  ): void {
+    try {
+      // 检查是否是ModelScope模型
+      const providerName = this.extractProviderFromModel(originalRequest.model);
+      if (providerName !== 'modelscope') {
+        return;
+      }
+
+      logger.debug(`处理 ModelScope 模型 ${modelConfig.id} 的 enable_thinking 参数`);
+
+      // 检查是否是思考模型（ID中包含Thinking关键字）
+      const isThinkingModel =
+        modelConfig.id.toLowerCase().includes('thinking') || modelConfig.name.toLowerCase().includes('thinking');
+
+      // 检查是否是非流式调用
+      const isNonStreaming = !openaiRequest.stream;
+
+      const openaiRequestAny = openaiRequest as any;
+      const originalRequestAny = originalRequest as any;
+
+      // 如果原始请求中已经指定了enable_thinking参数，优先使用原始请求的设置
+      if (originalRequestAny.enable_thinking !== undefined) {
+        openaiRequestAny.enable_thinking = originalRequestAny.enable_thinking;
+        logger.debug(`使用原始请求中的 enable_thinking 设置: ${originalRequestAny.enable_thinking}`);
+        return;
+      }
+
+      // 根据模型类型和调用方式自动设置enable_thinking参数
+      if (isThinkingModel) {
+        // 思考模型必须启用thinking
+        openaiRequestAny.enable_thinking = true;
+        logger.debug(`为思考模型 ${modelConfig.id} 设置 enable_thinking = true`);
+      } else if (isNonStreaming) {
+        // 非思考模型的非流式调用必须关闭thinking
+        openaiRequestAny.enable_thinking = false;
+        logger.debug(`为非思考模型 ${modelConfig.id} 的非流式调用设置 enable_thinking = false`);
+      }
+      // 流式调用通常不需要设置此参数，或者可以不设置
+    } catch (error) {
+      logger.error(`处理 ModelScope 模型 ${modelConfig.id} 的 enable_thinking 参数时出错:`, error);
     }
   }
 }

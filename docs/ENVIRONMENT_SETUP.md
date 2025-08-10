@@ -12,7 +12,9 @@
 | `DASHSCOPE_API_KEY`  | 阿里云百炼     | 阿里云通义千问模型 | [阿里云控制台](https://dashscope.console.aliyun.com/) |
 | `TENCENTDS_API_KEY`  | 腾讯云DeepSeek | 腾讯云托管DeepSeek | [腾讯云控制台](https://console.cloud.tencent.com/)    |
 | `DEEPSEEK_API_KEY`   | DeepSeek官方   | DeepSeek官方服务   | [DeepSeek平台](https://platform.deepseek.com/)        |
+| `MOONSHOT_API_KEY`   | Moonshot AI    | Kimi大模型服务     | [Moonshot平台](https://platform.moonshot.cn/)         |
 | `OPENROUTER_API_KEY` | OpenRouter     | 多模型聚合服务平台 | [OpenRouter平台](https://openrouter.ai/)              |
+| `MODELSCOPE_API_KEY` | 魔搭社区       | 阿里云开源模型社区 | [魔搭社区](https://www.modelscope.cn/)                |
 
 ### 🚀 服务器配置
 
@@ -59,8 +61,14 @@ TENCENTDS_API_KEY=your_tencentds_api_key_here
 # DeepSeek官方配置
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 
+# Moonshot AI配置
+MOONSHOT_API_KEY=your_moonshot_api_key_here
+
 # OpenRouter配置
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# 魔搭社区配置
+MODELSCOPE_API_KEY=your_modelscope_api_key_here
 
 # 日志配置
 LOG_LEVEL=info
@@ -85,12 +93,22 @@ $env:VOLCENGINE_API_KEY = "your_volcengine_api_key_here"
 
 ```bash
 # 临时设置（当前会话有效）
-export OPENROUTER_API_KEY="sk-or-your-api-key-here"
 export VOLCENGINE_API_KEY="your_volcengine_api_key_here"
+export DASHSCOPE_API_KEY="your_dashscope_api_key_here"
+export TENCENTDS_API_KEY="your_tencentds_api_key_here"
+export DEEPSEEK_API_KEY="your_deepseek_api_key_here"
+export MOONSHOT_API_KEY="your_moonshot_api_key_here"
+export OPENROUTER_API_KEY="sk-or-your-api-key-here"
+export MODELSCOPE_API_KEY="your_modelscope_api_key_here"
 
 # 永久设置（添加到 ~/.bashrc 或 ~/.zshrc）
-echo 'export OPENROUTER_API_KEY="sk-or-your-api-key-here"' >> ~/.bashrc
 echo 'export VOLCENGINE_API_KEY="your_volcengine_api_key_here"' >> ~/.bashrc
+echo 'export DASHSCOPE_API_KEY="your_dashscope_api_key_here"' >> ~/.bashrc
+echo 'export TENCENTDS_API_KEY="your_tencentds_api_key_here"' >> ~/.bashrc
+echo 'export DEEPSEEK_API_KEY="your_deepseek_api_key_here"' >> ~/.bashrc
+echo 'export MOONSHOT_API_KEY="your_moonshot_api_key_here"' >> ~/.bashrc
+echo 'export OPENROUTER_API_KEY="sk-or-your-api-key-here"' >> ~/.bashrc
+echo 'export MODELSCOPE_API_KEY="your_modelscope_api_key_here"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -106,7 +124,9 @@ environment:
   - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
   - TENCENTDS_API_KEY=${TENCENTDS_API_KEY}
   - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+  - MOONSHOT_API_KEY=${MOONSHOT_API_KEY}
   - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+  - MODELSCOPE_API_KEY=${MODELSCOPE_API_KEY}
 ```
 
 只需在 `.env` 文件中设置变量值即可。

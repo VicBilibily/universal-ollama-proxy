@@ -19,7 +19,9 @@ services:
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
       - TENCENTDS_API_KEY=${TENCENTDS_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - MOONSHOT_API_KEY=${MOONSHOT_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - MODELSCOPE_API_KEY=${MODELSCOPE_API_KEY}
     volumes:
       # 如果需要挂载日志目录，可以取消注释
       # - ./logs:/app/logs

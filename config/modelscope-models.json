@@ -1,0 +1,224 @@
+{
+  "models": [
+    {
+      "id": "qwen/Qwen3-235B-A22B-Instruct-2507",
+      "name": "Qwen3 235B A22B Instruct 2507",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-235b-a22b-instruct-2507",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen/Qwen3-235B-A22B-Thinking-2507",
+      "name": "Qwen3 235B A22B Thinking 2507",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-235b-a22b-thinking-2507",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen/Qwen3-Coder-480B-A35B-Instruct",
+      "name": "Qwen3 Coder 480B A35B Instruct",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-coder-480b-a35b-instruct",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3-coder",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "tags": ["code_generation", "reasoning"]
+      }
+    },
+    {
+      "id": "qwen/Qwen3-30B-A3B-Instruct-2507",
+      "name": "Qwen3 30B A3B Instruct 2507",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-30b-a3b-instruct-2507",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32768
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "name": "Qwen3 Coder 30B A3B Instruct",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-coder-30b-a3b-instruct",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3-coder",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 32768
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "chat",
+        "tags": ["code_generation", "reasoning"]
+      }
+    },
+    {
+      "id": "qwen/Qwen3-235B-A22B",
+      "name": "Qwen3 235B A22B Base",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-235b-a22b-base",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "o200k_base",
+        "type": "completion"
+      }
+    },
+    {
+      "id": "ZhipuAI/GLM-4.5",
+      "name": "GLM-4.5",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm",
+        "limits": {
+          "max_context_window_tokens": 128000,
+          "max_output_tokens": 4096,
+          "max_prompt_tokens": 128000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    }
+  ],
+  "object": "list",
+  "meta": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-01-16",
+    "totalModels": 7,
+    "source": "https://api-inference.modelscope.cn",
+    "description": "魔搭社区(ModelScope)完整Qwen3系列模型配置文件，包含14个Qwen3模型、Kimi K2和GLM-4.5，提供免费的AI模型推理API服务，使用MODELSCOPE_API_KEY认证",
+    "officialDoc": "https://www.modelscope.cn/docs/model-service/API-Inference/intro",
+    "modelFamilies": ["Qwen3", "Qwen3-Coder", "Kimi", "GLM"],
+    "supportedFeatures": {
+      "categories": ["text", "vision", "code", "reasoning"],
+      "capabilities": [
+        "tool_calls",
+        "vision",
+        "thinking",
+        "streaming",
+        "structured_outputs",
+        "code_generation",
+        "reasoning"
+      ]
+    }
+  }
+}

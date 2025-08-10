@@ -42,6 +42,10 @@ Chat 只支持 Ollama 本地模型的限制，通过代理服务让你可以：
 | 腾讯云DeepSeek | `tencentds`  | 腾讯云托管的DeepSeek服务 |
 | Moonshot AI    | `moonshot`   | Kimi大模型服务平台       |
 | OpenRouter     | `openrouter` | 多模型聚合服务平台       |
+| 魔搭社区       | `modelscope` | 阿里云开源模型社区 ⚠️    |
+
+> **⚠️ 魔搭社区特别提示**：使用前需在 [ModelScope官网](https://modelscope.cn/)
+> 绑定阿里云账号，否则会出现401认证错误。
 
 每个提供商需要在配置文件中设置相应的API密钥和端点信息。
 
@@ -94,6 +98,7 @@ TENCENTDS_API_KEY=your_tencent_deepseek_api_key_here
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 MOONSHOT_API_KEY=your_moonshot_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+MODELSCOPE_API_KEY=your_modelscope_api_key_here  # 需先绑定阿里云账号
 
 # 可选配置
 LOG_LEVEL=info

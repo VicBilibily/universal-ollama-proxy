@@ -46,11 +46,11 @@
       }
     },
     {
-      "id": "doubao-seed-1.6-thinking-250615",
+      "id": "doubao-seed-1.6-thinking-250715",
       "name": "豆包1.6大模型 (思考增强)",
       "object": "model",
       "vendor": "ByteDance",
-      "version": "doubao-seed-1.6-thinking-250615",
+      "version": "doubao-seed-1.6-thinking-250715",
       "preview": false,
       "model_picker_enabled": true,
       "capabilities": {
@@ -90,11 +90,11 @@
       }
     },
     {
-      "id": "doubao-seed-1.6-flash-250615",
+      "id": "doubao-seed-1.6-flash-250715",
       "name": "豆包1.6大模型 (极速)",
       "object": "model",
       "vendor": "ByteDance",
-      "version": "doubao-seed-1.6-flash-250615",
+      "version": "doubao-seed-1.6-flash-250715",
       "preview": false,
       "model_picker_enabled": true,
       "capabilities": {
@@ -507,14 +507,46 @@
         "tokenizer": "cl100k_base",
         "type": "chat"
       }
+    },
+    {
+      "id": "kimi-k2-250711",
+      "name": "Kimi K2 (方舟)",
+      "object": "model",
+      "vendor": "Moonshot AI",
+      "version": "kimi-k2-250711",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "kimi-k2",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 98304
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": {
+          "type": "MoE",
+          "total_parameters": "1T",
+          "activated_parameters": "32B",
+          "description": "具备超强代码和Agent能力的MoE架构基础模型"
+        }
+      }
     }
   ],
   "object": "list",
   "meta": {
     "version": "2.0.0",
-    "lastUpdated": "2025-06-04",
+    "lastUpdated": "2025-08-18",
     "source": "https://ark.cn-beijing.volces.com/api/v3",
-    "description": "火山方舟引擎模型配置文件 - 新格式版本",
+    "description": "火山方舟引擎模型配置文件 - 新格式版本（thinking和flash系列升级至250715）",
     "officialDoc": "https://www.volcengine.com/docs/82379/1330310",
     "supportedFeatures": {
       "categories": ["thinking", "vision", "text"],

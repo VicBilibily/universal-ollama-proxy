@@ -417,12 +417,77 @@
         "tokenizer": "cl100k_base",
         "type": "chat"
       }
+    },
+    {
+      "id": "qwen3-coder-flash",
+      "name": "通义千问3 Coder Flash (智能体编程)",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen3-coder-flash",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen3-coder-flash",
+        "limits": {
+          "max_context_window_tokens": 262144,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 229376
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": {
+          "type": "MoE",
+          "total_parameters": "30.5B",
+          "activated_parameters": "3.3B",
+          "experts": 128,
+          "active_experts": 8,
+          "layers": 48,
+          "description": "专注智能体编程、浏览器使用和工具调用的MoE架构模型"
+        }
+      }
+    },
+    {
+      "id": "qwen-flash",
+      "name": "通义千问 Flash (极速版)",
+      "object": "model",
+      "vendor": "Alibaba",
+      "version": "qwen-flash",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen-flash",
+        "limits": {
+          "max_context_window_tokens": 32768,
+          "max_output_tokens": 8192,
+          "max_prompt_tokens": 24576
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
     }
   ],
   "object": "list",
   "meta": {
     "version": "2.1.0",
-    "lastUpdated": "2025-07-24",
+    "lastUpdated": "2025-08-18",
     "source": "https://dashscope.aliyuncs.com/api/v1",
     "description": "阿里云百炼通义千问模型配置文件，包含文本生成、视觉理解和代码生成模型，使用qwen3系列，支持DASHSCOPE_API_KEY认证",
     "officialDoc": "https://help.aliyun.com/zh/model-studio/models",

@@ -37,11 +37,11 @@
       "preview": true,
       "model_picker_enabled": true,
       "capabilities": {
-        "family": "moonshot",
+        "family": "kimi-k2",
         "limits": {
           "max_context_window_tokens": 131072,
-          "max_output_tokens": 65536,
-          "max_prompt_tokens": 65536
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 98304
         },
         "object": "model_capabilities",
         "supports": {
@@ -53,13 +53,53 @@
           "structured_outputs": true
         },
         "tokenizer": "cl100k_base",
-        "type": "chat"
+        "type": "chat",
+        "architecture": {
+          "type": "MoE",
+          "total_parameters": "1T",
+          "activated_parameters": "32B",
+          "description": "具备超强代码和Agent能力的MoE架构基础模型"
+        }
+      }
+    },
+    {
+      "id": "kimi-k2-turbo-preview",
+      "name": "Kimi K2 Turbo (Preview)",
+      "object": "model",
+      "vendor": "Moonshot AI",
+      "version": "kimi-k2-turbo-preview",
+      "preview": true,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "kimi-k2",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 32768,
+          "max_prompt_tokens": 98304
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": {
+          "type": "MoE",
+          "total_parameters": "1T",
+          "activated_parameters": "32B",
+          "description": "具备超强代码和Agent能力的MoE架构基础模型，4倍速度提升"
+        }
       }
     }
   ],
   "meta": {
     "version": "1.0.0",
-    "lastUpdated": "2025-07-15",
+    "lastUpdated": "2025-08-18",
     "description": "Moonshot AI模型配置文件",
     "source": "https://platform.moonshot.cn/docs"
   }

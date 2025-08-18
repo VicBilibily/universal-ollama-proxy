@@ -6,6 +6,153 @@
                 "multiplier": 0
             },
             "capabilities": {
+                "family": "gpt-4.1",
+                "limits": {
+                    "max_context_window_tokens": 128000,
+                    "max_output_tokens": 16384,
+                    "max_prompt_tokens": 128000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "parallel_tool_calls": true,
+                    "streaming": true,
+                    "structured_outputs": true,
+                    "tool_calls": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "gpt-4.1",
+            "is_chat_default": true,
+            "is_chat_fallback": true,
+            "model_picker_enabled": true,
+            "name": "GPT-4.1",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest GPT-4.1 model from OpenAI. [Learn more about how GitHub Copilot serves GPT-4.1](https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task#gpt-41)."
+            },
+            "preview": false,
+            "vendor": "Azure OpenAI",
+            "version": "gpt-4.1-2025-04-14"
+        },
+        {
+            "billing": {
+                "is_premium": false,
+                "multiplier": 0
+            },
+            "capabilities": {
+                "family": "gpt-5-mini",
+                "limits": {
+                    "max_context_window_tokens": 128000,
+                    "max_output_tokens": 64000,
+                    "max_prompt_tokens": 128000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "parallel_tool_calls": true,
+                    "streaming": true,
+                    "structured_outputs": true,
+                    "tool_calls": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "gpt-5-mini",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": true,
+            "name": "GPT-5 mini (Preview)",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest GPT-5 mini model from OpenAI. [Learn more about how GitHub Copilot serves GPT-5 mini](https://gh.io/copilot-openai)."
+            },
+            "preview": true,
+            "vendor": "Azure OpenAI",
+            "version": "gpt-5-mini"
+        },
+        {
+            "billing": {
+                "is_premium": true,
+                "multiplier": 1,
+                "restricted_to": [
+                    "pro",
+                    "pro_plus",
+                    "business",
+                    "enterprise"
+                ]
+            },
+            "capabilities": {
+                "family": "gpt-5",
+                "limits": {
+                    "max_context_window_tokens": 128000,
+                    "max_output_tokens": 64000,
+                    "max_prompt_tokens": 128000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "parallel_tool_calls": true,
+                    "streaming": true,
+                    "structured_outputs": true,
+                    "tool_calls": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "gpt-5",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": true,
+            "name": "GPT-5 (Preview)",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest GPT-5 model from OpenAI. [Learn more about how GitHub Copilot serves GPT-5](https://gh.io/copilot-openai)."
+            },
+            "preview": true,
+            "vendor": "Azure OpenAI",
+            "version": "gpt-5"
+        },
+        {
+            "billing": {
+                "is_premium": false,
+                "multiplier": 0
+            },
+            "capabilities": {
                 "family": "gpt-3.5-turbo",
                 "limits": {
                     "max_context_window_tokens": 16384,
@@ -181,53 +328,6 @@
             "preview": false,
             "vendor": "Azure OpenAI",
             "version": "gpt-4-0613"
-        },
-        {
-            "billing": {
-                "is_premium": false,
-                "multiplier": 0
-            },
-            "capabilities": {
-                "family": "gpt-4.1",
-                "limits": {
-                    "max_context_window_tokens": 128000,
-                    "max_output_tokens": 16384,
-                    "max_prompt_tokens": 128000,
-                    "vision": {
-                        "max_prompt_image_size": 3145728,
-                        "max_prompt_images": 1,
-                        "supported_media_types": [
-                            "image/jpeg",
-                            "image/png",
-                            "image/webp",
-                            "image/gif"
-                        ]
-                    }
-                },
-                "object": "model_capabilities",
-                "supports": {
-                    "parallel_tool_calls": true,
-                    "streaming": true,
-                    "structured_outputs": true,
-                    "tool_calls": true,
-                    "vision": true
-                },
-                "tokenizer": "o200k_base",
-                "type": "chat"
-            },
-            "id": "gpt-4.1",
-            "is_chat_default": true,
-            "is_chat_fallback": true,
-            "model_picker_enabled": true,
-            "name": "GPT-4.1",
-            "object": "model",
-            "policy": {
-                "state": "enabled",
-                "terms": "Enable access to the latest GPT-4.1 model from OpenAI. [Learn more about how GitHub Copilot serves GPT-4.1](https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task#gpt-41)."
-            },
-            "preview": false,
-            "vendor": "Azure OpenAI",
-            "version": "gpt-4.1-2025-04-14"
         },
         {
             "billing": {
@@ -856,6 +956,53 @@
         {
             "billing": {
                 "is_premium": true,
+                "multiplier": 10,
+                "restricted_to": [
+                    "pro_plus",
+                    "enterprise"
+                ]
+            },
+            "capabilities": {
+                "family": "claude-opus-4.1",
+                "limits": {
+                    "max_context_window_tokens": 80000,
+                    "max_output_tokens": 16000,
+                    "max_prompt_tokens": 80000,
+                    "vision": {
+                        "max_prompt_image_size": 3145728,
+                        "max_prompt_images": 1,
+                        "supported_media_types": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ]
+                    }
+                },
+                "object": "model_capabilities",
+                "supports": {
+                    "streaming": true,
+                    "vision": true
+                },
+                "tokenizer": "o200k_base",
+                "type": "chat"
+            },
+            "id": "claude-opus-41",
+            "is_chat_default": false,
+            "is_chat_fallback": false,
+            "model_picker_enabled": true,
+            "name": "Claude Opus 4.1 (Preview)",
+            "object": "model",
+            "policy": {
+                "state": "enabled",
+                "terms": "Enable access to the latest Claude Opus 4.1 model from Anthropic. [Learn more about how GitHub Copilot serves Claude Opus 4.1](https://docs.github.com/en/copilot/using-github-copilot/ai-models/using-claude-sonnet-in-github-copilot)."
+            },
+            "preview": true,
+            "vendor": "Anthropic",
+            "version": "claude-opus-41"
+        },
+        {
+            "billing": {
+                "is_premium": true,
                 "multiplier": 0.25
             },
             "capabilities": {
@@ -931,6 +1078,8 @@
                 },
                 "object": "model_capabilities",
                 "supports": {
+                    "max_thinking_budget": 32768,
+                    "min_thinking_budget": 128,
                     "parallel_tool_calls": true,
                     "streaming": true,
                     "tool_calls": true,

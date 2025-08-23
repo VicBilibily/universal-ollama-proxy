@@ -15,15 +15,16 @@ Proxy 的所有配置参数，包括环境变量、AI 提供商配置和日志�
 
 ### 🔑 AI 提供商 API Keys
 
-| 变量名               | 提供商         | 必需 | 获取方式                                              |
-| -------------------- | -------------- | ---- | ----------------------------------------------------- |
-| `VOLCENGINE_API_KEY` | 火山方舟引擎   | ⚠️   | [火山引擎控制台](https://console.volcengine.com/)     |
-| `DASHSCOPE_API_KEY`  | 阿里云百炼     | ⚠️   | [阿里云控制台](https://dashscope.console.aliyun.com/) |
-| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek | ⚠️   | [腾讯云控制台](https://console.cloud.tencent.com/)    |
-| `DEEPSEEK_API_KEY`   | DeepSeek官方   | ⚠️   | [DeepSeek平台](https://platform.deepseek.com/)        |
-| `MOONSHOT_API_KEY`   | Moonshot AI    | ⚠️   | [Moonshot平台](https://platform.moonshot.cn/)         |
-| `OPENROUTER_API_KEY` | OpenRouter     | ⚠️   | [OpenRouter平台](https://openrouter.ai/)              |
-| `MODELSCOPE_API_KEY` | 魔搭社区       | ⚠️   | [魔搭社区](https://www.modelscope.cn/)                |
+| 变量名               | 提供商          | 必需 | 获取方式                                              |
+| -------------------- | --------------- | ---- | ----------------------------------------------------- |
+| `VOLCENGINE_API_KEY` | 火山方舟引擎    | ⚠️   | [火山引擎控制台](https://console.volcengine.com/)     |
+| `DASHSCOPE_API_KEY`  | 阿里云百炼      | ⚠️   | [阿里云控制台](https://dashscope.console.aliyun.com/) |
+| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek  | ⚠️   | [腾讯云控制台](https://console.cloud.tencent.com/)    |
+| `DEEPSEEK_API_KEY`   | DeepSeek官方    | ⚠️   | [DeepSeek平台](https://platform.deepseek.com/)        |
+| `MOONSHOT_API_KEY`   | Moonshot AI     | ⚠️   | [Moonshot平台](https://platform.moonshot.cn/)         |
+| `OPENROUTER_API_KEY` | OpenRouter      | ⚠️   | [OpenRouter平台](https://openrouter.ai/)              |
+| `MODELSCOPE_API_KEY` | 魔搭社区        | ⚠️   | [魔搭社区](https://www.modelscope.cn/)                |
+| `BIGMODEL_API_KEY`   | 智谱AI BigModel | ⚠️   | [智谱AI开放平台](https://open.bigmodel.cn/)           |
 
 > **⚠️ 重要**: 至少需要配置一个提供商的 API Key，系统会自动过滤不可用的提供商
 

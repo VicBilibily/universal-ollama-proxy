@@ -6,15 +6,16 @@
 
 ### 🔑 AI 提供商 API Keys
 
-| 环境变量             | 提供商         | 描述               | 获取方式                                              |
-| -------------------- | -------------- | ------------------ | ----------------------------------------------------- |
-| `VOLCENGINE_API_KEY` | 火山方舟引擎   | 字节跳动豆包大模型 | [火山引擎控制台](https://console.volcengine.com/)     |
-| `DASHSCOPE_API_KEY`  | 阿里云百炼     | 阿里云通义千问模型 | [阿里云控制台](https://dashscope.console.aliyun.com/) |
-| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek | 腾讯云托管DeepSeek | [腾讯云控制台](https://console.cloud.tencent.com/)    |
-| `DEEPSEEK_API_KEY`   | DeepSeek官方   | DeepSeek官方服务   | [DeepSeek平台](https://platform.deepseek.com/)        |
-| `MOONSHOT_API_KEY`   | Moonshot AI    | Kimi大模型服务     | [Moonshot平台](https://platform.moonshot.cn/)         |
-| `OPENROUTER_API_KEY` | OpenRouter     | 多模型聚合服务平台 | [OpenRouter平台](https://openrouter.ai/)              |
-| `MODELSCOPE_API_KEY` | 魔搭社区       | 阿里云开源模型社区 | [魔搭社区](https://www.modelscope.cn/)                |
+| 环境变量             | 提供商          | 描述               | 获取方式                                              |
+| -------------------- | --------------- | ------------------ | ----------------------------------------------------- |
+| `VOLCENGINE_API_KEY` | 火山方舟引擎    | 字节跳动豆包大模型 | [火山引擎控制台](https://console.volcengine.com/)     |
+| `DASHSCOPE_API_KEY`  | 阿里云百炼      | 阿里云通义千问模型 | [阿里云控制台](https://dashscope.console.aliyun.com/) |
+| `TENCENTDS_API_KEY`  | 腾讯云DeepSeek  | 腾讯云托管DeepSeek | [腾讯云控制台](https://console.cloud.tencent.com/)    |
+| `DEEPSEEK_API_KEY`   | DeepSeek官方    | DeepSeek官方服务   | [DeepSeek平台](https://platform.deepseek.com/)        |
+| `MOONSHOT_API_KEY`   | Moonshot AI     | Kimi大模型服务     | [Moonshot平台](https://platform.moonshot.cn/)         |
+| `OPENROUTER_API_KEY` | OpenRouter      | 多模型聚合服务平台 | [OpenRouter平台](https://openrouter.ai/)              |
+| `MODELSCOPE_API_KEY` | 魔搭社区        | 阿里云开源模型社区 | [魔搭社区](https://www.modelscope.cn/)                |
+| `BIGMODEL_API_KEY`   | 智谱AI BigModel | 智谱AI GLM-4.5系列 | [智谱AI开放平台](https://open.bigmodel.cn/)           |
 
 ### 🚀 服务器配置
 
@@ -70,6 +71,9 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 # 魔搭社区配置
 MODELSCOPE_API_KEY=your_modelscope_api_key_here
 
+# 智谱AI BigModel配置
+BIGMODEL_API_KEY=glm-your-bigmodel-api-key-here
+
 # 日志配置
 LOG_LEVEL=info
 CHAT_LOGS=false
@@ -100,6 +104,7 @@ export DEEPSEEK_API_KEY="your_deepseek_api_key_here"
 export MOONSHOT_API_KEY="your_moonshot_api_key_here"
 export OPENROUTER_API_KEY="sk-or-your-api-key-here"
 export MODELSCOPE_API_KEY="your_modelscope_api_key_here"
+export BIGMODEL_API_KEY="glm-your-bigmodel-api-key-here"
 
 # 永久设置（添加到 ~/.bashrc 或 ~/.zshrc）
 echo 'export VOLCENGINE_API_KEY="your_volcengine_api_key_here"' >> ~/.bashrc
@@ -110,6 +115,7 @@ echo 'export MOONSHOT_API_KEY="your_moonshot_api_key_here"' >> ~/.bashrc
 echo 'export OPENROUTER_API_KEY="sk-or-your-api-key-here"' >> ~/.bashrc
 echo 'export MODELSCOPE_API_KEY="your_modelscope_api_key_here"' >> ~/.bashrc
 source ~/.bashrc
+echo 'export BIGMODEL_API_KEY="glm-your-bigmodel-api-key-here"' >> ~/.bashrc
 ```
 
 ### 3. Docker 环境配置
@@ -127,6 +133,7 @@ environment:
   - MOONSHOT_API_KEY=${MOONSHOT_API_KEY}
   - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
   - MODELSCOPE_API_KEY=${MODELSCOPE_API_KEY}
+  - BIGMODEL_API_KEY=${BIGMODEL_API_KEY}
 ```
 
 只需在 `.env` 文件中设置变量值即可。
@@ -137,6 +144,7 @@ environment:
 docker run -d \
   --name universal-ollama-proxy \
   -p 11434:11434 \
+  -e BIGMODEL_API_KEY="glm-your-bigmodel-api-key-here" \
   -e OPENROUTER_API_KEY="sk-or-your-api-key-here" \
   -e VOLCENGINE_API_KEY="your_volcengine_api_key_here" \
   universal-ollama-proxy:latest

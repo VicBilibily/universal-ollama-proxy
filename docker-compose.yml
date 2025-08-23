@@ -24,6 +24,7 @@ services:
       - MOONSHOT_API_KEY=${MOONSHOT_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - MODELSCOPE_API_KEY=${MODELSCOPE_API_KEY}
+      - BIGMODEL_API_KEY=${BIGMODEL_API_KEY}
       # 添加新供应商时，在此添加对应的环境变量
     volumes:
       # 开发模式下挂载日志目录

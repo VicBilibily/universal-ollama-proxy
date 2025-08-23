@@ -5,6 +5,23 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/VicBilibily/universal-ollama-proxy)](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> **⚠️ 重要通知 - 项目即将存档**
+>
+> 由于 VS Code 的 GitHub Copilot 即将支持 **OpenAI Compatible**
+> 模型配置功能，用户将能够直接在 GitHub
+> Copilot 中配置各种 AI 提供商的模型，无需通过本代理服务。
+>
+> **本项目将在 GitHub Copilot 官方支持此功能后进入存档模式。**
+>
+> 我们建议：
+>
+> - 🔄 现有用户可继续使用本项目，直到 GitHub Copilot 官方功能发布
+> - 📰 关注 [GitHub Copilot 官方更新](https://github.com/features/copilot)
+>   获取最新功能发布信息
+> - 🔗 准备迁移到官方支持的 OpenAI Compatible 配置方式
+>
+> 感谢所有用户的支持和贡献！🙏
+
 一个专为 GitHub Copilot
 Chat 的 Ollama 接入而设计的代理服务。将多个AI服务提供商的API转换为Ollama兼容格式，让你可以在 GitHub
 Copilot Chat 中使用不同的AI模型。基于TypeScript和OpenAI SDK构建。
@@ -34,15 +51,16 @@ Chat 只支持 Ollama 本地模型的限制，通过代理服务让你可以：
 
 目前支持以下AI服务提供商：
 
-| 提供商         | 配置标识     | 说明                     |
-| -------------- | ------------ | ------------------------ |
-| 火山方舟引擎   | `volcengine` | 字节跳动的AI服务平台     |
-| 阿里云百炼     | `dashscope`  | 阿里云的AI模型服务       |
-| DeepSeek官方   | `deepseek`   | DeepSeek官方API          |
-| 腾讯云DeepSeek | `tencentds`  | 腾讯云托管的DeepSeek服务 |
-| Moonshot AI    | `moonshot`   | Kimi大模型服务平台       |
-| OpenRouter     | `openrouter` | 多模型聚合服务平台       |
-| 魔搭社区       | `modelscope` | 阿里云开源模型社区 ⚠️    |
+| 提供商          | 配置标识     | 说明                     |
+| --------------- | ------------ | ------------------------ |
+| 火山方舟引擎    | `volcengine` | 字节跳动的AI服务平台     |
+| 阿里云百炼      | `dashscope`  | 阿里云的AI模型服务       |
+| DeepSeek官方    | `deepseek`   | DeepSeek官方API          |
+| 腾讯云DeepSeek  | `tencentds`  | 腾讯云托管的DeepSeek服务 |
+| Moonshot AI     | `moonshot`   | Kimi大模型服务平台       |
+| OpenRouter      | `openrouter` | 多模型聚合服务平台       |
+| 魔搭社区        | `modelscope` | 阿里云开源模型社区 ⚠️    |
+| 智谱AI BigModel | `bigmodel`   | 智谱AI GLM-4.5系列模型   |
 
 > **⚠️ 魔搭社区特别提示**：使用前需在 [ModelScope官网](https://modelscope.cn/)
 > 绑定阿里云账号，否则会出现401认证错误。
@@ -99,6 +117,7 @@ DEEPSEEK_API_KEY=your_deepseek_api_key_here
 MOONSHOT_API_KEY=your_moonshot_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 MODELSCOPE_API_KEY=your_modelscope_api_key_here  # 需先绑定阿里云账号
+BIGMODEL_API_KEY=your_bigmodel_api_key_here
 
 # 可选配置
 LOG_LEVEL=info

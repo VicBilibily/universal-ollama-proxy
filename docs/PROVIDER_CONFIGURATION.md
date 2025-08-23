@@ -276,6 +276,26 @@ Proxy 中配置AI服务提供商。特别关注提供商的 API 密钥配置方�
 }
 ```
 
+### 8. 智谱AI BigModel
+
+- **提供商**: 智谱AI
+- **配置名**: `bigmodel`
+- **环境变量**: `BIGMODEL_API_KEY`
+- **模型配置**: `config/bigmodel-models.json`
+
+```json
+{
+  "name": "bigmodel",
+  "displayName": "智谱AI BigModel",
+  "enabled": true,
+  "baseURL": "https://open.bigmodel.cn/api/paas/v4",
+  "apiKey": "${BIGMODEL_API_KEY}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+```
+
 ## 提供商配置示例
 
 以下是一些常见提供商配置示例：

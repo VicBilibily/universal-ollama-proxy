@@ -1,0 +1,179 @@
+{
+  "models": [
+    {
+      "id": "glm-4.5",
+      "name": "GLM-4.5 (最强推理模型)",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm-4.5",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 98304,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": "MoE",
+        "parameters": "355B total / 32B activated",
+        "pricing": {
+          "input_cost_per_1m": 0.8,
+          "output_cost_per_1m": 2.0,
+          "currency": "CNY"
+        }
+      }
+    },
+    {
+      "id": "glm-4.5-air",
+      "name": "GLM-4.5-Air (高性价比轻量级)",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5-air",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm-4.5",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 98304,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": "MoE",
+        "parameters": "106B total / 12B activated",
+        "pricing": {
+          "input_cost_per_1m": 0.8,
+          "output_cost_per_1m": 2.0,
+          "currency": "CNY"
+        }
+      }
+    },
+    {
+      "id": "glm-4.5-x",
+      "name": "GLM-4.5-X (高性能强推理极速版)",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5-x",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm-4.5",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 98304,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": "MoE",
+        "parameters": "Optimized for Speed",
+        "pricing": {
+          "input_cost_per_1m": 0.8,
+          "output_cost_per_1m": 2.0,
+          "currency": "CNY"
+        }
+      }
+    },
+    {
+      "id": "glm-4.5-airx",
+      "name": "GLM-4.5-AirX (轻量级极速版)",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5-airx",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm-4.5",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 98304,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": true,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": "MoE",
+        "parameters": "Lightweight Optimized",
+        "pricing": {
+          "input_cost_per_1m": 0.8,
+          "output_cost_per_1m": 2.0,
+          "currency": "CNY"
+        }
+      }
+    },
+    {
+      "id": "glm-4.5-flash",
+      "name": "GLM-4.5-Flash (免费高效版)",
+      "object": "model",
+      "vendor": "智谱AI",
+      "version": "glm-4.5-flash",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm-4.5",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 98304,
+          "max_prompt_tokens": 131072
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat",
+        "architecture": "MoE",
+        "parameters": "Optimized for Efficiency",
+        "pricing": {
+          "input_cost_per_1m": 0.0,
+          "output_cost_per_1m": 0.0,
+          "currency": "CNY"
+        }
+      }
+    }
+  ]
+}

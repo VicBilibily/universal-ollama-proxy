@@ -89,6 +89,17 @@
       "headers": {
         "Content-Type": "application/json"
       }
+    },
+    {
+      // iFlow 心流平台配置 - OpenAI兼容接口
+      "name": "iflow",
+      "displayName": "iFlow心流平台",
+      "enabled": true,
+      "baseURL": "https://apis.iflow.cn/v1",
+      "apiKey": "${IFLOW_API_KEY}",
+      "headers": {
+        "Content-Type": "application/json"
+      }
     }
   ],
   "meta": {

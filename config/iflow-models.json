@@ -1,0 +1,136 @@
+{
+  "models": [
+    {
+      "id": "qwen3-coder",
+      "name": "Qwen3-Coder-480B-A35B",
+      "object": "model",
+      "vendor": "iFlow",
+      "version": "qwen3-coder",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "qwen",
+        "limits": {
+          "max_context_window_tokens": 262144,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 196608
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "glm-4.5",
+      "name": "GLM-4.5",
+      "object": "model",
+      "vendor": "iFlow",
+      "version": "glm-4.5",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "glm",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 65536
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": true,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "kimi-k2",
+      "name": "Kimi-K2",
+      "object": "model",
+      "vendor": "iFlow",
+      "version": "kimi-k2",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "kimi",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 65536,
+          "max_prompt_tokens": 65536
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    },
+    {
+      "id": "deepseek-v3.1",
+      "name": "DeepSeek-V3.1",
+      "object": "model",
+      "vendor": "iFlow",
+      "version": "deepseek-v3.1",
+      "preview": false,
+      "model_picker_enabled": true,
+      "capabilities": {
+        "family": "deepseek",
+        "limits": {
+          "max_context_window_tokens": 131072,
+          "max_output_tokens": 32000,
+          "max_prompt_tokens": 32000
+        },
+        "object": "model_capabilities",
+        "supports": {
+          "streaming": true,
+          "tool_calls": true,
+          "parallel_tool_calls": true,
+          "vision": false,
+          "thinking": false,
+          "structured_outputs": true
+        },
+        "tokenizer": "cl100k_base",
+        "type": "chat"
+      }
+    }
+  ],
+  "object": "list",
+  "meta": {
+    "version": "2.0.0",
+    "lastUpdated": "2025-08-30",
+    "source": "https://apis.iflow.cn/v1",
+    "description": "iFlow心流平台官方模型配置 - 基于平台真实模型信息",
+    "officialDoc": "https://platform.iflow.cn/docs/api-mode",
+    "modelCount": 11,
+    "supportedFeatures": {
+      "categories": ["chat"],
+      "capabilities": [
+        "tool_calls",
+        "streaming",
+        "structured_outputs",
+        "thinking",
+        "vision",
+        "parallel_tool_calls"
+      ]
+    }
+  }
+}

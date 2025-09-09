@@ -88,6 +88,12 @@
       "apiKey": "${BIGMODEL_API_KEY}",
       "headers": {
         "Content-Type": "application/json"
+        // 以下为使用订阅套餐的请求头，可根据需要启用
+        // "HTTP-Referer": "https://kilocode.ai",
+        // "X-Title": "Kilo Code",
+        // "X-KiloCode-Version": "4.91.2",
+        // "User-Agent": "Kilo-Code/4.91.2",
+        // "Authorization": "Bearer YOUR_BIGMODEL_API_KEY"
       }
     },
     {

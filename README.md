@@ -5,26 +5,37 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/VicBilibily/universal-ollama-proxy)](https://github.com/VicBilibily/universal-ollama-proxy/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **⚠️ 重要通知 - 项目即将存档**
+一个专为 GitHub Copilot
+Chat 的 Ollama 接入而设计的代理服务。将多个AI服务提供商的API转换为Ollama兼容格式，让你可以在 GitHub
+Copilot Chat 中使用不同的AI模型。基于TypeScript和OpenAI SDK构建。
+
+> **⚠️ 重要通知 - 项目已经存档**
 >
 > 由于 VS Code 的 GitHub Copilot 即将支持 **OpenAI Compatible**
 > 模型配置功能，用户将能够直接在 GitHub
 > Copilot 中配置各种 AI 提供商的模型，无需通过本代理服务。
 >
-> **本项目将在 GitHub Copilot 官方支持此功能后进入存档模式。**
->
-> 我们建议：
->
-> - 🔄 现有用户可继续使用本项目，直到 GitHub Copilot 官方功能发布
 > - 📰 关注 [GitHub Copilot 官方更新](https://github.com/features/copilot)
 >   获取最新功能发布信息
-> - 🔗 准备迁移到官方支持的 OpenAI Compatible 配置方式
+> - 🔗 准备迁移到官方支持的 OpenAI Compatible 配置方式 [PS: >
+>   此功能官方延后至2025年10月发布]
 >
 > 感谢所有用户的支持和贡献！🙏
-
-一个专为 GitHub Copilot
-Chat 的 Ollama 接入而设计的代理服务。将多个AI服务提供商的API转换为Ollama兼容格式，让你可以在 GitHub
-Copilot Chat 中使用不同的AI模型。基于TypeScript和OpenAI SDK构建。
+>
+> ---
+>
+> 另：VSCode 2025年09月更新支持第三方插件作为 GitHub Copilot Chat 模型提供方。
+>
+> 当前项目正式由新项目接替
+>
+> ### GCMP - 提供多个国内主流AI大模型供应商支持的扩展
+>
+> [![CI](https://github.com/VicBilibily/GCMP/actions/workflows/ci.yml/badge.svg)](https://github.com/VicBilibily/GCMP/actions)
+> [![Version](https://img.shields.io/visual-studio-marketplace/v/vicanent.gcmp?color=blue&label=Version)](https://marketplace.visualstudio.com/items?itemName=vicanent.gcmp)
+> [![Downloads](https://img.shields.io/visual-studio-marketplace/d/vicanent.gcmp?color=green&label=Downloads)](https://marketplace.visualstudio.com/items?itemName=vicanent.gcmp)
+> [![License](https://img.shields.io/github/license/VicBilibily/GCMP?color=orange&label=License)](https://github.com/VicBilibily/GCMP/blob/main/LICENSE)
+>
+> 通过集成国内顶尖的AI模型，为开发者提供更丰富、更适合的AI编程助手选择。
 
 ## ✨ 功能特点
 
@@ -205,18 +216,3 @@ npm run quick:build      # 交互式快速构建
 ## 📄 许可证
 
 本项目采用 [MIT 许可证](LICENSE) 开源。
-
----
-
-<div align="center">
-
-### 🌟 如果这个项目对你有帮助，请给个 Star ⭐
-
-**Made with ❤️ for the AI community**
-
-[🏠 Homepage](https://github.com/VicBilibily/universal-ollama-proxy) |
-[📖 Documentation](./README/) |
-[🐛 Issues](https://github.com/VicBilibily/universal-ollama-proxy/issues) |
-[🚀 Releases](https://github.com/VicBilibily/universal-ollama-proxy/releases)
-
-</div>
